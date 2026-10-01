@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+	<include name="IconWallCardSurface">
+		<param name="focused">false</param>
+		<definition>
+			<control type="image">
+				<width>100%</width>
+				<height>100%</height>
+				<texture material="glass" glassstyle="regular" cornerradius="32">colors/white.png</texture>
+			</control>
+			<control type="image">
+				<width>100%</width>
+				<height>100%</height>
+				<texture cornerradius="32" colordiffuse="glass_focus_light">colors/white.png</texture>
+				<visible>$PARAM[focused]</visible>
+				<include>Animation_FocusTextureFade</include>
+			</control>
+		</definition>
+	</include>
+	<include name="View_52_IconWall">
+		<control type="group">
+			<visible>Control.IsVisible(52)</visible>
+			<include>OpenClose_Right</include>
+			<include>Visible_Right</include>
+			<control type="panel" id="52">
+				<sharedglassbackdrop>true</sharedglassbackdrop>
+				<centerleft>51%</centerleft>
+				<top>0</top>
+				<width>92%</width>
+				<height>100%</height>
+				<onleft>9000</onleft>
+				<onright>531</onright>
+				<pagecontrol>531</pagecontrol>
+				<preloaditems>2</preloaditems>
+				<onup>52</onup>
+				<ondown>52</ondown>
+				<scrolltime tween="cubic" easing="out">500</scrolltime>
+				<visible>Container.Content() | Container.Content(files) | Container.Content(tags) | Container.Content(years) | Container.Content(roles) | Container.Content(sources) | Container.Content(genres) | Container.Content(countries) | Container.Content(studios) | Container.Content(playlists) | Container.Content(favourites) | Container.Content(unknown)</visible>
+				<viewtype label="31099">icon</viewtype>
+				<itemlayout height="280" width="440" condition="Container.Content() | Container.Content(files) | Container.Content(tags) | Container.Content(playlists) | [Container.Content(studios) + System.AddonIsEnabled(resource.images.studios.white)]">
+					<control type="group">
+						<left>20</left>
+						<top>140</top>
+						<width>356</width>
+						<height>205</height>
+						<include content="IconWallCardSurface" />
+						<control type="image">
+							<left>98</left>
+							<top>14</top>
+							<width>160</width>
+							<height>116</height>
+							<texture fallback="DefaultStudios.png">$VAR[IconWallThumbVar]</texture>
+							<aspectratio>keep</aspectratio>
+							<align>center</align>
+						</control>
+						<control type="textbox">
+							<left>16</left>
+							<top>134</top>
+							<width>324</width>
+							<height>56</height>
+							<font>font12</font>
+							<textcolor>text_primary</textcolor>
+							<label>$INFO[ListItem.Label]</label>
+							<align>center</align>
+							<aligny>center</aligny>
+						</control>
+					</control>
+				</itemlayout>
+				<focusedlayout height="280" width="440" condition="Container.Content() | Container.Content(files) | Container.Content(tags) | Container.Content(playlists) | [Container.Content(studios) + System.AddonIsEnabled(resource.images.studios.white)]">
+					<control type="group">
+						<depth>DepthContentPopout</depth>
+						<animation type="Focus">
+							<effect type="zoom" start="100" end="104" time="200" tween="sine" easing="inout" center="auto" />
+						</animation>
+						<animation type="Unfocus">
+							<effect type="zoom" start="104" end="100" time="200" tween="sine" easing="inout" center="auto" />
+						</animation>
+						<left>20</left>
+						<top>140</top>
+						<width>356</width>
+						<height>205</height>
+						<include content="IconWallCardSurface">
+							<param name="focused" value="true" />
+						</include>
+						<control type="image">
+							<left>98</left>
+							<top>14</top>
+							<width>160</width>
+							<height>116</height>
+							<texture fallback="DefaultStudios.png">$VAR[IconWallThumbVar]</texture>
+							<aspectratio>keep</aspectratio>
+							<align>center</align>
+						</control>
+						<control type="textbox">
+							<left>16</left>
+							<top>134</top>
+							<width>324</width>
+							<height>56</height>
+							<font>font12</font>
+							<textcolor>text_primary</textcolor>
+							<label>$INFO[ListItem.Label]</label>
+							<align>center</align>
+							<aligny>center</aligny>
+						</control>
+					</control>
+				</focusedlayout>
+				<itemlayout height="156" width="348" condition="Container.Content(genres) | Container.Content(sources) | Container.Content(years) | Container.Content(roles) | Container.Content(countries) | [Container.Content(studios) + !System.AddonIsEnabled(resource.images.studios.white)]">
+					<control type="group">
+						<left>20</left>
+						<top>110</top>
+						<width>308</width>
+						<height>112</height>
+						<include content="IconWallCardSurface" />
+						<control type="textbox">
+							<left>18</left>
+							<top>12</top>
+							<width>272</width>
+							<height>88</height>
+							<font>font14</font>
+							<textcolor>text_primary</textcolor>
+							<label>$INFO[ListItem.Label]</label>
+							<align>center</align>
+							<aligny>center</aligny>
+						</control>
+					</control>
+				</itemlayout>
+				<focusedlayout height="156" width="348" condition="Container.Content(genres) | Container.Content(sources) | Container.Content(years) | Container.Content(roles) | Container.Content(countries) | [Container.Content(studios) + !System.AddonIsEnabled(resource.images.studios.white)]">
+					<control type="group">
+						<depth>DepthContentPopout</depth>
+						<left>20</left>
+						<top>110</top>
+						<width>308</width>
+						<height>112</height>
+						<animation type="Focus">
+							<effect type="zoom" start="100" end="104" time="200" tween="sine" easing="inout" center="auto" />
+						</animation>
+						<animation type="Unfocus">
+							<effect type="zoom" start="104" end="100" time="200" tween="sine" easing="inout" center="auto" />
+						</animation>
+						<include content="IconWallCardSurface">
+							<param name="focused" value="true" />
+						</include>
+						<control type="textbox">
+							<left>18</left>
+							<top>12</top>
+							<width>272</width>
+							<height>88</height>
+							<font>font14</font>
+							<label>$INFO[ListItem.Label]</label>
+							<textcolor>text_primary</textcolor>
+							<align>center</align>
+							<aligny>center</aligny>
+						</control>
+					</control>
+				</focusedlayout>
+			</control>
+		</control>
+	</include>
+</includes>

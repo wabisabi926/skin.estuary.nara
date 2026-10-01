@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+	<include name="NaraPgsSuccessContent">
+		<param name="font">font12</param>
+		<param name="message">$LOCALIZE[70198]</param>
+		<param name="id_prefix">7010</param>
+		<definition>
+			<animation type="Conditional" reversible="false" condition="String.IsEqual(VideoPlayer.PgsAutoSelectionStatus,$PARAM[message])">
+				<effect type="slide" start="360,0" end="0,0" time="280" tween="cubic" easing="out" />
+				<effect type="fade" start="0" end="100" time="100" />
+			</animation>
+			<animation effect="fade" start="100" end="0" time="250" reversible="false" condition="String.IsEmpty(VideoPlayer.PgsAutoSelectionStatus)">Hidden</animation>
+			<control type="label" id="$PARAM[id_prefix]1">
+				<width>900</width>
+				<height>36</height>
+				<font>$PARAM[font]</font>
+				<align>right</align>
+				<aligny>center</aligny>
+				<textcolor>text_secondary</textcolor>
+				<label>$PARAM[message]</label>
+				<visible>String.IsEmpty(VideoPlayer.PgsAutoSelectionStatus) | String.IsEqual(VideoPlayer.PgsAutoSelectionStatus,$PARAM[message])</visible>
+			</control>
+			<control type="label" id="$PARAM[id_prefix]2">
+				<width>900</width>
+				<height>36</height>
+				<font>$PARAM[font]</font>
+				<align>right</align>
+				<aligny>center</aligny>
+				<textcolor>80EDEDED</textcolor>
+				<label>$PARAM[message]</label>
+				<visible>String.IsEqual(VideoPlayer.PgsAutoSelectionStatus,$PARAM[message])</visible>
+				<animation type="Conditional" reversible="false" condition="String.IsEqual(VideoPlayer.PgsAutoSelectionStatus,$PARAM[message])">
+					<effect type="fade" start="0" end="100" delay="420" time="100" />
+					<effect type="fade" start="100" end="0" delay="560" time="140" />
+				</animation>
+			</control>
+			<control type="label" id="$PARAM[id_prefix]3">
+				<width>900</width>
+				<height>36</height>
+				<font>$PARAM[font]</font>
+				<align>right</align>
+				<aligny>center</aligny>
+				<textcolor>80EDEDED</textcolor>
+				<label>$PARAM[message]</label>
+				<visible>String.IsEqual(VideoPlayer.PgsAutoSelectionStatus,$PARAM[message])</visible>
+				<animation type="Conditional" reversible="false" condition="String.IsEqual(VideoPlayer.PgsAutoSelectionStatus,$PARAM[message])">
+					<effect type="fade" start="0" end="100" delay="820" time="100" />
+					<effect type="fade" start="100" end="0" delay="960" time="140" />
+				</animation>
+			</control>
+		</definition>
+	</include>
+	<include name="NaraPgsSuccessNotifications">
+		<param name="font">font12</param>
+		<definition>
+			<control type="group" id="70110">
+				<width>900</width>
+				<height>36</height>
+				<include content="NaraPgsSuccessContent">
+					<param name="font" value="$PARAM[font]" />
+					<param name="message" value="$LOCALIZE[70199]" />
+					<param name="id_prefix" value="7011" />
+				</include>
+				<visible>String.IsEqual(VideoPlayer.PgsAutoSelectionStatus,$LOCALIZE[70199])</visible>
+			</control>
+			<control type="group" id="70100">
+				<width>900</width>
+				<height>36</height>
+				<include content="NaraPgsSuccessContent">
+					<param name="font" value="$PARAM[font]" />
+				</include>
+				<visible>String.IsEqual(VideoPlayer.PgsAutoSelectionStatus,$LOCALIZE[70198])</visible>
+			</control>
+		</definition>
+	</include>
+	<variable name="VideoOSDButtonFocusSurfaceVar">
+		<value condition="Window.IsVisible(1116)">00FFFFFF</value>
+		<value>focus_surface</value>
+	</variable>
+	<variable name="VideoOSDButtonFocusForegroundVar">
+		<value condition="Window.IsVisible(1116)">text_primary</value>
+		<value>focus_foreground</value>
+	</variable>
+	<variable name="VideoOSDPlaylistThumbVar">
+		<value condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
+		<value condition="!String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
+		<value condition="!String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
+		<value>DefaultVideo.png</value>
+	</variable>
+	<variable name="VideoOSDPlaylistTitleVar">
+		<value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Season,S]$INFO[ListItem.Episode,E]$INFO[ListItem.Title, · ]</value>
+		<value>$VAR[NaraPlaylistTitleVar]</value>
+	</variable>
+	<variable name="VideoOSDHdrTypeVar">
+		<value condition="!String.IsEmpty(Player.Process(hdrsource))">$INFO[Player.Process(hdrsource)]</value>
+		<value condition="!String.IsEmpty(VideoPlayer.HdrType)">$MAP[NaraTechnicalHdrTextMap,VideoPlayer.HdrType]</value>
+		<value>SDR</value>
+	</variable>
+	<include name="VideoOSDInfoBadge">
+		<param name="visible">true</param>
+		<param name="surface">C0EDEDED</param>
+		<param name="foreground">FF282828</param>
+		<definition>
+			<control type="button">
+				<width min="40" max="$PARAM[maxwidth]">auto</width>
+				<height>36</height>
+				<label>[B][UPPERCASE]$PARAM[label][/UPPERCASE][/B]</label>
+				<font>font19_title</font>
+				<align>center</align>
+				<aligny>center</aligny>
+				<textoffsetx>18</textoffsetx>
+				<textcolor>$PARAM[foreground]</textcolor>
+				<disabledcolor>$PARAM[foreground]</disabledcolor>
+				<texturefocus cornerradius="4" cornerinset="0.5" colordiffuse="$PARAM[surface]">colors/white.png</texturefocus>
+				<texturenofocus cornerradius="4" cornerinset="0.5" colordiffuse="$PARAM[surface]">colors/white.png</texturenofocus>
+				<enable>false</enable>
+				<visible>$PARAM[visible]</visible>
+			</control>
+		</definition>
+	</include>
+	<include name="VideoOSDInfoBadgeRow">
+		<param name="top">30</param>
+		<param name="surface">C0EDEDED</param>
+		<param name="foreground">FF282828</param>
+		<definition>
+			<control type="grouplist">
+				<right>30</right>
+				<top>$PARAM[top]</top>
+				<width>1030</width>
+				<height>36</height>
+				<orientation>horizontal</orientation>
+				<align>right</align>
+				<itemgap>8</itemgap>
+				<include content="VideoOSDInfoBadge">
+					<param name="label" value="$VAR[VideoOSDHdrTypeVar]" />
+					<param name="maxwidth" value="200" />
+					<param name="surface" value="$PARAM[surface]" />
+					<param name="foreground" value="$PARAM[foreground]" />
+				</include>
+				<include content="VideoOSDInfoBadge">
+					<param name="label" value="$INFO[Player.Process(videowidth)]×$INFO[Player.Process(videoheight)]" />
+					<param name="maxwidth" value="158" />
+					<param name="visible" value="Integer.IsGreater(Player.Process(videowidth),0) + Integer.IsGreater(Player.Process(videoheight),0)" />
+					<param name="surface" value="$PARAM[surface]" />
+					<param name="foreground" value="$PARAM[foreground]" />
+				</include>
+				<include content="VideoOSDInfoBadge">
+					<param name="label" value="$INFO[Player.Process(videofps),, FPS]" />
+					<param name="maxwidth" value="160" />
+					<param name="visible" value="!String.IsEmpty(Player.Process(videofps))" />
+					<param name="surface" value="$PARAM[surface]" />
+					<param name="foreground" value="$PARAM[foreground]" />
+				</include>
+				<include content="VideoOSDInfoBadge">
+					<param name="label" value="$MAP[NaraTechnicalAudioCodecTextMap,VideoPlayer.AudioCodec]" />
+					<param name="maxwidth" value="305" />
+					<param name="visible" value="!String.IsEmpty(VideoPlayer.AudioCodec)" />
+					<param name="surface" value="$PARAM[surface]" />
+					<param name="foreground" value="$PARAM[foreground]" />
+				</include>
+				<include content="VideoOSDInfoBadge">
+					<param name="label" value="$INFO[VideoPlayer.AudioChannels(DefaultLayout)]" />
+					<param name="maxwidth" value="175" />
+					<param name="visible" value="!String.IsEmpty(VideoPlayer.AudioChannels(DefaultLayout))" />
+					<param name="surface" value="$PARAM[surface]" />
+					<param name="foreground" value="$PARAM[foreground]" />
+				</include>
+			</control>
+		</definition>
+	</include>
+	<include name="VideoOSDHeader">
+		<control type="group">
+			<visible>Window.IsModalDialogTopmost(videoosd) | Window.IsModalDialogTopmost(1116)</visible>
+			<animation effect="fade" start="0" end="100" time="180">WindowOpen</animation>
+			<animation effect="fade" start="100" end="0" time="140">WindowClose</animation>
+			<animation effect="fade" time="140">VisibleChange</animation>
+			<control type="image">
+				<width>100%</width>
+				<height>270</height>
+				<texture flipy="true" colordiffuse="5AFFFFFF">overlays/overlayfade.png</texture>
+			</control>
+			<control type="grouplist">
+				<left>30</left>
+				<top>30</top>
+				<width>820</width>
+				<height>166</height>
+				<orientation>vertical</orientation>
+				<itemgap>6</itemgap>
+				<control type="image">
+					<width>356</width>
+					<height>100</height>
+					<texture>$VAR[PlayerClearLogoVar]</texture>
+					<aspectratio align="left" aligny="top">keep</aspectratio>
+					<visible>!String.IsEmpty(Player.Art(tvshow.clearlogo)) | !String.IsEmpty(Player.Art(clearlogo))</visible>
+				</control>
+				<control type="label">
+					<width>820</width>
+					<height>50</height>
+					<font>font36_title</font>
+					<label>$VAR[NowPlayingBreadcrumbsVar]</label>
+					<scroll>true</scroll>
+					<visible>String.IsEmpty(Player.Art(tvshow.clearlogo)) + String.IsEmpty(Player.Art(clearlogo))</visible>
+				</control>
+				<control type="label">
+					<width>820</width>
+					<height>34</height>
+					<font>font12</font>
+					<label>$INFO[VideoPlayer.Season,S]$INFO[VideoPlayer.Episode,E]$INFO[VideoPlayer.Title, · ]</label>
+					<textcolor>text_secondary</textcolor>
+					<scroll>true</scroll>
+					<visible>VideoPlayer.Content(episodes)</visible>
+				</control>
+			</control>
+			<include content="VideoOSDInfoBadgeRow">
+				<param name="top" value="32" />
+				<param name="surface" value="50000000" />
+				<param name="foreground" value="00000000" />
+			</include>
+			<include content="VideoOSDInfoBadgeRow" />
+			<control type="group">
+				<right>30</right>
+				<top>78</top>
+				<width>900</width>
+				<height>36</height>
+				<include content="NaraPgsSuccessNotifications" />
+			</control>
+		</control>
+	</include>
+	<include name="VideoOSDPlaylistCard">
+		<param name="focused">false</param>
+		<definition>
+			<control type="group">
+				<left>10</left>
+				<top>10</top>
+				<width>356</width>
+				<height>200</height>
+				<control type="image">
+					<width>356</width>
+					<height>200</height>
+					<aspectratio>scale</aspectratio>
+					<texture fallback="DefaultVideo.png" background="true" cornerradius="4">$VAR[VideoOSDPlaylistThumbVar]</texture>
+				</control>
+				<control type="image">
+					<left>-14</left>
+					<top>-14</top>
+					<width>384</width>
+					<height>228</height>
+					<texture cornerradius="6" cornerborder="2" cornerglow="12" colordiffuse="focus_media">colors/white.png</texture>
+					<visible>$PARAM[focused]</visible>
+				</control>
+				<control type="image">
+					<top>134</top>
+					<width>356</width>
+					<height>66</height>
+					<aspectratio>stretch</aspectratio>
+					<texture cornerradius="4" colordiffuse="80FFFFFF">overlays/overlayfade.png</texture>
+				</control>
+				<control type="label">
+					<left>12</left>
+					<top>159</top>
+					<width>212</width>
+					<height>34</height>
+					<font>font12</font>
+					<label>$VAR[VideoOSDPlaylistTitleVar]</label>
+					<textcolor>text_secondary</textcolor>
+					<selectedcolor>text_secondary</selectedcolor>
+					<scroll>$PARAM[focused]</scroll>
+				</control>
+				<control type="image">
+					<centerleft>50%</centerleft>
+					<centertop>50%</centertop>
+					<width>64</width>
+					<height>64</height>
+					<aspectratio>keep</aspectratio>
+					<texture colordiffuse="B3FFFFFF">osd/nara/play-circle.png</texture>
+					<visible>ListItem.IsPlaying</visible>
+				</control>
+				<control type="label">
+					<right>12</right>
+					<top>161</top>
+					<width>108</width>
+					<height>30</height>
+					<font>font10</font>
+					<align>right</align>
+					<label>$INFO[ListItem.Duration]</label>
+					<textcolor>text_secondary</textcolor>
+					<selectedcolor>text_secondary</selectedcolor>
+					<visible>!ListItem.IsPlaying</visible>
+				</control>
+				<control type="label">
+					<right>12</right>
+					<top>161</top>
+					<width>108</width>
+					<height>30</height>
+					<font>font10</font>
+					<align>right</align>
+					<label>$LOCALIZE[31000]</label>
+					<textcolor>FFFFFFFF</textcolor>
+					<selectedcolor>FFFFFFFF</selectedcolor>
+					<visible>ListItem.IsPlaying</visible>
+				</control>
+			</control>
+		</definition>
+	</include>
+</includes>

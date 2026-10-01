@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<window type="dialog" id="1102">
+	<defaultcontrol always="true">1000</defaultcontrol>
+	<include>Animation_DialogPopupOpenClose</include>
+	<controls>
+		<control type="image">
+			<width>100%</width>
+			<height>100%</height>
+			<texture colordiffuse="66000000">colors/black.png</texture>
+		</control>
+		<control type="button">
+			<width>100%</width>
+			<height>100%</height>
+			<texturefocus />
+			<texturenofocus />
+			<onclick>Action(Close)</onclick>
+		</control>
+		<control type="group">
+			<centerleft>50%</centerleft>
+			<centertop>50%</centertop>
+			<width>1500</width>
+			<height>550</height>
+			<control type="image">
+				<width>100%</width>
+				<height>100%</height>
+				<texture material="glass" glassstyle="regular" cornerradius="32">colors/white.png</texture>
+				<visible>$EXP[nara_dialog_glass]</visible>
+			</control>
+			<control type="image">
+				<width>100%</width>
+				<height>100%</height>
+				<texture colordiffuse="F02A2D32" cornerradius="32">colors/white.png</texture>
+				<visible>!$EXP[nara_dialog_glass]</visible>
+			</control>
+			<control type="button" id="22002">
+				<width>100%</width>
+				<height>100%</height>
+				<texturefocus />
+				<texturenofocus />
+				<onclick>noop</onclick>
+				<onup>PageUp(3000)</onup>
+				<ondown>PageDown(3000)</ondown>
+			</control>
+			<control type="label" id="1">
+				<left>48</left>
+				<top>32</top>
+				<width>1404</width>
+				<height>44</height>
+				<font>font32</font>
+				<label>$INFO[Window(home).Property(TextViewer_Header)]</label>
+			</control>
+			<control type="textbox" id="2000">
+				<left>48</left>
+				<top>96</top>
+				<width>1404</width>
+				<height>406</height>
+				<pagecontrol>3000</pagecontrol>
+				<font>font30_title</font>
+				<label>$INFO[Window(home).Property(TextViewer_Text)]</label>
+			</control>
+			<control type="scrollbar" id="3000">
+				<right>24</right>
+				<top>96</top>
+				<width>6</width>
+				<height>406</height>
+				<orientation>vertical</orientation>
+				<onleft>1000</onleft>
+				<onright>1000</onright>
+				<onup>3000</onup>
+				<ondown>3000</ondown>
+				<texturesliderbackground colordiffuse="border_subtle" cornerradius="3">colors/white.png</texturesliderbackground>
+				<texturesliderbar colordiffuse="text_muted" cornerradius="3">colors/white.png</texturesliderbar>
+				<texturesliderbarfocus colordiffuse="text_primary" cornerradius="3">colors/white.png</texturesliderbarfocus>
+				<visible>Integer.IsGreater(Container(2000).NumPages,1)</visible>
+			</control>
+		</control>
+		<control type="button" id="1000">
+			<include>HiddenObject</include>
+			<onclick>Action(Close)</onclick>
+			<onup>PageUp(3000)</onup>
+			<ondown>PageDown(3000)</ondown>
+			<onright condition="Integer.IsGreater(Container(2000).NumPages,1)">3000</onright>
+		</control>
+	</controls>
+</window>

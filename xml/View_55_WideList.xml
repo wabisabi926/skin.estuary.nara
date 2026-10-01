@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+	<include name="WideListFocus">
+		<control type="image">
+			<left>0</left>
+			<right>0</right>
+			<top>4</top>
+			<bottom>4</bottom>
+			<texture cornerradius="12" colordiffuse="focus_surface">colors/white.png</texture>
+			<visible>Control.HasFocus(55)</visible>
+		</control>
+		<control type="image">
+			<left>0</left>
+			<right>0</right>
+			<top>4</top>
+			<bottom>4</bottom>
+			<texture cornerradius="12" colordiffuse="selection_surface">colors/white.png</texture>
+			<visible>!Control.HasFocus(55)</visible>
+		</control>
+	</include>
+	<include name="View_55_WideList">
+		<param name="bottom_offset">list_bottom_offset</param>
+		<param name="preview_fallback">DefaultFolder.png</param>
+		<definition>
+			<control type="group">
+				<include>OpenClose_Left</include>
+				<visible>Control.IsVisible(55)</visible>
+				<include>Visible_Left</include>
+				<include content="WideListPreview">
+					<param name="fallback_image" value="$PARAM[preview_fallback]" />
+				</include>
+			</control>
+			<control type="group">
+				<include>OpenClose_Right</include>
+				<visible>Control.IsVisible(55)</visible>
+				<include>Visible_Right</include>
+				<control type="fixedlist" id="55">
+					<left>594</left>
+					<top>topbar_content_top</top>
+					<bottom>$PARAM[bottom_offset]</bottom>
+					<right>40</right>
+					<scrolltime tween="cubic" easing="out">500</scrolltime>
+					<orientation>vertical</orientation>
+					<pagecontrol>531</pagecontrol>
+					<movement>6</movement>
+					<focusposition>5</focusposition>
+					<onleft>9000</onleft>
+					<onright>531</onright>
+					<onup>55</onup>
+					<ondown>55</ondown>
+					<viewtype label="$LOCALIZE[31107]">list</viewtype>
+					<focusedlayout height="list_item_height" condition="Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(movies) | Container.Content(musicvideos) | Container.Content(videos) | Window.IsActive(videoplaylist) | Window.IsActive(musicplaylist)">
+						<include>WideListFocus</include>
+						<control type="image">
+							<left>35</left>
+							<centertop>50%</centertop>
+							<width>32</width>
+							<height>32</height>
+							<texture>$VAR[ListWatchedIconVar]</texture>
+							<colordiffuse>$VAR[FocusLayoutTextColor55Var]</colordiffuse>
+						</control>
+						<control type="label">
+							<left>105</left>
+							<top>0</top>
+							<bottom>0</bottom>
+							<right>352</right>
+							<aligny>center</aligny>
+							<scroll>true</scroll>
+							<font>font25</font>
+							<label>$VAR[ListLabelVar]</label>
+							<textcolor>$VAR[FocusLayoutTextColor55Var]</textcolor>
+							<selectedcolor>$VAR[FocusLayoutTextColor55Var]</selectedcolor>
+						</control>
+						<control type="label">
+							<width>280</width>
+							<top>0</top>
+							<bottom>0</bottom>
+							<right>40</right>
+							<align>right</align>
+							<aligny>center</aligny>
+							<font>font12</font>
+							<label>$VAR[ListLabel2Var]</label>
+							<textcolor>$VAR[FocusLayoutMetaColor55Var]</textcolor>
+							<selectedcolor>$VAR[FocusLayoutMetaColor55Var]</selectedcolor>
+						</control>
+					</focusedlayout>
+					<itemlayout height="list_item_height" condition="Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(movies) | Container.Content(musicvideos) | Container.Content(videos) | Window.IsActive(videoplaylist) | Window.IsActive(musicplaylist)">
+						<control type="image">
+							<left>35</left>
+							<centertop>50%</centertop>
+							<width>32</width>
+							<height>32</height>
+							<texture colordiffuse="text_secondary">$VAR[ListWatchedIconVar]</texture>
+						</control>
+						<control type="label">
+							<left>105</left>
+							<top>0</top>
+							<bottom>0</bottom>
+							<right>352</right>
+							<aligny>center</aligny>
+							<font>font25</font>
+							<label>$VAR[ListLabelVar]</label>
+							<textcolor>text_primary</textcolor>
+							<selectedcolor>selection_foreground</selectedcolor>
+						</control>
+						<control type="label">
+							<width>280</width>
+							<top>0</top>
+							<bottom>0</bottom>
+							<right>40</right>
+							<align>right</align>
+							<aligny>center</aligny>
+							<font>font12</font>
+							<label>$VAR[ListLabel2Var]</label>
+							<textcolor>text_muted</textcolor>
+							<selectedcolor>text_secondary</selectedcolor>
+						</control>
+					</itemlayout>
+					<focusedlayout height="list_item_height" condition="!Container.Content(songs) + !Container.Content(addons) + !Container.Content(playlists) + !Container.Content() + !Container.Content(tvshows) + !Container.Content(seasons) + !Container.Content(episodes) + !Container.Content(movies) + !Container.Content(musicvideos) + !Container.Content(videos) + !Container.Content(favourites) + !Container.Content(recordings)">
+						<include>WideListFocus</include>
+						<control type="image">
+							<left>35</left>
+							<centertop>50%</centertop>
+							<width>32</width>
+							<height>32</height>
+							<texture>$VAR[ListWatchedIconVar]</texture>
+							<colordiffuse>$VAR[FocusLayoutTextColor55Var]</colordiffuse>
+						</control>
+						<control type="label">
+							<left>105</left>
+							<top>0</top>
+							<bottom>0</bottom>
+							<right>352</right>
+							<aligny>center</aligny>
+							<scroll>true</scroll>
+							<font>font25</font>
+							<label>$VAR[ListLabelVar]</label>
+							<textcolor>$VAR[FocusLayoutTextColor55Var]</textcolor>
+							<selectedcolor>$VAR[FocusLayoutTextColor55Var]</selectedcolor>
+						</control>
+						<control type="label">
+							<width>280</width>
+							<top>0</top>
+							<bottom>0</bottom>
+							<right>40</right>
+							<align>right</align>
+							<aligny>center</aligny>
+							<font>font12</font>
+							<label>$VAR[ListLabel2Var]</label>
+							<textcolor>$VAR[FocusLayoutMetaColor55Var]</textcolor>
+							<selectedcolor>$VAR[FocusLayoutMetaColor55Var]</selectedcolor>
+						</control>
+					</focusedlayout>
+					<itemlayout height="list_item_height" condition="!Container.Content(songs) + !Container.Content(addons) + !Container.Content(playlists) + !Container.Content() + !Container.Content(tvshows) + !Container.Content(seasons) + !Container.Content(episodes) + !Container.Content(movies) + !Container.Content(musicvideos) + !Container.Content(videos) + !Container.Content(favourites) + !Container.Content(recordings)">
+						<control type="image">
+							<left>35</left>
+							<centertop>50%</centertop>
+							<width>32</width>
+							<height>32</height>
+							<texture colordiffuse="text_secondary">$VAR[ListWatchedIconVar]</texture>
+						</control>
+						<control type="label">
+							<left>105</left>
+							<top>0</top>
+							<bottom>0</bottom>
+							<right>352</right>
+							<aligny>center</aligny>
+							<font>font25</font>
+							<label>$VAR[ListLabelVar]</label>
+							<textcolor>text_primary</textcolor>
+							<selectedcolor>selection_foreground</selectedcolor>
+						</control>
+						<control type="label">
+							<width>280</width>
+							<top>0</top>
+							<bottom>0</bottom>
+							<right>40</right>
+							<align>right</align>
+							<aligny>center</aligny>
+							<font>font12</font>
+							<label>$VAR[ListLabel2Var]</label>
+							<textcolor>text_muted</textcolor>
+							<selectedcolor>text_secondary</selectedcolor>
+						</control>
+					</itemlayout>
+					<focusedlayout height="list_item_height" condition="Container.Content(playlists) | Container.Content(favourites) | Container.Content()">
+						<include>WideListFocus</include>
+						<control type="image">
+							<left>28</left>
+							<centertop>50%</centertop>
+							<width>50</width>
+							<height>50</height>
+							<texture cornerradius="25" colordiffuse="$VAR[WideListIconSurfaceVar]">colors/white.png</texture>
+						</control>
+						<control type="image">
+							<left>28</left>
+							<centertop>50%</centertop>
+							<width>50</width>
+							<height>50</height>
+							<aspectratio>keep</aspectratio>
+							<texture background="true" cornerradius="25">$INFO[ListItem.Icon]</texture>
+						</control>
+						<control type="label">
+							<left>105</left>
+							<top>0</top>
+							<bottom>0</bottom>
+							<right>40</right>
+							<aligny>center</aligny>
+							<scroll>true</scroll>
+							<font>font25</font>
+							<label>$INFO[ListItem.Label]</label>
+							<textcolor>$VAR[FocusLayoutTextColor55Var]</textcolor>
+							<selectedcolor>$VAR[FocusLayoutTextColor55Var]</selectedcolor>
+						</control>
+					</focusedlayout>
+					<itemlayout height="list_item_height" condition="Container.Content(playlists) | Container.Content(favourites) | Container.Content()">
+						<control type="image">
+							<left>28</left>
+							<centertop>50%</centertop>
+							<width>50</width>
+							<height>50</height>
+							<texture cornerradius="25" colordiffuse="selection_surface">colors/white.png</texture>
+						</control>
+						<control type="image">
+							<left>28</left>
+							<centertop>50%</centertop>
+							<width>50</width>
+							<height>50</height>
+							<aspectratio>keep</aspectratio>
+							<texture background="true" cornerradius="25" colordiffuse="opacity_medium">$INFO[ListItem.Icon]</texture>
+						</control>
+						<control type="label">
+							<left>105</left>
+							<top>0</top>
+							<bottom>0</bottom>
+							<right>40</right>
+							<aligny>center</aligny>
+							<font>font25</font>
+							<label>$INFO[ListItem.Label]</label>
+							<textcolor>text_primary</textcolor>
+							<selectedcolor>selection_foreground</selectedcolor>
+						</control>
+					</itemlayout>
+					<include condition="Window.IsActive(music)">SongsListLayout</include>
+					<include>AddonsListLayout</include>
+				</control>
+			</control>
+		</definition>
+	</include>
+	<include name="WideListPreview">
+		<param name="fallback_image">DefaultFolder.png</param>
+		<definition>
+			<control type="group">
+				<depth>DepthContentPanel</depth>
+				<left>40</left>
+				<top>104</top>
+				<width>510</width>
+				<height>884</height>
+				<control type="image">
+					<width>510</width>
+					<height>884</height>
+					<texture material="glass" glassstyle="regular" cornerradius="32">colors/white.png</texture>
+				</control>
+				<control type="image">
+					<left>36</left>
+					<top>28</top>
+					<width>438</width>
+					<height>366</height>
+					<aspectratio>keep</aspectratio>
+					<fadetime>200</fadetime>
+					<texture fallback="$PARAM[fallback_image]" background="true" cornerradius="12">$VAR[IconWallThumbVar]</texture>
+					<visible>!Container.Content(addons) + !String.IsEqual(ListItem.DBType,song) + !String.IsEqual(ListItem.DBType,episode) + [!String.IsEmpty(ListItem.Art(poster)) | !String.IsEmpty(ListItem.Thumb)]</visible>
+				</control>
+				<control type="image">
+					<centerleft>255</centerleft>
+					<centertop>211</centertop>
+					<width>160</width>
+					<height>160</height>
+					<aspectratio>keep</aspectratio>
+					<fadetime>200</fadetime>
+					<texture fallback="$PARAM[fallback_image]" background="true">$VAR[IconWallThumbVar]</texture>
+					<visible>!Container.Content(addons) + !String.IsEqual(ListItem.DBType,song) + !String.IsEqual(ListItem.DBType,episode) + String.IsEmpty(ListItem.Art(poster)) + String.IsEmpty(ListItem.Thumb)</visible>
+				</control>
+				<control type="image">
+					<centerleft>255</centerleft>
+					<centertop>211</centertop>
+					<width>240</width>
+					<height>240</height>
+					<aspectratio>keep</aspectratio>
+					<fadetime>200</fadetime>
+					<texture fallback="DefaultAddon.png" background="true" cornerradius="12">$VAR[IconWallThumbVar]</texture>
+					<visible>Container.Content(addons)</visible>
+				</control>
+				<control type="image">
+					<centerleft>255</centerleft>
+					<centertop>211</centertop>
+					<width>340</width>
+					<height>340</height>
+					<aspectratio>keep</aspectratio>
+					<fadetime>200</fadetime>
+					<texture fallback="DefaultAudio.png" background="true" cornerradius="12">$VAR[MusicInfoThumbVar]</texture>
+					<visible>!Container.Content(addons) + String.IsEqual(ListItem.DBType,song)</visible>
+				</control>
+				<control type="image">
+					<left>36</left>
+					<centertop>211</centertop>
+					<width>438</width>
+					<height>246</height>
+					<aspectratio>keep</aspectratio>
+					<fadetime>200</fadetime>
+					<texture fallback="DefaultVideo.png" background="true" cornerradius="12">$VAR[ShiftThumbVar]</texture>
+					<visible>!Container.Content(addons) + String.IsEqual(ListItem.DBType,episode)</visible>
+				</control>
+				<control type="textbox">
+					<left>32</left>
+					<top>426</top>
+					<width>446</width>
+					<height>80</height>
+					<font>font32_title</font>
+					<textcolor>text_primary</textcolor>
+					<label>$VAR[WideListPreviewTitleVar]</label>
+					<autoscroll time="3000" delay="7000" repeat="5000">!System.HasModalDialog + Skin.HasSetting(AutoScroll)</autoscroll>
+				</control>
+				<control type="textbox">
+					<left>32</left>
+					<top>518</top>
+					<width>446</width>
+					<height>58</height>
+					<font>font12</font>
+					<textcolor>text_secondary</textcolor>
+					<label>$VAR[WideListPreviewMetadataVar]</label>
+				</control>
+				<control type="label">
+					<left>32</left>
+					<top>588</top>
+					<width>446</width>
+					<height>28</height>
+					<font>font12</font>
+					<textcolor>text_secondary</textcolor>
+					<label>$VAR[WideListPreviewRatingVar]</label>
+				</control>
+				<control type="group">
+					<left>32</left>
+					<top>636</top>
+					<width>446</width>
+					<height>212</height>
+					<control type="textbox" id="55401">
+						<width>446</width>
+						<height>212</height>
+						<font>font12</font>
+						<textcolor>text_secondary</textcolor>
+						<label>$VAR[WideListPreviewDescriptionVar]</label>
+						<autoscroll time="3000" delay="7000" repeat="5000">!System.HasModalDialog + Skin.HasSetting(AutoScroll)</autoscroll>
+					</control>
+					<control type="group">
+						<visible>String.IsEmpty(Control.GetLabel(55401))</visible>
+						<include content="InfoList">
+							<param name="list_id" value="55400" />
+							<param name="width" value="436" />
+							<param name="bottom" value="0" />
+							<param name="font" value="font12" />
+							<param name="sortby" value="year" />
+							<param name="visible" value="ListItem.IsCollection" />
+						</include>
+						<include content="InfoList">
+							<param name="list_id" value="55420" />
+							<param name="width" value="436" />
+							<param name="bottom" value="0" />
+							<param name="font" value="font12" />
+							<param name="sortby" value="year" />
+							<param name="visible" value="!ListItem.IsCollection + !String.IsEmpty(ListItem.DBID) + String.IsEqual(ListItem.DBType,artist)" />
+						</include>
+						<include content="InfoList">
+							<param name="list_id" value="55430" />
+							<param name="width" value="436" />
+							<param name="bottom" value="0" />
+							<param name="font" value="font12" />
+							<param name="sortby" value="track" />
+							<param name="item_label" value="$INFO[ListItem.Duration,[COLOR text_secondary],[/COLOR]  -  ]$INFO[ListItem.Label]" />
+							<param name="visible" value="!ListItem.IsCollection + !String.IsEmpty(ListItem.DBID) + String.IsEqual(ListItem.DBType,album)" />
+						</include>
+						<control type="label">
+							<width>446</width>
+							<height>32</height>
+							<font>font12</font>
+							<textcolor>text_muted</textcolor>
+							<label>$LOCALIZE[19055]</label>
+							<visible>!ListItem.IsParentFolder + !Integer.IsGreater(Container(55400).NumItems,0) + !Integer.IsGreater(Container(55420).NumItems,0) + !Integer.IsGreater(Container(55430).NumItems,0)</visible>
+						</control>
+					</control>
+				</control>
+			</control>
+		</definition>
+	</include>
+	<include name="SongsListLayout">
+		<focusedlayout height="list_item_height" condition="Container.Content(songs)">
+			<include>WideListFocus</include>
+			<control type="label">
+				<left>35</left>
+				<right>272</right>
+				<top>0</top>
+				<bottom>0</bottom>
+				<aligny>center</aligny>
+				<scroll>true</scroll>
+				<font>font25</font>
+				<label>$VAR[ListLabelVar]</label>
+				<textcolor>$VAR[FocusLayoutTextColor55Var]</textcolor>
+				<selectedcolor>$VAR[FocusLayoutTextColor55Var]</selectedcolor>
+			</control>
+			<control type="label">
+				<width>200</width>
+				<right>40</right>
+				<align>right</align>
+				<top>0</top>
+				<bottom>0</bottom>
+				<aligny>center</aligny>
+				<font>font12</font>
+				<label>$VAR[ListLabel2Var]</label>
+				<textcolor>$VAR[FocusLayoutMetaColor55Var]</textcolor>
+				<selectedcolor>$VAR[FocusLayoutMetaColor55Var]</selectedcolor>
+			</control>
+		</focusedlayout>
+		<itemlayout height="list_item_height" condition="Container.Content(songs)">
+			<control type="label">
+				<left>35</left>
+				<right>272</right>
+				<top>0</top>
+				<bottom>0</bottom>
+				<aligny>center</aligny>
+				<font>font25</font>
+				<label>$VAR[ListLabelVar]</label>
+				<textcolor>text_primary</textcolor>
+				<selectedcolor>selection_foreground</selectedcolor>
+			</control>
+			<control type="label">
+				<width>200</width>
+				<right>40</right>
+				<align>right</align>
+				<top>0</top>
+				<bottom>0</bottom>
+				<aligny>center</aligny>
+				<font>font12</font>
+				<label>$VAR[ListLabel2Var]</label>
+				<textcolor>text_muted</textcolor>
+				<selectedcolor>text_secondary</selectedcolor>
+			</control>
+		</itemlayout>
+	</include>
+	<include name="AddonsListLayout">
+		<focusedlayout height="list_item_height" condition="Container.Content(addons)">
+			<include>WideListFocus</include>
+			<control type="image">
+				<left>20</left>
+				<centertop>50%</centertop>
+				<width>32</width>
+				<height>32</height>
+				<texture>$VAR[AddonsListIconVar]</texture>
+				<colordiffuse>$VAR[FocusLayoutTextColor55Var]</colordiffuse>
+			</control>
+			<control type="label">
+				<left>75</left>
+				<right>462</right>
+				<top>0</top>
+				<bottom>0</bottom>
+				<aligny>center</aligny>
+				<scroll>true</scroll>
+				<font>font25</font>
+				<label>$INFO[ListItem.Label]</label>
+				<textcolor>$VAR[FocusLayoutTextColor55Var]</textcolor>
+				<selectedcolor>$VAR[FocusLayoutTextColor55Var]</selectedcolor>
+			</control>
+			<control type="label">
+				<width>340</width>
+				<right>90</right>
+				<align>right</align>
+				<top>0</top>
+				<bottom>0</bottom>
+				<aligny>center</aligny>
+				<font>font12</font>
+				<label>$VAR[AddonsLabel2Var]</label>
+				<scroll>true</scroll>
+				<textcolor>$VAR[FocusLayoutMetaColor55Var]</textcolor>
+				<selectedcolor>$VAR[FocusLayoutMetaColor55Var]</selectedcolor>
+			</control>
+			<control type="image">
+				<right>40</right>
+				<centertop>50%</centertop>
+				<width>32</width>
+				<height>32</height>
+				<texture>$VAR[AddonsOriginVar]</texture>
+				<colordiffuse>$VAR[FocusLayoutTextColor55Var]</colordiffuse>
+				<visible>!ListItem.IsFolder</visible>
+			</control>
+		</focusedlayout>
+		<itemlayout height="list_item_height" condition="Container.Content(addons)">
+			<control type="image">
+				<left>20</left>
+				<centertop>50%</centertop>
+				<width>32</width>
+				<height>32</height>
+				<texture colordiffuse="text_secondary">$VAR[AddonsListIconVar]</texture>
+			</control>
+			<control type="label">
+				<left>75</left>
+				<right>462</right>
+				<top>0</top>
+				<bottom>0</bottom>
+				<aligny>center</aligny>
+				<font>font25</font>
+				<label>$INFO[ListItem.Label]</label>
+				<textcolor>text_primary</textcolor>
+				<selectedcolor>selection_foreground</selectedcolor>
+			</control>
+			<control type="label">
+				<width>340</width>
+				<right>90</right>
+				<align>right</align>
+				<top>0</top>
+				<bottom>0</bottom>
+				<aligny>center</aligny>
+				<font>font12</font>
+				<label>$VAR[AddonsLabel2Var]</label>
+				<textcolor>text_muted</textcolor>
+				<selectedcolor>text_secondary</selectedcolor>
+			</control>
+			<control type="image">
+				<right>40</right>
+				<centertop>50%</centertop>
+				<width>32</width>
+				<height>32</height>
+				<texture colordiffuse="text_secondary">$VAR[AddonsOriginVar]</texture>
+				<visible>!ListItem.IsFolder</visible>
+			</control>
+		</itemlayout>
+	</include>
+</includes>

@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+	<include name="OSDButton">
+		<param name="focuscolor">focus_surface</param>
+		<param name="foreground">focus_foreground</param>
+		<definition>
+			<textureradioonfocus colordiffuse="$PARAM[foreground]">$PARAM[texture]</textureradioonfocus>
+			<textureradioonnofocus colordiffuse="text_primary">$PARAM[texture]</textureradioonnofocus>
+			<textureradioofffocus colordiffuse="$PARAM[foreground]">$PARAM[texture]</textureradioofffocus>
+			<textureradiooffnofocus colordiffuse="text_primary">$PARAM[texture]</textureradiooffnofocus>
+			<textureradioondisabled colordiffuse="text_disabled">$PARAM[texture]</textureradioondisabled>
+			<textureradiooffdisabled colordiffuse="text_disabled">$PARAM[texture]</textureradiooffdisabled>
+			<texturefocus colordiffuse="$PARAM[focuscolor]">osd/fullscreen/buttons/button-fo.png</texturefocus>
+			<width>76</width>
+			<animation center="38,38" effect="zoom" end="100" reversible="false" start="95" time="480" tween="back">Focus</animation>
+			<height>76</height>
+			<radiowidth>74</radiowidth>
+			<radioheight>74</radioheight>
+			<font></font>
+			<texturenofocus />
+			<radioposx>1</radioposx>
+			<radioposy>0</radioposy>
+		</definition>
+	</include>
+	<include name="NaraVideoOSDButton">
+		<oninfo condition="!VideoPlayer.Content(LiveTV)">ActivateWindow(playerprocessinfo)</oninfo>
+		<textureradioonfocus colordiffuse="$VAR[VideoOSDButtonFocusForegroundVar]">$PARAM[texture]</textureradioonfocus>
+		<textureradioonnofocus colordiffuse="text_primary">$PARAM[texture]</textureradioonnofocus>
+		<textureradioofffocus colordiffuse="$VAR[VideoOSDButtonFocusForegroundVar]">$PARAM[texture]</textureradioofffocus>
+		<textureradiooffnofocus colordiffuse="text_primary">$PARAM[texture]</textureradiooffnofocus>
+		<textureradioondisabled colordiffuse="text_disabled">$PARAM[texture]</textureradioondisabled>
+		<textureradiooffdisabled colordiffuse="text_disabled">$PARAM[texture]</textureradiooffdisabled>
+		<texturefocus colordiffuse="$VAR[VideoOSDButtonFocusSurfaceVar]">osd/fullscreen/buttons/button-fo.png</texturefocus>
+		<texturenofocus />
+		<width>52</width>
+		<height>52</height>
+		<radiowidth>50</radiowidth>
+		<radioheight>50</radioheight>
+		<radioposx>1</radioposx>
+		<radioposy>1</radioposy>
+		<font></font>
+		<animation center="26,26" effect="zoom" end="100" reversible="false" start="94" time="360" tween="back">Focus</animation>
+	</include>
+	<include name="NaraVideoOSDPlayButton">
+		<oninfo condition="!VideoPlayer.Content(LiveTV)">ActivateWindow(playerprocessinfo)</oninfo>
+		<textureradioonfocus colordiffuse="$VAR[VideoOSDButtonFocusForegroundVar]">osd/nara/play.png</textureradioonfocus>
+		<textureradioonnofocus colordiffuse="text_primary">osd/nara/play.png</textureradioonnofocus>
+		<textureradioofffocus colordiffuse="$VAR[VideoOSDButtonFocusForegroundVar]">osd/nara/pause.png</textureradioofffocus>
+		<textureradiooffnofocus colordiffuse="text_primary">osd/nara/pause.png</textureradiooffnofocus>
+		<textureradioondisabled colordiffuse="text_disabled">osd/nara/play.png</textureradioondisabled>
+		<textureradiooffdisabled colordiffuse="text_disabled">osd/nara/pause.png</textureradiooffdisabled>
+		<texturefocus colordiffuse="$VAR[VideoOSDButtonFocusSurfaceVar]">osd/fullscreen/buttons/button-fo.png</texturefocus>
+		<texturenofocus />
+		<width>52</width>
+		<height>52</height>
+		<radiowidth>50</radiowidth>
+		<radioheight>50</radioheight>
+		<radioposx>1</radioposx>
+		<radioposy>1</radioposy>
+		<font></font>
+		<animation center="26,26" effect="zoom" end="100" reversible="false" start="94" time="360" tween="back">Focus</animation>
+	</include>
+	<include name="InfoDialogMetadata">
+		<param name="onclick_condition">false</param>
+		<param name="onclick">noop</param>
+		<param name="altclick_condition">false</param>
+		<param name="altclick">noop</param>
+		<definition>
+			<control type="togglebutton" id="$PARAM[control_id]">
+				<width>469</width>
+				<height>49</height>
+				<textoffsetx>16</textoffsetx>
+				<aligny>center</aligny>
+				<font>font12</font>
+				<texturefocus colordiffuse="$VAR[NaraDialogFocusSurfaceVar]">lists/focus.png</texturefocus>
+				<alttexturefocus colordiffuse="$VAR[NaraDialogFocusSurfaceVar]">lists/focus.png</alttexturefocus>
+				<texturenofocus />
+				<alttexturenofocus />
+				<onclick>noop</onclick>
+				<onclick condition="$PARAM[onclick_condition]">$PARAM[onclick]</onclick>
+				<altclick>noop</altclick>
+				<altclick condition="$PARAM[altclick_condition]">$PARAM[altclick]</altclick>
+				<label>$PARAM[label]</label>
+				<altlabel>$PARAM[altlabel]</altlabel>
+				<usealttexture>Control.HasFocus($PARAM[control_id])</usealttexture>
+				<visible>$PARAM[visible]</visible>
+				<focusedcolor>$VAR[NaraDialogFocusForegroundVar]</focusedcolor>
+			</control>
+		</definition>
+	</include>
+	<include name="DefaultSettingButton">
+		<param name="height">70</param>
+		<param name="textoffsetx">40</param>
+		<definition>
+			<textoffsetx>$PARAM[textoffsetx]</textoffsetx>
+			<top>0</top>
+			<height>$PARAM[height]</height>
+			<aligny>center</aligny>
+			<invalidcolor>status_error</invalidcolor>
+			<selectedcolor>selection_foreground</selectedcolor>
+			<texturefocus colordiffuse="$VAR[NaraDialogFocusSurfaceVar]">lists/focus.png</texturefocus>
+			<texturenofocus />
+			<focusedcolor>$VAR[NaraDialogFocusForegroundVar]</focusedcolor>
+			<textureupfocus colordiffuse="$VAR[NaraDialogFocusForegroundVar]">buttons/spinctrl/arrow-light-up.png</textureupfocus>
+			<texturedownfocus colordiffuse="$VAR[NaraDialogFocusForegroundVar]">buttons/spinctrl/arrow-light-down.png</texturedownfocus>
+			<textureradioonfocus colordiffuse="$VAR[NaraDialogFocusForegroundVar]">buttons/radio-button-on.png</textureradioonfocus>
+			<textureradioofffocus colordiffuse="$VAR[NaraDialogFocusForegroundVar]">buttons/radio-button-off.png</textureradioofffocus>
+		</definition>
+	</include>
+	<include name="DialogSettingButton">
+		<param name="width">700</param>
+		<param name="height">70</param>
+		<param name="textoffsetx">40</param>
+		<definition>
+			<textoffsetx>$PARAM[textoffsetx]</textoffsetx>
+			<top>0</top>
+			<width>$PARAM[width]</width>
+			<height>$PARAM[height]</height>
+			<aligny>center</aligny>
+			<invalidcolor>status_error</invalidcolor>
+			<selectedcolor>selection_foreground</selectedcolor>
+			<texturefocus colordiffuse="$VAR[NaraDialogFocusSurfaceVar]">lists/focus.png</texturefocus>
+			<texturenofocus colordiffuse="surface_dialog">colors/white.png</texturenofocus>
+			<focusedcolor>$VAR[NaraDialogFocusForegroundVar]</focusedcolor>
+			<textureupfocus colordiffuse="$VAR[NaraDialogFocusForegroundVar]">buttons/spinctrl/arrow-light-up.png</textureupfocus>
+			<texturedownfocus colordiffuse="$VAR[NaraDialogFocusForegroundVar]">buttons/spinctrl/arrow-light-down.png</texturedownfocus>
+			<textureradioonfocus colordiffuse="$VAR[NaraDialogFocusForegroundVar]">buttons/radio-button-on.png</textureradioonfocus>
+			<textureradioofffocus colordiffuse="$VAR[NaraDialogFocusForegroundVar]">buttons/radio-button-off.png</textureradioofffocus>
+		</definition>
+	</include>
+	<include name="DefaultSettingLabel">
+		<left>0</left>
+		<top>0</top>
+		<height>75</height>
+		<label></label>
+		<align>center</align>
+		<aligny>center</aligny>
+		<font>font25_title</font>
+		<textcolor>text_secondary</textcolor>
+	</include>
+	<include name="SettingsItemCommon">
+		<include condition="$EXP[nara_dialog_glass]" content="NaraSettingsRow">
+			<param name="height" value="70" />
+			<param name="focuscolor" value="glass_focus_medium" />
+		</include>
+		<include condition="!$EXP[nara_dialog_glass]">NaraDialogLegacySettingsItem</include>
+	</include>
+	<include name="SettingsLabelCommon">
+		<height>50</height>
+		<font>font12</font>
+		<textoffsetx>30</textoffsetx>
+		<textoffsety>10</textoffsety>
+		<textcolor>text_primary</textcolor>
+	</include>
+	<include name="DefaultDialogButton">
+		<param name="width">260</param>
+		<param name="height">64</param>
+		<param name="legacy_width">300</param>
+		<param name="legacy_height">100</param>
+		<param name="wrapmultiline">false</param>
+		<param name="font">font25_title</param>
+		<param name="onclick"></param>
+		<param name="visible">true</param>
+		<param name="enable">true</param>
+		<definition>
+			<control type="button" id="$PARAM[id]">
+				<include content="NaraDialogButtonDimensions" condition="$EXP[nara_dialog_glass]">
+					<param name="width" value="$PARAM[width]" />
+					<param name="height" value="$PARAM[height]" />
+				</include>
+				<include content="NaraDialogButtonDimensions" condition="!$EXP[nara_dialog_glass]">
+					<param name="width" value="$PARAM[legacy_width]" />
+					<param name="height" value="$PARAM[legacy_height]" />
+				</include>
+				<label>$PARAM[label]</label>
+				<font>$PARAM[font]</font>
+				<textoffsetx>20</textoffsetx>
+				<onclick>$PARAM[onclick]</onclick>
+				<wrapmultiline>$PARAM[wrapmultiline]</wrapmultiline>
+				<align>center</align>
+				<include condition="$EXP[nara_dialog_glass]">NaraDialogActionTextures</include>
+				<include condition="!$EXP[nara_dialog_glass]">NaraDialogLegacyActionTextures</include>
+				<visible>$PARAM[visible]</visible>
+				<enable>$PARAM[enable]</enable>
+			</control>
+		</definition>
+	</include>
+	<include name="KeyboardButton">
+		<width>120</width>
+		<height>120</height>
+		<textoffsety>27</textoffsety>
+		<texturefocus colordiffuse="$VAR[NaraDialogFocusSurfaceVar]">buttons/roundbutton-fo.png</texturefocus>
+		<texturenofocus />
+		<align>center</align>
+		<aligny>top</aligny>
+		<font>font45</font>
+		<focusedcolor>$VAR[NaraDialogFocusForegroundVar]</focusedcolor>
+	</include>
+	<include name="PlaylistWindowButton">
+		<param name="width">100%</param>
+		<definition>
+			<control type="button" id="$PARAM[control_id]">
+				<width>$PARAM[width]</width>
+				<height>110</height>
+				<align>left</align>
+				<aligny>top</aligny>
+				<texturefocus colordiffuse="focus_surface">lists/focus.png</texturefocus>
+				<texturenofocus />
+				<textoffsetx>40</textoffsetx>
+				<textoffsety>35</textoffsety>
+				<label>$PARAM[label]</label>
+				<onclick>$PARAM[onclick]</onclick>
+				<selectedcolor>selection_foreground</selectedcolor>
+			</control>
+		</definition>
+	</include>
+	<include name="IconButton">
+		<param name="width">56</param>
+		<param name="height">56</param>
+		<param name="radio_pos_x">16</param>
+		<param name="radio_pos_y">16</param>
+		<param name="radio_width">24</param>
+		<param name="radio_height">24</param>
+		<param name="visible">true</param>
+		<param name="onclick_condition">true</param>
+		<param name="onclick_2_condition">true</param>
+		<param name="onclick_3_condition">true</param>
+		<definition>
+			<control type="radiobutton" id="$PARAM[control_id]">
+				<width>$PARAM[width]</width>
+				<height>$PARAM[height]</height>
+				<align>center</align>
+				<aligny>center</aligny>
+				<onclick condition="$PARAM[onclick_condition]">$PARAM[onclick]</onclick>
+				<onclick condition="$PARAM[onclick_2_condition]">$PARAM[onclick_2]</onclick>
+				<onclick condition="$PARAM[onclick_3_condition]">$PARAM[onclick_3]</onclick>
+				<font></font>
+				<label>$PARAM[label]</label>
+				<texturefocus cornerradius="28" colordiffuse="glass_focus_light">colors/white.png</texturefocus>
+				<texturenofocus />
+				<radioposx>$PARAM[radio_pos_x]</radioposx>
+				<radioposy>$PARAM[radio_pos_y]</radioposy>
+				<radiowidth>$PARAM[radio_width]</radiowidth>
+				<radioheight>$PARAM[radio_height]</radioheight>
+				<textureradioonfocus colordiffuse="text_primary">$PARAM[icon]</textureradioonfocus>
+				<textureradioonnofocus colordiffuse="text_secondary">$PARAM[icon]</textureradioonnofocus>
+				<textureradioofffocus colordiffuse="text_primary">$PARAM[icon]</textureradioofffocus>
+				<textureradiooffnofocus colordiffuse="text_secondary">$PARAM[icon]</textureradiooffnofocus>
+				<visible>$PARAM[visible]</visible>
+			</control>
+		</definition>
+	</include>
+	<include name="BottomMainMenuToggleItem">
+		<param name="height">56</param>
+		<definition>
+			<control type="radiobutton" id="$PARAM[control_id]">
+				<width>56</width>
+				<height>$PARAM[height]</height>
+				<align>center</align>
+				<aligny>center</aligny>
+				<onclick>$PARAM[onclick]</onclick>
+				<font></font>
+				<label>$PARAM[label]</label>
+				<texturefocus cornerradius="28" colordiffuse="glass_focus_light">colors/white.png</texturefocus>
+				<texturenofocus />
+				<radioposx>16</radioposx>
+				<radioposy>16</radioposy>
+				<radiowidth>24</radiowidth>
+				<radioheight>24</radioheight>
+				<textureradioonfocus colordiffuse="text_primary">$PARAM[icon_on]</textureradioonfocus>
+				<textureradioonnofocus colordiffuse="text_secondary">$PARAM[icon_on]</textureradioonnofocus>
+				<textureradioofffocus colordiffuse="text_primary">$PARAM[icon_off]</textureradioofffocus>
+				<textureradiooffnofocus colordiffuse="text_secondary">$PARAM[icon_off]</textureradiooffnofocus>
+				<selected>$PARAM[selected]</selected>
+			</control>
+		</definition>
+	</include>
+	<include name="VideoInfoButtonsCommon">
+		<param name="width">264</param>
+		<definition>
+			<width>$PARAM[width]</width>
+			<height>142</height>
+			<align>center</align>
+			<aligny>top</aligny>
+			<texturefocus border="21" colordiffuse="$VAR[NaraDialogFocusSurfaceVar]">buttons/button-fo.png</texturefocus>
+			<texturenofocus border="21">buttons/button-nofo.png</texturenofocus>
+			<textoffsetx>22</textoffsetx>
+			<textoffsety>78</textoffsety>
+			<radioposx>108</radioposx>
+			<radioposy>13</radioposy>
+			<radiowidth>48</radiowidth>
+			<font>font12</font>
+			<hitrect x="21" y="21" w="245" h="100" />
+			<textureradioonfocus colordiffuse="$VAR[NaraDialogFocusForegroundVar]">$PARAM[icon]</textureradioonfocus>
+			<textureradioonnofocus colordiffuse="text_secondary">$PARAM[icon]</textureradioonnofocus>
+			<textureradioofffocus colordiffuse="$VAR[NaraDialogFocusForegroundVar]">$PARAM[icon]</textureradioofffocus>
+			<textureradiooffnofocus colordiffuse="text_secondary">$PARAM[icon]</textureradiooffnofocus>
+			<textureradiooffdisabled colordiffuse="text_disabled">$PARAM[icon]</textureradiooffdisabled>
+			<textureradioondisabled colordiffuse="text_disabled">$PARAM[icon]</textureradioondisabled>
+			<focusedcolor>$VAR[NaraDialogFocusForegroundVar]</focusedcolor>
+		</definition>
+	</include>
+	<include name="InfoDialogButton">
+		<param name="width">264</param>
+		<param name="onclick_1_condition">true</param>
+		<param name="onclick_2_condition">true</param>
+		<param name="onclick_3_condition">true</param>
+		<definition>
+			<control type="radiobutton" id="$PARAM[id]">
+				<width>$PARAM[width]</width>
+				<height>142</height>
+				<align>center</align>
+				<aligny>top</aligny>
+				<texturefocus border="21" colordiffuse="$VAR[NaraDialogFocusSurfaceVar]">buttons/button-fo.png</texturefocus>
+				<texturenofocus border="21">buttons/button-nofo.png</texturenofocus>
+				<textoffsetx>22</textoffsetx>
+				<textoffsety>78</textoffsety>
+				<radioposx>108</radioposx>
+				<radioposy>16</radioposy>
+				<radiowidth>48</radiowidth>
+				<font>font12</font>
+				<hitrect x="21" y="21" w="245" h="100" />
+				<textureradioonfocus colordiffuse="$VAR[NaraDialogFocusForegroundVar]">$PARAM[icon]</textureradioonfocus>
+				<textureradioonnofocus colordiffuse="text_secondary">$PARAM[icon]</textureradioonnofocus>
+				<textureradioofffocus colordiffuse="$VAR[NaraDialogFocusForegroundVar]">$PARAM[icon]</textureradioofffocus>
+				<textureradiooffnofocus colordiffuse="text_secondary">$PARAM[icon]</textureradiooffnofocus>
+				<textureradiooffdisabled colordiffuse="text_disabled">$PARAM[icon]</textureradiooffdisabled>
+				<textureradioondisabled colordiffuse="text_disabled">$PARAM[icon]</textureradioondisabled>
+				<label>$PARAM[label]</label>
+				<onclick condition="$PARAM[onclick_1_condition]">$PARAM[onclick_1]</onclick>
+				<onclick condition="$PARAM[onclick_2_condition]">$PARAM[onclick_2]</onclick>
+				<onclick condition="$PARAM[onclick_3_condition]">$PARAM[onclick_3]</onclick>
+				<visible>$PARAM[visible]</visible>
+				<animation effect="fade" start="100" end="0" time="300" delay="300">Hidden</animation>
+				<focusedcolor>$VAR[NaraDialogFocusForegroundVar]</focusedcolor>
+			</control>
+		</definition>
+	</include>
+	<include name="ButtonMenuList">
+		<left>0</left>
+		<top>80</top>
+		<width>600</width>
+		<height>700</height>
+		<onleft>9000</onleft>
+		<onright>9000</onright>
+		<onup>9000</onup>
+		<ondown>9000</ondown>
+		<orientation>vertical</orientation>
+		<itemlayout height="70" width="600">
+			<control type="image">
+				<left>0</left>
+				<top>0</top>
+				<width>600</width>
+				<height>70</height>
+				<texture colordiffuse="surface_dialog">colors/white.png</texture>
+			</control>
+			<control type="label">
+				<left>0</left>
+				<textoffsetx>20</textoffsetx>
+				<top>0</top>
+				<width>600</width>
+				<height>70</height>
+				<align>center</align>
+				<aligny>center</aligny>
+				<textcolor>text_secondary</textcolor>
+				<label>$INFO[ListItem.Label]</label>
+			</control>
+		</itemlayout>
+		<focusedlayout height="70" width="600">
+			<control type="image">
+				<left>0</left>
+				<top>0</top>
+				<width>600</width>
+				<height>70</height>
+				<texture colordiffuse="surface_dialog">colors/white.png</texture>
+			</control>
+			<control type="image">
+				<left>0</left>
+				<top>0</top>
+				<width>600</width>
+				<height>70</height>
+				<texture colordiffuse="focus_surface">lists/focus.png</texture>
+			</control>
+			<control type="label">
+				<left>0</left>
+				<textoffsetx>20</textoffsetx>
+				<top>0</top>
+				<width>600</width>
+				<height>70</height>
+				<align>center</align>
+				<aligny>center</aligny>
+				<textcolor>focus_foreground</textcolor>
+				<selectedcolor>focus_foreground</selectedcolor>
+				<label>$INFO[ListItem.Label]</label>
+			</control>
+		</focusedlayout>
+	</include>
+</includes>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+	<defaultcontrol>5</defaultcontrol>
+	<controls>
+		<include condition="$EXP[nara_settings_osd]">NaraOSDSettingsLayout</include>
+		<include condition="!$EXP[nara_settings_osd]">NaraSettingsDialogLayout</include>
+	</controls>
+	<include>Animation_DialogPopupOpenClose</include>
+</window>

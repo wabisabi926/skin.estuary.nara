@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+	<defaultcontrol>3</defaultcontrol>
+	<controls>
+		<include>NaraSettingsBackground</include>
+		<include>NaraSettingsSidebar</include>
+		<control type="image">
+			<left>505</left>
+			<top>145</top>
+			<width>1355</width>
+			<height>740</height>
+			<texture colordiffuse="18FFFFFF" cornerradius="28">colors/white.png</texture>
+		</control>
+		<control type="grouplist" id="3">
+			<left>76</left>
+			<top>165</top>
+			<width>368</width>
+			<height>685</height>
+			<itemgap>4</itemgap>
+			<usecontrolcoords>true</usecontrolcoords>
+			<onleft>5</onleft>
+			<onright>5</onright>
+			<onup>3</onup>
+			<ondown>20</ondown>
+		</control>
+		<control type="togglebutton" id="10">
+			<include>NaraSettingsCategoryButton</include>
+		</control>
+		<control type="grouplist" id="5">
+			<left>525</left>
+			<top>161</top>
+			<width>1315</width>
+			<height>708</height>
+			<itemgap>2</itemgap>
+			<pagecontrol>60</pagecontrol>
+			<onleft>3</onleft>
+			<onright>60</onright>
+			<onup>5</onup>
+			<ondown>5</ondown>
+		</control>
+		<control type="button" id="7">
+			<include>NaraSettingsRow</include>
+		</control>
+		<control type="radiobutton" id="8">
+			<include>NaraSettingsRow</include>
+		</control>
+		<control type="spincontrolex" id="9">
+			<include>NaraSettingsRow</include>
+		</control>
+		<control type="sliderex" id="13">
+			<include>NaraSettingsRow</include>
+		</control>
+		<control type="colorbutton" id="15">
+			<include>NaraSettingsRow</include>
+		</control>
+		<control type="image" id="11">
+			<height>22</height>
+			<texture />
+		</control>
+		<control type="label" id="14">
+			<left>0</left>
+			<top>0</top>
+			<width>1315</width>
+			<height>60</height>
+			<textoffsetx>28</textoffsetx>
+			<align>left</align>
+			<aligny>center</aligny>
+			<font>font24</font>
+			<textcolor>text_secondary</textcolor>
+			<label></label>
+		</control>
+		<control type="image">
+			<left>90</left>
+			<top>878</top>
+			<width>340</width>
+			<height>1</height>
+			<texture colordiffuse="25FFFFFF">colors/white.png</texture>
+		</control>
+		<control type="button" id="20">
+			<left>76</left>
+			<top>895</top>
+			<width>368</width>
+			<height>64</height>
+			<font>font26</font>
+			<textoffsetx>68</textoffsetx>
+			<label></label>
+			<onclick>SettingsLevelChange</onclick>
+			<onleft>5</onleft>
+			<onright>5</onright>
+			<onup>3</onup>
+			<ondown>3</ondown>
+			<texturefocus cornerradius="18" colordiffuse="glass_focus_light">colors/white.png</texturefocus>
+			<texturenofocus></texturenofocus>
+			<focusedcolor>text_primary</focusedcolor>
+			<textcolor>text_primary</textcolor>
+			<selectedcolor>text_primary</selectedcolor>
+		</control>
+		<control type="image">
+			<left>100</left>
+			<top>911</top>
+			<width>32</width>
+			<height>32</height>
+			<texture colordiffuse="text_secondary">settings/system.png</texture>
+		</control>
+		<control type="textbox" id="6">
+			<left>545</left>
+			<top>915</top>
+			<width>1255</width>
+			<height>100</height>
+			<font>font24</font>
+			<textcolor>text_secondary</textcolor>
+			<autoscroll time="3000" delay="5000" repeat="5000">true</autoscroll>
+		</control>
+		<control type="scrollbar" id="60">
+			<left>1874</left>
+			<top>165</top>
+			<width>8</width>
+			<height>700</height>
+			<onleft>5</onleft>
+			<onright>3</onright>
+			<orientation>vertical</orientation>
+		</control>
+		<include content="TopBar">
+			<param name="breadcrumbs_label" value="$LOCALIZE[5]$INFO[Control.GetLabel(2), / ]" />
+			<param name="show_status_in_title" value="false" />
+		</include>
+		<control type="label" id="2">
+			<visible>false</visible>
+		</control>
+	</controls>
+	<backgroundcolor>background</backgroundcolor>
+</window>
