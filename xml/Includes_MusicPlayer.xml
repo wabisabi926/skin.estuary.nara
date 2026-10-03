@@ -53,8 +53,8 @@
 	<include name="NaraMusicAudioDetail">
 		<control type="label">
 			<width min="1" max="200">auto</width>
-			<height>28</height>
-			<font>font10</font>
+			<height>30</height>
+			<font>font_nara_music_meta</font>
 			<aligny>center</aligny>
 			<textcolor>80FFFFFF</textcolor>
 			<label>$PARAM[label]</label>
@@ -100,18 +100,18 @@
 			<control type="label">
 				<left>32</left>
 				<top>38</top>
-				<width>82</width>
-				<height>24</height>
-				<font>font10</font>
+				<width>96</width>
+				<height>30</height>
+				<font>font_nara_music_time</font>
 				<aligny>center</aligny>
 				<label>$VAR[NaraOSDTimeLabelVar]</label>
 			</control>
 			<control type="label">
 				<right>32</right>
 				<top>38</top>
-				<width>82</width>
-				<height>24</height>
-				<font>font10</font>
+				<width>96</width>
+				<height>30</height>
+				<font>font_nara_music_time</font>
 				<align>right</align>
 				<aligny>center</aligny>
 				<label>$INFO[Player.Duration]</label>
@@ -234,15 +234,15 @@
 				<right>32</right>
 				<top>95</top>
 				<width>420</width>
-				<height>28</height>
-				<font>font10</font>
+				<height>30</height>
+				<font>font_nara_music_meta</font>
 				<align>right</align>
 				<textcolor>99FFFFFF</textcolor>
 				<label>$VAR[NaraMusicControlLabelVar]</label>
 			</control>
 			<control type="group">
-				<left>122</left>
-				<right>122</right>
+				<left>132</left>
+				<right>132</right>
 				<top>42</top>
 				<visible>Player.SeekEnabled</visible>
 				<control type="image">

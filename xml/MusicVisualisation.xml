@@ -12,7 +12,7 @@
 				<top>28</top>
 				<width>800</width>
 				<height>36</height>
-				<font>font27</font>
+				<font>font_nara_music_head</font>
 				<aligny>center</aligny>
 				<textcolor>text_primary</textcolor>
 				<label>$LOCALIZE[31000]...</label>
@@ -23,7 +23,7 @@
 				<top>64</top>
 				<width>800</width>
 				<height>32</height>
-				<font>font12_large</font>
+				<font>font_nara_music_sub</font>
 				<aligny>center</aligny>
 				<textcolor>text_secondary</textcolor>
 				<label>$LOCALIZE[554] $INFO[Playlist.Position(music)] / $INFO[Playlist.Length(music)]</label>
@@ -181,7 +181,7 @@
 				<top>150</top>
 				<width>770</width>
 				<height>622</height>
-				<font>font27</font>
+				<font>font_nara_music_head</font>
 				<textcolor>CFFFFFFF</textcolor>
 				<label>$INFO[Window(visualisation).Property(NaraMusic.LyricsText)]</label>
 				<pagecontrol>422</pagecontrol>
@@ -214,7 +214,7 @@
 					<visible>!String.IsEmpty(Window(visualisation).Property(NaraMusic.NextTitle))</visible>
 					<control type="label">
 						<height>32</height>
-						<font>font12</font>
+						<font>font_nara_music_sub</font>
 						<textcolor>80FFFFFF</textcolor>
 						<label>$VAR[NaraMusicNextHeadingVar]</label>
 					</control>
@@ -227,7 +227,7 @@
 					</control>
 					<control type="label">
 						<height>40</height>
-						<font>font27</font>
+						<font>font_nara_music_head</font>
 						<textcolor>80FFFFFF</textcolor>
 						<label>$INFO[Window(visualisation).Property(NaraMusic.NextArtist)]</label>
 						<scroll>true</scroll>
@@ -237,7 +237,7 @@
 				<control type="label">
 					<top>80</top>
 					<height>48</height>
-					<font>font27</font>
+					<font>font_nara_music_head</font>
 					<textcolor>80FFFFFF</textcolor>
 					<label>$VAR[NaraMusicLyricsStatusVar]</label>
 					<visible>String.IsEmpty(Window(visualisation).Property(NaraMusic.NextTitle))</visible>
