@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+	<variable name="NaraAddonInfoIdentityVar">
+		<value condition="!String.IsEmpty(ListItem.AddonVersion) + !String.IsEmpty(ListItem.AddonCreator)">$INFO[ListItem.AddonVersion,v]$INFO[ListItem.AddonCreator,  ·  ]</value>
+		<value condition="!String.IsEmpty(ListItem.AddonVersion)">$INFO[ListItem.AddonVersion,v]</value>
+		<value>$INFO[ListItem.AddonCreator]</value>
+	</variable>
+	<variable name="NaraAddonInfoDescriptionVar">
+		<value condition="!String.IsEmpty(ListItem.AddonDescription)">$INFO[ListItem.AddonDescription]</value>
+		<value>$INFO[ListItem.AddonSummary]</value>
+	</variable>
+	<variable name="NaraAddonInfoNoticeVar">
+		<value condition="String.IsEqual(ListItem.AddonLifecycleType,$LOCALIZE[24170]) | String.IsEqual(ListItem.AddonLifecycleType,$LOCALIZE[24171])">[COLOR status_warning]$INFO[ListItem.AddonLifecycleType]$INFO[ListItem.AddonLifecycleDesc,: ][/COLOR]$INFO[ListItem.AddonDisclaimer,[CR][CR]]</value>
+		<value>$INFO[ListItem.AddonDisclaimer]</value>
+	</variable>
+	<variable name="NaraAddonInfoStatusVar">
+		<value condition="!String.IsEmpty(ListItem.Property(Addon.Status)) + !String.IsEmpty(ListItem.Property(Addon.ValidUpdateVersion))">$INFO[ListItem.Property(Addon.Status)]$INFO[ListItem.Property(Addon.ValidUpdateVersion), · $LOCALIZE[19114]: ]</value>
+		<value condition="!String.IsEmpty(ListItem.Property(Addon.ValidUpdateVersion))">$INFO[ListItem.Property(Addon.ValidUpdateVersion),$LOCALIZE[19114]: ]</value>
+		<value>$INFO[ListItem.Property(Addon.Status)]</value>
+	</variable>
+	<include name="NaraAddonInfoActionStyle">
+		<width>162</width>
+		<height>120</height>
+		<font>font24</font>
+		<align>center</align>
+		<aligny>top</aligny>
+		<textoffsetx>8</textoffsetx>
+		<textoffsety>76</textoffsety>
+		<textcolor>text_primary</textcolor>
+		<disabledcolor>text_disabled</disabledcolor>
+		<include>NaraDialogButtonInsetTexture</include>
+	</include>
+	<include name="NaraAddonInfoAction">
+		<param name="id">0</param>
+		<param name="label" />
+		<param name="icon_on" />
+		<param name="icon_off" />
+		<param name="selected">false</param>
+		<definition>
+			<control type="radiobutton" id="$PARAM[id]">
+				<radioposx>63</radioposx>
+				<radioposy>24</radioposy>
+				<radiowidth>36</radiowidth>
+				<radioheight>36</radioheight>
+				<label>$PARAM[label]</label>
+				<selected>$PARAM[selected]</selected>
+				<include>NaraAddonInfoActionStyle</include>
+				<textureradioonfocus colordiffuse="text_primary">$PARAM[icon_on]</textureradioonfocus>
+				<textureradioofffocus colordiffuse="text_primary">$PARAM[icon_off]</textureradioofffocus>
+				<textureradioonnofocus colordiffuse="text_secondary">$PARAM[icon_on]</textureradioonnofocus>
+				<textureradiooffnofocus colordiffuse="text_secondary">$PARAM[icon_off]</textureradiooffnofocus>
+				<textureradioondisabled colordiffuse="text_disabled">$PARAM[icon_on]</textureradioondisabled>
+				<textureradiooffdisabled colordiffuse="text_disabled">$PARAM[icon_off]</textureradiooffdisabled>
+			</control>
+		</definition>
+	</include>
+	<include name="NaraAddonInfoDescription">
+		<param name="id">61</param>
+		<param name="scrollbar">60</param>
+		<param name="left">40</param>
+		<param name="top">8</param>
+		<param name="width">1344</param>
+		<param name="height">184</param>
+		<definition>
+			<control type="textbox" id="$PARAM[id]">
+				<left>$PARAM[left]</left>
+				<top>$PARAM[top]</top>
+				<width>$PARAM[width]</width>
+				<height>$PARAM[height]</height>
+				<font>font26</font>
+				<textcolor>text_secondary</textcolor>
+				<label>$VAR[NaraAddonInfoDescriptionVar]</label>
+				<pagecontrol>$PARAM[scrollbar]</pagecontrol>
+				<autoscroll delay="5000" repeat="7500" time="5000">!Control.HasFocus($PARAM[scrollbar])</autoscroll>
+			</control>
+		</definition>
+	</include>
+	<include name="NaraAddonInfoDescriptionScrollbar">
+		<param name="id">60</param>
+		<param name="textbox">61</param>
+		<param name="left">1392</param>
+		<param name="top">8</param>
+		<param name="height">184</param>
+		<param name="visible">true</param>
+		<definition>
+			<control type="scrollbar" id="$PARAM[id]">
+				<left>$PARAM[left]</left>
+				<top>$PARAM[top]</top>
+				<width>8</width>
+				<height>$PARAM[height]</height>
+				<orientation>vertical</orientation>
+				<onleft>9000</onleft>
+				<onright>9000</onright>
+				<onup>9000</onup>
+				<ondown>9000</ondown>
+				<visible>$PARAM[visible] + Integer.IsGreater(Container($PARAM[textbox]).NumPages,1)</visible>
+				<texturesliderbackground colordiffuse="border_subtle" cornerradius="4">colors/white.png</texturesliderbackground>
+				<texturesliderbar colordiffuse="text_muted" cornerradius="4">colors/white.png</texturesliderbar>
+				<texturesliderbarfocus colordiffuse="text_primary" cornerradius="4">colors/white.png</texturesliderbarfocus>
+			</control>
+		</definition>
+	</include>
+	<include name="NaraAddonInfoGlassBackground">
+		<texturebackground material="glass" glassstyle="frosted" cornerradius="32">colors/white.png</texturebackground>
+	</include>
+	<include name="NaraAddonInfoLegacyBackground">
+		<texturebackground colordiffuse="surface_dialog" cornerradius="32">colors/white.png</texturebackground>
+	</include>
+</includes>

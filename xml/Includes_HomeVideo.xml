@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+	<variable name="HomeVideoPosterFocusColorVar">
+		<value condition="String.IsEmpty(ListItem.Art(poster))">focus_card_surface</value>
+		<value>focus_media</value>
+	</variable>
+	<expression name="NaraHomeMovieLibrariesVisible">System.AddonIsEnabled(plugin.service.emby-next-gen) + [Integer.IsGreater(Container(5700).NumItems,0) | Container(5700).IsUpdating]</expression>
+	<expression name="NaraHomeTVShowLibrariesVisible">System.AddonIsEnabled(plugin.service.emby-next-gen) + [Integer.IsGreater(Container(6600).NumItems,0) | Container(6600).IsUpdating]</expression>
+	<expression name="NaraHomeVideoSingleRow">[String.IsEqual(Window(home).Property(Home.Section),movies) + [String.IsEmpty(Window(home).Property(Home.movies.Page)) | String.IsEqual(Window(home).Property(Home.movies.Page),first)] + !$EXP[NaraHomeMovieLibrariesVisible]] | [String.IsEqual(Window(home).Property(Home.Section),tvshows) + [String.IsEmpty(Window(home).Property(Home.tvshows.Page)) | String.IsEqual(Window(home).Property(Home.tvshows.Page),first)] + !$EXP[NaraHomeTVShowLibrariesVisible]]</expression>
+	<expression name="NaraHomeVideoExpanded">$EXP[NaraHomeVideoSingleRow] | [String.IsEqual(Window(home).Property(Home.Section),movies) + String.IsEqual(Window(home).Property(Home.movies.Page),poster)] | [String.IsEqual(Window(home).Property(Home.Section),tvshows) + String.IsEqual(Window(home).Property(Home.tvshows.Page),poster)]</expression>
+	<include name="HomeVideoPage">
+		<param name="always_first_row">false</param>
+		<definition>
+			<control type="group" id="$PARAM[id]">
+				<height>100%</height>
+				<visible>$PARAM[visible]</visible>
+				<defaultcontrol always="$PARAM[always_first_row]">0</defaultcontrol>
+				<nested />
+			</control>
+		</definition>
+	</include>
+	<include name="HomeVideoPageContent">
+		<param name="slide_distance">16</param>
+		<param name="slide_time">220</param>
+		<param name="fade_time">220</param>
+		<definition>
+			<control type="group">
+				<top>$PARAM[top]</top>
+				<bottom>0</bottom>
+				<animation type="Conditional" condition="$PARAM[active]" reversible="false">
+					<effect type="fade" start="0" end="100" time="$PARAM[fade_time]" tween="sine" easing="out" />
+					<effect type="slide" start="0,$PARAM[slide_distance]" end="0,0" time="$PARAM[slide_time]" tween="cubic" easing="out" />
+				</animation>
+				<nested />
+			</control>
+		</definition>
+	</include>
+	<include name="HomeVideoHeroDetails">
+		<definition>
+			<control type="group">
+				<left>80</left>
+				<top>202</top>
+				<visible>$EXP[NaraHomeVideoExpanded]</visible>
+				<animation effect="fade" time="200">VisibleChange</animation>
+				<animation effect="slide" start="0,0" end="0,20" time="320" tween="cubic" easing="out" condition="$EXP[NaraHomeVideoSingleRow]">Conditional</animation>
+				<control type="label">
+					<width>820</width>
+					<height>38</height>
+					<font>font13</font>
+					<textcolor>text_secondary</textcolor>
+					<scroll>true</scroll>
+					<label>$INFO[Container($PARAM[list_id]).ListItemSettled.Year]$INFO[Container($PARAM[list_id]).ListItemSettled.Mpaa,  &#183;  ]$INFO[Container($PARAM[list_id]).ListItemSettled.Duration,  &#183;  ]$INFO[Container($PARAM[list_id]).ListItemSettled.Genre,  &#183;  ]</label>
+					<visible>!String.IsEqual(Container($PARAM[list_id]).ListItemSettled.DBType,tvshow)</visible>
+				</control>
+				<control type="label">
+					<width>820</width>
+					<height>38</height>
+					<font>font13</font>
+					<textcolor>text_secondary</textcolor>
+					<scroll>true</scroll>
+					<label>$INFO[Container($PARAM[list_id]).ListItemSettled.Year]$INFO[Container($PARAM[list_id]).ListItemSettled.Mpaa,  &#183;  ]$INFO[Container($PARAM[list_id]).ListItemSettled.Genre,  &#183;  ]$INFO[Container($PARAM[list_id]).ListItemSettled.Season,  &#183;  , $LOCALIZE[36905]]$INFO[Container($PARAM[list_id]).ListItemSettled.Episode,  &#183;  , $LOCALIZE[36907]]</label>
+					<visible>String.IsEqual(Container($PARAM[list_id]).ListItemSettled.DBType,tvshow)</visible>
+				</control>
+				<include content="NaraOnlineRatingsRow">
+					<param name="top" value="42" />
+					<param name="item_prefix" value="Container($PARAM[list_id]).ListItemSettled" />
+				</include>
+				<include content="VideoTechnicalFlagsRow">
+					<param name="top" value="84" />
+					<param name="item_prefix" value="Container($PARAM[list_id]).ListItemSettled" />
+				</include>
+				<control type="textbox">
+					<top>126</top>
+					<width>820</width>
+					<height>105</height>
+					<font>font13</font>
+					<textcolor>text_secondary</textcolor>
+					<label>$INFO[Container($PARAM[list_id]).ListItemSettled.Plot]</label>
+				</control>
+			</control>
+		</definition>
+	</include>
+	<include name="HomeMovieSetHeroDetails">
+		<definition>
+			<control type="group">
+				<left>80</left>
+				<top>202</top>
+				<visible>$EXP[NaraHomeVideoExpanded]</visible>
+				<animation effect="fade" time="200">VisibleChange</animation>
+				<control type="label">
+					<width>820</width>
+					<height>38</height>
+					<font>font13</font>
+					<textcolor>text_secondary</textcolor>
+					<scroll>true</scroll>
+					<label>$LOCALIZE[20457]$INFO[Container(5600).ListItemSettled.Property(total),  &#183;  $LOCALIZE[31705]: ]$INFO[Container(5600).ListItemSettled.Year,  &#183;  $LOCALIZE[31707]: ]</label>
+				</control>
+				<control type="label">
+					<top>44</top>
+					<width>900</width>
+					<height>38</height>
+					<font>font13</font>
+					<textcolor>text_primary</textcolor>
+					<scroll>true</scroll>
+					<label>$INFO[Container(5600).ListItemSettled.Property(watched),$LOCALIZE[16102]: ]$INFO[Container(5600).ListItemSettled.Property(unwatched),  &#183;  $LOCALIZE[16101]: ]$INFO[Container(5600).ListItemSettled.Property(inprogress),  &#183;  $LOCALIZE[31709]: ]$INFO[Container(5600).ListItemSettled.Rating,  &#183;  $LOCALIZE[31706]: ]</label>
+				</control>
+				<control type="textbox">
+					<top>96</top>
+					<width>820</width>
+					<height>105</height>
+					<font>font13</font>
+					<textcolor>text_secondary</textcolor>
+					<label>$INFO[Container(5600).ListItemSettled.Plot]</label>
+					<visible>!String.IsEmpty(Container(5600).ListItemSettled.Plot)</visible>
+				</control>
+				<control type="list" id="5602">
+					<enable>false</enable>
+					<left>-82</left>
+					<top>-342</top>
+					<width>1</width>
+					<height>1</height>
+					<itemlayout width="1" height="1" />
+					<focusedlayout width="1" height="1" />
+					<visible>String.IsEqual(Window(home).Property(Home.movies.Hero),5600) + String.IsEmpty(Container(5600).ListItemSettled.Plot) + !String.IsEmpty(Container(5600).ListItemSettled.DBID) + !String.IsEqual(Container(5600).ListItemSettled.Property(node.type),target_folder)</visible>
+					<content sortby="year" sortorder="ascending" limit="5" browse="never" loaditemdetails="false">videodb://movies/sets/$INFO[Container(5600).ListItemSettled.DBID]/?setid=$INFO[Container(5600).ListItemSettled.DBID]</content>
+				</control>
+				<control type="textbox">
+					<top>96</top>
+					<width>820</width>
+					<height>105</height>
+					<font>font13</font>
+					<textcolor>text_secondary</textcolor>
+					<label>$LOCALIZE[31708]: $INFO[Container(5602).ListItemAbsolute(0).Title]$INFO[Container(5602).ListItemAbsolute(1).Title,  &#183;  ]$INFO[Container(5602).ListItemAbsolute(2).Title,  &#183;  ]$INFO[Container(5602).ListItemAbsolute(3).Title,  &#183;  ]$INFO[Container(5602).ListItemAbsolute(4).Title,  &#183;  ]</label>
+					<visible>String.IsEmpty(Container(5600).ListItemSettled.Plot) + !Container(5602).IsUpdating + String.IsEqual(Container(5602).ListItemAbsolute(0).SetID,Container(5600).ListItemSettled.DBID)</visible>
+				</control>
+			</control>
+		</definition>
+	</include>
+	<include name="HomeVideoTailListCommon">
+		<orientation>vertical</orientation>
+		<height min="540" max="540">auto</height>
+		<scrolltime tween="cubic" easing="out">300</scrolltime>
+		<itemgap>20</itemgap>
+	</include>
+	<include name="HomeVideoTailRow">
+		<param name="visible">true</param>
+		<definition>
+			<control type="group" id="$PARAM[id]">
+				<height>260</height>
+				<visible>[$PARAM[visible]] + [Integer.IsGreater(Container($PARAM[list_id]).NumItems,0) | Container($PARAM[list_id]).IsUpdating]</visible>
+				<nested />
+			</control>
+		</definition>
+	</include>
+	<include name="HomeVideoRowNavigation">
+		<param name="hero_id"></param>
+		<param name="update_hero">false</param>
+		<param name="reset_on_row_change">false</param>
+		<definition>
+			<scrolltime tween="cubic" easing="out">350</scrolltime>
+			<orientation>horizontal</orientation>
+			<onleft>noop</onleft>
+			<onright>noop</onright>
+			<onup>$PARAM[onup]</onup>
+			<ondown>$PARAM[ondown]</ondown>
+			<onfocus condition="!String.IsEqual(Window(home).Property(Home.movies.Page),first) + Control.HasFocus(5700) + !String.IsEmpty(Container(5100).ListItemSettled.Art(fanart))">SetProperty(Home.LastMovieFanart,$ESCINFO[Container(5100).ListItemSettled.Art(fanart)],home)</onfocus>
+			<onfocus condition="!String.IsEqual(Window(home).Property(Home.tvshows.Page),first) + Control.HasFocus(6600) + !String.IsEmpty(Container(6100).ListItemSettled.Art(fanart))">SetProperty(Home.LastTVShowFanart,$ESCINFO[Container(6100).ListItemSettled.Art(fanart)],home)</onfocus>
+			<onfocus>SetProperty(Home.$PARAM[section].Page,$PARAM[page],home)</onfocus>
+			<onfocus>SetProperty(Home.$PARAM[section].Row,$PARAM[list_id],home)</onfocus>
+			<onfocus condition="$PARAM[update_hero]">SetProperty(Home.$PARAM[section].Hero,$PARAM[hero_id],home)</onfocus>
+			<!-- Conditions use the previous row; record the new row before refocusing. -->
+			<onfocus condition="$PARAM[reset_on_row_change] + !String.IsEqual(Window(home).Property(Home.$PARAM[section].Row),$PARAM[list_id])">SetFocus($PARAM[list_id],0,absolute)</onfocus>
+			<onback condition="!Container($PARAM[list_id]).Position(0)">SetFocus($PARAM[list_id],0,absolute)</onback>
+			<onback condition="Container($PARAM[list_id]).Position(0) + Container($PARAM[pages_id]).HasPrevious">SetFocus($PARAM[pages_id])</onback>
+			<onback condition="Container($PARAM[list_id]).Position(0) + !Container($PARAM[pages_id]).HasPrevious">SetFocus(9000)</onback>
+			<preloaditems>2</preloaditems>
+		</definition>
+	</include>
+	<variable name="HomeVideoHeroFanartVar">
+		<value condition="String.IsEqual(Window(home).Property(Home.Section),movies) + String.IsEqual(Window(home).Property(Home.movies.Hero),5100) + String.IsEqual(Container(5100).ListItemSettled.Property(node.type),target_folder)">$INFO[Container(5100).ListItemSettled(-1).Art(fanart)]</value>
+		<value condition="String.IsEqual(Window(home).Property(Home.Section),movies) + String.IsEqual(Window(home).Property(Home.movies.Hero),5100)">$INFO[Container(5100).ListItemSettled.Art(fanart)]</value>
+		<value condition="String.IsEqual(Window(home).Property(Home.Section),movies) + String.IsEqual(Window(home).Property(Home.movies.Hero),5200) + String.IsEqual(Container(5200).ListItemSettled.Property(node.type),target_folder)">$INFO[Container(5200).ListItemSettled(-1).Art(fanart)]</value>
+		<value condition="String.IsEqual(Window(home).Property(Home.Section),movies) + String.IsEqual(Window(home).Property(Home.movies.Hero),5200)">$INFO[Container(5200).ListItemSettled.Art(fanart)]</value>
+		<value condition="String.IsEqual(Window(home).Property(Home.Section),movies) + String.IsEqual(Window(home).Property(Home.movies.Hero),5300) + String.IsEqual(Container(5300).ListItemSettled.Property(node.type),target_folder)">$INFO[Container(5300).ListItemSettled(-1).Art(fanart)]</value>
+		<value condition="String.IsEqual(Window(home).Property(Home.Section),movies) + String.IsEqual(Window(home).Property(Home.movies.Hero),5300)">$INFO[Container(5300).ListItemSettled.Art(fanart)]</value>
+		<value condition="String.IsEqual(Window(home).Property(Home.Section),movies) + String.IsEqual(Window(home).Property(Home.movies.Hero),5800) + String.IsEqual(Container(5800).ListItemSettled.Property(node.type),target_folder)">$INFO[Container(5800).ListItemSettled(-1).Art(fanart)]</value>
+		<value condition="String.IsEqual(Window(home).Property(Home.Section),movies) + String.IsEqual(Window(home).Property(Home.movies.Hero),5800)">$INFO[Container(5800).ListItemSettled.Art(fanart)]</value>
+		<value condition="String.IsEqual(Window(home).Property(Home.Section),movies) + String.IsEqual(Window(home).Property(Home.movies.Hero),5400) + String.IsEqual(Container(5400).ListItemSettled.Property(node.type),target_folder)">$INFO[Container(5400).ListItemSettled(-1).Art(fanart)]</value>
+		<value condition="String.IsEqual(Window(home).Property(Home.Section),movies) + String.IsEqual(Window(home).Property(Home.movies.Hero),5400)">$INFO[Container(5400).ListItemSettled.Art(fanart)]</value>
+		<value condition="String.IsEqual(Window(home).Property(Home.Section),movies) + String.IsEqual(Window(home).Property(Home.movies.Hero),5600) + String.IsEqual(Container(5600).ListItemSettled.Property(node.type),target_folder)">$INFO[Container(5600).ListItemSettled(-1).Art(fanart)]</value>
+		<value condition="String.IsEqual(Window(home).Property(Home.Section),movies) + String.IsEqual(Window(home).Property(Home.movies.Hero),5600)">$INFO[Container(5600).ListItemSettled.Art(fanart)]</value>
+		<value condition="String.IsEqual(Window(home).Property(Home.Section),tvshows) + String.IsEqual(Window(home).Property(Home.tvshows.Hero),6100) + String.IsEqual(Container(6100).ListItemSettled.Property(node.type),target_folder)">$INFO[Container(6100).ListItemSettled(-1).Art(fanart)]</value>
+		<value condition="String.IsEqual(Window(home).Property(Home.Section),tvshows) + String.IsEqual(Window(home).Property(Home.tvshows.Hero),6100)">$INFO[Container(6100).ListItemSettled.Art(fanart)]</value>
+		<value condition="String.IsEqual(Window(home).Property(Home.Section),tvshows) + String.IsEqual(Window(home).Property(Home.tvshows.Hero),6200) + String.IsEqual(Container(6200).ListItemSettled.Property(node.type),target_folder)">$INFO[Container(6200).ListItemSettled(-1).Art(fanart)]</value>
+		<value condition="String.IsEqual(Window(home).Property(Home.Section),tvshows) + String.IsEqual(Window(home).Property(Home.tvshows.Hero),6200)">$INFO[Container(6200).ListItemSettled.Art(fanart)]</value>
+		<value condition="String.IsEqual(Window(home).Property(Home.Section),tvshows) + String.IsEqual(Window(home).Property(Home.tvshows.Hero),6300) + String.IsEqual(Container(6300).ListItemSettled.Property(node.type),target_folder)">$INFO[Container(6300).ListItemSettled(-1).Art(fanart)]</value>
+		<value condition="String.IsEqual(Window(home).Property(Home.Section),tvshows) + String.IsEqual(Window(home).Property(Home.tvshows.Hero),6300)">$INFO[Container(6300).ListItemSettled.Art(fanart)]</value>
+		<value condition="String.IsEqual(Window(home).Property(Home.Section),tvshows) + String.IsEqual(Window(home).Property(Home.tvshows.Hero),6700) + String.IsEqual(Container(6700).ListItemSettled.Property(node.type),target_folder)">$INFO[Container(6700).ListItemSettled(-1).Art(fanart)]</value>
+		<value condition="String.IsEqual(Window(home).Property(Home.Section),tvshows) + String.IsEqual(Window(home).Property(Home.tvshows.Hero),6700)">$INFO[Container(6700).ListItemSettled.Art(fanart)]</value>
+		<value condition="String.IsEqual(Window(home).Property(Home.Section),tvshows) + String.IsEqual(Window(home).Property(Home.tvshows.Hero),6800) + String.IsEqual(Container(6800).ListItemSettled.Property(node.type),target_folder)">$INFO[Container(6800).ListItemSettled(-1).Art(fanart)]</value>
+		<value condition="String.IsEqual(Window(home).Property(Home.Section),tvshows) + String.IsEqual(Window(home).Property(Home.tvshows.Hero),6800)">$INFO[Container(6800).ListItemSettled.Art(fanart)]</value>
+	</variable>
+</includes>

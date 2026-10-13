@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window id="1116" type="dialog">
+	<onunload condition="String.IsEqual(Window(1116).Property(VideoOSDPlaylist.CloseOSD),true)">Dialog.Close(videoosd)</onunload>
+	<onunload condition="!String.IsEmpty(Window(1116).Property(VideoOSDPlaylist.FocusControl))">SetFocus($INFO[Window(1116).Property(VideoOSDPlaylist.FocusControl)])</onunload>
+	<onunload>ClearProperty(VideoOSDPlaylist.CloseOSD,1116)</onunload>
+	<onunload>ClearProperty(VideoOSDPlaylist.FocusControl,1116)</onunload>
+	<defaultcontrol always="true">6</defaultcontrol>
+	<depth>DepthOSD+</depth>
+	<animation effect="fade" start="0" end="100" time="180">WindowOpen</animation>
+	<animation effect="fade" start="100" end="0" time="140">WindowClose</animation>
+	<controls>
+		<control type="button">
+			<width>100%</width>
+			<height>100%</height>
+			<texturefocus />
+			<texturenofocus />
+			<onclick>Dialog.Close(1116)</onclick>
+		</control>
+		<control type="group">
+			<bottom>142</bottom>
+			<height>230</height>
+			<control type="image">
+				<width>100%</width>
+				<height>230</height>
+				<texture colordiffuse="80141418">colors/white.png</texture>
+			</control>
+			<control type="list" id="6">
+				<left>20</left>
+				<top>5</top>
+				<width>1880</width>
+				<height>224</height>
+				<orientation>horizontal</orientation>
+				<defaultfocusposition>1</defaultfocusposition>
+				<scrolltime>220</scrolltime>
+				<preloaditems>1</preloaditems>
+				<onleft>6</onleft>
+				<onright>6</onright>
+				<onup>ClearProperty(VideoOSDPlaylist.CloseOSD,1116)</onup>
+				<onup>SetProperty(VideoOSDPlaylist.FocusControl,201,1116)</onup>
+				<onup>Dialog.Close(1116)</onup>
+				<ondown>ClearProperty(VideoOSDPlaylist.CloseOSD,1116)</ondown>
+				<ondown>SetProperty(VideoOSDPlaylist.FocusControl,87,1116)</ondown>
+				<ondown>Dialog.Close(1116)</ondown>
+				<onback>Dialog.Close(1116)</onback>
+				<itemlayout width="376" height="224">
+					<include>VideoOSDPlaylistCard</include>
+				</itemlayout>
+				<focusedlayout width="376" height="224">
+					<include content="VideoOSDPlaylistCard">
+						<param name="focused">true</param>
+					</include>
+				</focusedlayout>
+				<onclick condition="!ListItem.IsPlaying">Playlist.PlayPosition(video,$INFO[ListItem.Property(playlistposition)])</onclick>
+				<onclick>Dialog.Close(1116)</onclick>
+				<onclick>Dialog.Close(videoosd)</onclick>
+				<content browse="never" focusplaying="true">playlistvideo://?reload=$INFO[Playlist.Position(video)]</content>
+			</control>
+		</control>
+	</controls>
+</window>
