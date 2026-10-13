@@ -8,12 +8,7 @@
 				<width>1920</width>
 				<height>1080</height>
 				<aspectratio>scale</aspectratio>
-				<texture>settings/background.png</texture>
-			</control>
-			<control type="image">
-				<width>1920</width>
-				<height>1080</height>
-				<texture colordiffuse="66000000">colors/black.png</texture>
+				<texture colordiffuse="primary_background">special://skin/extras/backgrounds/primary.jpg</texture>
 			</control>
 		</definition>
 	</include>
@@ -197,6 +192,8 @@
 					<selectedcolor>text_primary</selectedcolor>
 					<texturefocus cornerradius="26" colordiffuse="glass_focus_light">colors/white.png</texturefocus>
 					<onclick condition="$PARAM[modal]">SetProperty(SettingsHub.Target,$PARAM[target],1115)</onclick>
+					<!-- Keep the drawer hidden through the dialog and Home close animations. -->
+					<onclick condition="$PARAM[modal] + Window.IsActive(home) + String.IsEqual(Window(home).Property(Home.Section),search)">SetProperty(Search.SettingsTransition,true,home)</onclick>
 					<onclick condition="$PARAM[modal]">Dialog.Close(1115)</onclick>
 					<onclick condition="!$PARAM[modal]">ActivateWindow($PARAM[target])</onclick>
 				</control>

@@ -7,6 +7,15 @@ function Assert-True([bool]$Condition, [string]$Message) {
   if (!$Condition) { throw $Message }
 }
 
+# Literal textures are packed into media/Textures.xbt; only the process-info channel
+# diagrams are kept loose. Resolve against both locations instead of the loose folder alone.
+$textureBundle = [System.Text.Encoding]::GetEncoding(28591).GetString(
+  [System.IO.File]::ReadAllBytes((Join-Path $SkinDirectory 'media/Textures.xbt')))
+function Test-SkinTexture([string]$RelativePath) {
+  if (Test-Path -LiteralPath (Join-Path $SkinDirectory ('media/' + $RelativePath))) { return $true }
+  return $textureBundle.IndexOf($RelativePath + [char]0, [System.StringComparison]::Ordinal) -ge 0
+}
+
 $documents = @{}
 $includes = @{}
 $variables = @{}
@@ -30,7 +39,7 @@ foreach ($name in @('MusicVisualisation.xml', 'MusicOSD.xml', 'Includes_MusicPla
   }
   foreach ($node in $document.SelectNodes('//*[starts-with(local-name(),"texture") or local-name()="midtexture" or local-name()="righttexture"]')) {
     if ($node.InnerText -and !$node.InnerText.StartsWith('$')) {
-      Assert-True (Test-Path -LiteralPath (Join-Path $SkinDirectory ('media/' + $node.InnerText))) "Missing texture: $name $($node.InnerText)"
+      Assert-True (Test-SkinTexture $node.InnerText) "Missing texture: $name $($node.InnerText)"
     }
   }
   foreach ($glass in $document.SelectNodes('//*[@material="glass"]')) {
@@ -73,10 +82,11 @@ $controls = $documents['Includes_MusicPlayer.xml']
 Assert-True ($null -ne $documents['Includes.xml'].SelectSingleNode('//include[@file="Includes_MusicBackground.xml"]')) 'Background definitions must be loaded'
 Assert-True ($page.SelectSingleNode('/window/controls/include').InnerText -eq 'NaraMusicPlayerBackground') 'Player background include changed'
 Assert-True ($page.window.defaultcontrol.InnerText -eq '602') 'Default focus must remain play/pause'
-Assert-True ($page.SelectSingleNode('//control[@id="420"]/left').InnerText -eq '1040') 'Timed lyric column moved'
-Assert-True ($page.SelectSingleNode('//control[@id="421"]/left').InnerText -eq '1040') 'Untimed lyric column must align'
-Assert-True ($page.SelectSingleNode('//control[@id="420"]/width').InnerText -eq '720') 'Lyrics must retain the right margin'
-Assert-True ($page.OuterXml -notmatch 'LOCALIZE\[24013\]|MusicPlayer\.(Codec|SampleRate|BitsPerSample|Channels)') 'Redundant headings or technical flags returned'
+$timedLyrics = $page.SelectSingleNode('//control[@id="420"]')
+$plainLyrics = $page.SelectSingleNode('//control[@id="421"]')
+Assert-True ($timedLyrics.left -eq $plainLyrics.left -and $timedLyrics.top -eq $plainLyrics.top -and $timedLyrics.height -eq $plainLyrics.height) 'Timed and untimed lyrics must share a column'
+Assert-True ([int]$timedLyrics.left + [int]$timedLyrics.width -eq 1760) 'Lyrics must retain the right margin'
+Assert-True ($page.OuterXml -notmatch 'LOCALIZE\[24013\]') 'Redundant lyrics heading returned'
 $heading = $page.SelectNodes('//control[@type="label" and contains(label,"LOCALIZE[31000]")]')
 Assert-True ($heading.Count -eq 1 -and $heading[0].left -eq '40' -and $heading[0].top -eq '28') 'Only the inset top-left now-playing heading is allowed'
 $trackPosition = $page.SelectSingleNode('//control[contains(label,"Playlist.Position(music)")]')
@@ -92,8 +102,22 @@ foreach ($label in @($heading[0], $trackPosition, $clock)) {
 }
 $cover = $page.SelectSingleNode('//control[texture="$VAR[NaraMusicCoverVar]"]')
 $title = $page.SelectSingleNode('//control[label="$INFO[Player.Title]"]')
-Assert-True ($title.left -eq '180' -and $title.width -eq '620') 'Song title space must stay unchanged'
-Assert-True ([int]$cover.left + [int]$cover.width / 2 -eq [int]$title.left + [int]$title.width / 2) 'Cover must center over the full title column'
+Assert-True ($cover.width -eq '450' -and $cover.height -eq '450') 'Music cover must remain 450 pixels square'
+Assert-True ($cover.left -eq $title.left) 'Cover must align with its title'
+# The lyric column is deliberately raised above the cover top; it only has to clear the header
+# above and the bottom control bar (1080 - 160) below.
+Assert-True ([int]$timedLyrics.top -lt [int]$cover.top) 'The raised lyric column must start above the cover top'
+Assert-True ([int]$timedLyrics.top -ge 96 -and [int]$timedLyrics.top + [int]$timedLyrics.height -le 920) 'Lyric column must clear the header and the bottom control bar'
+Assert-True ([int]$title.left + [int]$title.width -lt [int]$timedLyrics.left) 'Song title must not overlap lyrics'
+$album = $page.SelectSingleNode('//control[label="$VAR[NaraMusicAlbumYearVar]"]')
+Assert-True ([int]$album.top -ge [int]$cover.top + [int]$cover.height) 'Album metadata must sit below the cover'
+$details = $page.SelectSingleNode('//control[include/@content="NaraMusicAudioDetail"]')
+Assert-True ($details.align -eq 'right' -and [int]$details.right -eq 1920 - [int]$timedLyrics.left - [int]$timedLyrics.width) 'Audio specifications must align with the lyric column right edge'
+Assert-True ($details.SelectNodes('include[@content="NaraMusicAudioDetail"]').Count -eq 5) 'Audio specifications must include codec, bit depth, sample rate, bitrate and channels'
+$glow = $page.SelectSingleNode('//control[@id="431"]/texture')
+Assert-True (!$glow.HasAttribute('border') -and !$glow.HasAttribute('cornerradius')) 'Cover backlight must use a continuous gradient'
+Assert-True ($page.SelectSingleNode('//control[@id="432"]').type -eq 'grouplist') 'Cover reflection requires a clipping container'
+Assert-True ($page.SelectNodes('//visible[contains(text(),"1114")]').Count -eq 0) 'Lyrics must stay visible behind the playlist popup'
 Assert-True ($page.SelectNodes('//*[@material="glass"]').Count -eq 0) 'The clock must be plain text without a glass capsule'
 Assert-True ($page.OuterXml -notmatch 'Player.ShowInfo|Player.ShowTime|ColoredBackgroundImages|osdfade') 'Music content must stay persistent and unmasked'
 $gate = $page.SelectSingleNode('//include[text()="NaraMusicPlayerControls"]/../visible')
@@ -105,9 +129,24 @@ Assert-True ($addonList.type -eq 'list' -and $lyricsAddon.SelectSingleNode('//co
 Assert-True ($lyricsAddon.SelectNodes('//include | //texture | //texturebackground | //backgroundcolor').Count -eq 0) 'The lyrics overlay must not obscure the music page with a panel or scrim'
 $adapterSlide = $addonList.SelectSingleNode('animation[@effect="slide"]')
 Assert-True ($adapterSlide.end -eq '0,-10000' -and $adapterSlide.condition.Contains('NaraMusic.IntegratedLyrics')) 'Only the integrated add-on adapter must stay offscreen'
-Assert-True ($addonList.top -eq '222') 'Other music modes must retain a visible add-on layout'
-Assert-True ($page.OuterXml -notmatch 'script-cu-lrclyrics-main.xml') 'Native lyrics must remain visible and interactive while the add-on runs'
+# The add-on window is fused onto the native lyric column: identical geometry, row heights and
+# fonts, so the two renderers hand the column over without a visible jump.
+Assert-True ($addonList.left -eq $timedLyrics.left -and $addonList.top -eq $timedLyrics.top -and
+             $addonList.width -eq $timedLyrics.width -and $addonList.height -eq $timedLyrics.height) 'Add-on lyrics must match the native lyric column geometry'
+$addonItem = $addonList.SelectSingleNode('itemlayout')
+$addonFocus = $addonList.SelectSingleNode('focusedlayout')
+Assert-True ($addonItem.height -eq $timedLyrics.SelectSingleNode('itemlayout').height -and
+             $addonFocus.height -eq $timedLyrics.SelectSingleNode('focusedlayout').height) 'Add-on lyric rows must match the native row heights'
+Assert-True ($addonItem.SelectSingleNode('control/font').InnerText -eq $timedLyrics.SelectSingleNode('itemlayout/control/font').InnerText) 'Add-on context lyrics must reuse the native font'
+Assert-True ($addonFocus.SelectSingleNode('control/font').InnerText -eq $timedLyrics.SelectSingleNode('focusedlayout/control/font').InnerText) 'Add-on focused lyric must reuse the native font'
+Assert-True ($null -ne $addonList.SelectSingleNode('animation[@type="WindowOpen"]') -and $addonList.SelectSingleNode('scrolltime').InnerText -eq '200') 'Add-on lyrics must slide in and scroll like the native column'
 Assert-True ($lyricsAddon.SelectNodes('//onleft | //onright | //onclick | //onload').Count -eq 0) 'The add-on adapter must not introduce a second navigation mode'
+# Native lyrics yield the column while the add-on window owns it, and come back when it closes.
+foreach ($lyricControl in @($timedLyrics, $plainLyrics, $page.SelectSingleNode('//control[@id="422"]'))) {
+  Assert-True ($lyricControl.SelectSingleNode('visible').InnerText -match '!Window\.IsVisible\(script-cu-lrclyrics-main\.xml\)') "Native lyrics must yield to the add-on window: $($lyricControl.id)"
+}
+$emptyLyrics = $page.SelectSingleNode('//visible[contains(text(),"NaraMusic.LyricsTimed") and contains(text(),"NaraMusic.LyricsText")]')
+Assert-True ($null -ne $emptyLyrics -and $emptyLyrics.InnerText -match '!Window\.IsVisible\(script-cu-lrclyrics-main\.xml\)') 'The empty lyric placeholder must also yield to the add-on window'
 
 $expanded = [xml]$page.OuterXml
 Expand-Includes $expanded.window
@@ -134,17 +173,24 @@ foreach ($button in $buttons) {
     $path = $texture.InnerText
     Assert-True (![string]::IsNullOrEmpty($path) -and !$path.Contains('$')) "Missing static icon: $($button.id) $state"
     if ($checkedIcons.ContainsKey($path)) { continue }
-    $icon = [System.Drawing.Bitmap]::new((Join-Path $SkinDirectory ('media/' + $path)))
-    try {
-      $visiblePixels = 0
-      for ($y = 0; $y -lt $icon.Height; $y++) {
-        for ($x = 0; $x -lt $icon.Width; $x++) {
-          if ($icon.GetPixel($x, $y).A -gt 0) { $visiblePixels++ }
+    $iconPath = Join-Path $SkinDirectory ('media/' + $path)
+    # Only loose icons can be decoded here; packed ones are verified through the bundle instead.
+    if (Test-Path -LiteralPath $iconPath) {
+      $icon = [System.Drawing.Bitmap]::new($iconPath)
+      try {
+        $visiblePixels = 0
+        for ($y = 0; $y -lt $icon.Height; $y++) {
+          for ($x = 0; $x -lt $icon.Width; $x++) {
+            if ($icon.GetPixel($x, $y).A -gt 0) { $visiblePixels++ }
+          }
         }
+        Assert-True ($visiblePixels -gt 0) "Icon is fully transparent: $path"
       }
-      Assert-True ($visiblePixels -gt 0) "Icon is fully transparent: $path"
+      finally { $icon.Dispose() }
     }
-    finally { $icon.Dispose() }
+    else {
+      Assert-True (Test-SkinTexture $path) "Icon is missing from the texture bundle: $path"
+    }
     $checkedIcons[$path] = $true
   }
 }
@@ -207,18 +253,25 @@ foreach ($name in @('DialogSeekBar.xml', 'Custom_1109_TopBarOverlay.xml')) {
 }
 
 $background = $documents['Includes_MusicBackground.xml']
-Assert-True ($background.SelectNodes('//control[@type="image"]').Count -eq 1) 'Static background must use one image'
-Assert-True ($background.SelectNodes('//animation|//control[@type="multiimage" or @type="visualisation" or @type="videowindow"]').Count -eq 0) 'Background must not animate or start another renderer'
-Assert-True ($background.SelectSingleNode('//texture').InnerText -eq 'osd/nara/music-background.png') 'Wrong wallpaper'
-$wallpaper = [System.Drawing.Bitmap]::new((Join-Path $SkinDirectory 'media/osd/nara/music-background.png'))
-try {
-  Assert-True ($wallpaper.Width -ge 1600 -and [Math]::Abs($wallpaper.Width / [double]$wallpaper.Height - 16.0/9) -lt 0.01) 'Wallpaper must be high-resolution widescreen'
-  Assert-True (($wallpaper.PixelFormat -band [System.Drawing.Imaging.PixelFormat]::Indexed) -eq 0) 'Indexed PNG swaps red and blue in the existing TexturePacker; use true color'
-}
-finally { $wallpaper.Dispose() }
+Assert-True ($background.SelectNodes('//control[@type="image"]').Count -eq 1) 'Background must use one image'
+Assert-True ($background.SelectNodes('//animation|//control[@type="multiimage" or @type="visualisation" or @type="videowindow"]').Count -eq 0) 'Background must use a single static image'
+$backgroundTexture = $background.SelectSingleNode('//texture')
+Assert-True (!$backgroundTexture.HasAttribute('material')) 'Music background must use ordinary image rendering'
+Assert-True ($backgroundTexture.InnerText -eq '$INFO[Skin.String(Nara.MusicBackground)]' -and $backgroundTexture.background -eq 'true') 'Background must load the saved image asynchronously'
+Assert-True ($backgroundTexture.fallback -eq 'osd/nara/music-background.png') 'An empty or unavailable custom image must use the default wallpaper'
+# The wallpaper now only exists inside media/Textures.xbt, so its pixels can no longer be
+# re-inspected from the skin folder; assert that it is still packed and wired as the fallback.
+Assert-True (Test-SkinTexture 'osd/nara/music-background.png') 'The default wallpaper must stay packed in Textures.xbt'
 
 $playlist = $documents['Custom_1114_MusicPlaylistDialog.xml']
 Assert-True ($playlist.window.id -eq '1114') 'Music playlist must have an independent dialog ID'
+$panel = $playlist.SelectSingleNode('/window/controls/control')
+Assert-True ($panel.centerleft -eq '50%' -and $panel.centertop -eq '50%') 'Playlist popup must be centered'
+foreach ($layout in $playlist.SelectNodes('//itemlayout | //focusedlayout')) {
+  $columns = $layout.SelectNodes('control[@type="label"]')
+  Assert-True ($columns.Count -eq 2) 'Playlist must only show title and artist columns'
+  Assert-True ([int]$columns[0].left + [int]$columns[0].width -le [int]$columns[1].left -and [int]$columns[1].left + [int]$columns[1].width -le [int]$layout.width) 'Playlist columns must fit without overlap'
+}
 Assert-True ($controls.SelectSingleNode('//control[@id="70051"]/onclick').InnerText -eq 'ActivateWindow(1114)') 'Music controls must open the music-only playlist'
 Assert-True ($playlist.SelectSingleNode('//content').focusplaying -eq 'true') 'Playlist must focus the playing item'
 Assert-True ($playlist.SelectSingleNode('//content').InnerText -eq 'playlistmusic://?reload=$INFO[Playlist.Position(music)]') 'Music playlist provider changed'
@@ -245,6 +298,19 @@ $mute = $audio.SelectSingleNode('//control[@id="11"]')
 Assert-True ($audioFocus.texture.OuterXml -eq $focus.texture.OuterXml) 'Audio and playlist popups must use identical seam-free focus'
 Assert-True ([int]$audioFocus.top - [int]$mute.top -eq 3 -and [int]$mute.height - [int]$audioFocus.height -eq 6) 'Audio focus must retain 3-pixel vertical padding'
 Assert-True ($audioFocus.visible -eq 'Control.HasFocus(11)' -and !$mute.texturefocus.InnerText) 'Mute focus must render once'
+$chooseBackground = $audio.SelectSingleNode('//control[@id="12"]')
+$resetBackground = $audio.SelectSingleNode('//control[@id="13"]')
+Assert-True ($chooseBackground.onclick -eq 'Skin.SetImage(Nara.MusicBackground)') 'Custom background must use the native image browser and persistent skin setting'
+Assert-True ($resetBackground.SelectSingleNode('onclick').InnerText -eq 'Skin.Reset(Nara.MusicBackground)') 'Restore must clear only the music background setting'
+Assert-True ($resetBackground.enable -eq '!String.IsEmpty(Skin.String(Nara.MusicBackground))' -and $resetBackground.SelectNodes('onclick')[1].InnerText -eq 'SetFocus(12)') 'Restore must return focus to the chooser before becoming disabled'
+foreach ($id in @(10, 11, 12, 13)) {
+  $row = $audio.SelectSingleNode('//control[@id="' + $id + '"]')
+  Assert-True ([int]$row.top + [int]$row.height -le [int]$row.ParentNode.height) "Music setting exceeds dialog bounds: $id"
+  foreach ($direction in @('onup', 'ondown')) {
+    $target = $row.SelectSingleNode($direction).InnerText
+    Assert-True ($null -ne $audio.SelectSingleNode('//control[@id="' + $target + '"]')) "Music setting navigation target missing: $id $direction"
+  }
+}
 $videoPlaylist = $documents['Custom_1112_OSDPlaylistDialog.xml']
 Assert-True ($videoPlaylist.OuterXml -notmatch 'NaraMusic|Player.HasAudio|material="glass"') 'Video playlist must not contain music-specific styles'
 Assert-True ($videoPlaylist.SelectSingleNode('//content').InnerText -eq 'playlistvideo://?reload=$INFO[Playlist.Position(video)]') 'Video playlist provider must stay unchanged'
@@ -259,4 +325,4 @@ foreach ($name in @('Custom_1114_MusicPlaylistDialog.xml', 'Custom_1113_MusicAud
 }
 Assert-True ($documents['Custom_1113_MusicAudioDialog.xml'].OuterXml -notmatch 'colors/black.png|osdfade') 'Music audio popup must be glass without a black scrim'
 
-Write-Output "PASS: $($documents.Count) XML files; expanded music controls/popups, legacy overlay isolation, single nib, static wallpaper, regular glass, File Manager focus styling and independent video dialog checked."
+Write-Output "PASS: $($documents.Count) XML files; music layout/packed assets, fused CU-LRC lyric column, expanded controls/popups, legacy overlay isolation, single nib, custom static background, regular glass and independent video dialog checked."

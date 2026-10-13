@@ -14,6 +14,8 @@
 	<onload condition="Window.Previous(filemanager) + String.IsEqual(Window(home).Property(Home.Section),files) + String.IsEqual(Window(home).Property(Home.FileReturnControl),15020)">SetFocus(15020)</onload>
 	<onload condition="Window.Previous(filemanager) + String.IsEqual(Window(home).Property(Home.Section),files) + String.IsEqual(Window(home).Property(Home.FileReturnControl),9017)">SetFocus(9017)</onload>
 	<onload>ClearProperty(Home.FileReturnControl,home)</onload>
+	<!-- Keep the drawer hidden during the initial visibility pass when returning from settings. -->
+	<onload>ClearProperty(Search.SettingsTransition,home)</onload>
 	<!-- Record file-entry focus at departure; opening settings must not reuse an old file selection. -->
 	<onunload>ClearProperty(Home.FileReturnControl,home)</onunload>
 	<onunload condition="Window.Next(filemanager) + Control.HasFocus(15010)">SetProperty(Home.FileReturnControl,15010,home)</onunload>
@@ -38,7 +40,7 @@
 			<aspectratio align="right">scale</aspectratio>
 			<fadetime>350</fadetime>
 			<animation effect="zoom" center="auto" end="102,102" time="0" condition="Integer.IsGreater(System.StereoscopicMode,0)">conditional</animation>
-			<animation effect="fade" start="0" end="100" time="250">WindowOpen</animation>
+			<animation effect="fade" start="0" end="100" time="250" reversible="false" condition="Window.Previous(startup) | Window.Previous(fullscreenvideo) | Window.Previous(fullscreengame) | Window.Previous(visualisation)">WindowOpen</animation>
 			<animation effect="fade" time="400">VisibleChange</animation>
 			<include content="Animation_NaraFanartFocus">
 				<param name="condition" value="$EXP[NaraHomeFanartFocused]" />
@@ -65,7 +67,9 @@
 			<aspectratio align="right">scale</aspectratio>
 			<fadetime>250</fadetime>
 			<texture background="true" colordiffuse="CCFFFFFF">$VAR[NaraSharedRandomFanartVar]</texture>
-			<visible>[String.IsEqual(Window(home).Property(Home.Section),files) | String.IsEqual(Window(home).Property(Home.Section),favorites)] + !Skin.HasSetting(no_fanart) + ![String.IsEmpty(Skin.String(Nara.SharedRandomFanart.LockedPath)) + String.IsEmpty(Window(home).Property(Home.SharedRandomFanart.SessionPath)) + String.IsEmpty(Container(16090).ListItem.Art(fanart))] + ![Player.HasVideo | Player.HasAudio | Player.HasGame]</visible>
+			<!-- Keep Favorites' backdrop resident so the detail close fade reveals it immediately. -->
+			<animation effect="fade" start="100" end="0" time="0" condition="String.IsEqual(Window(home).Property(Home.Section),favorites) + Window.IsActive(movieinformation)">Conditional</animation>
+			<visible>[String.IsEqual(Window(home).Property(Home.Section),files) | String.IsEqual(Window(home).Property(Home.Section),favorites)] + !Skin.HasSetting(no_fanart) + ![String.IsEmpty(Skin.String(Nara.SharedRandomFanart.LockedPath)) + String.IsEmpty(Window(home).Property(Home.SharedRandomFanart.SessionPath)) + String.IsEmpty(Container(16090).ListItem.Art(fanart))] + ![Player.HasVideo | Player.HasAudio | Player.HasGame] + [String.IsEqual(Window(home).Property(Home.Section),favorites) | !Window.IsVisible(movieinformation)]</visible>
 		</control>
 		<!-- Standard sections match the movie/TV information pages. Files and
 		     Favorites omit the directional reading scrims below. -->
@@ -110,6 +114,7 @@
 				<height>660</height>
 				<aspectratio>stretch</aspectratio>
 				<texture colordiffuse="opacity_medium">overlays/overlayfade.png</texture>
+				<animation effect="slide" start="0,0" end="0,100" time="260" tween="cubic" easing="out" condition="$EXP[NaraHomeVideoExpanded]">Conditional</animation>
 				<visible>![String.IsEqual(Window(home).Property(Home.Section),files) | String.IsEqual(Window(home).Property(Home.Section),favorites)]</visible>
 			</control>
 		</control>
@@ -141,93 +146,301 @@
 					<top>0</top>
 					<visible>String.IsEqual(Window(home).Property(Home.Section),movies)</visible>
 					<include>Visible_Fade</include>
+					<include content="HomeFocusedItemHero" condition="Library.HasContent(movies) + !Skin.HasSetting(home_no_movies_inprogress_widget)">
+						<param name="id" value="5001001"/>
+						<param name="list_id" value="5100"/>
+						<param name="metadata" value="$INFO[Container(5100).ListItemSettled.Year]$INFO[Container(5100).ListItemSettled.Rating,  &#183;  ]$INFO[Container(5100).ListItemSettled.Duration,  &#183;  ]$INFO[Container(5100).ListItemSettled.Genre,  &#183;  ]"/>
+						<param name="visible" value="String.IsEmpty(Window(home).Property(Home.movies.Hero)) | String.IsEqual(Window(home).Property(Home.movies.Hero),5100)"/>
+					</include>
+					<include content="HomeFocusedItemHero" condition="Library.HasContent(movies) + !Skin.HasSetting(home_no_movies_recentlyadded_widget)">
+						<param name="id" value="5200001"/>
+						<param name="list_id" value="5200"/>
+						<param name="visible" value="String.IsEqual(Window(home).Property(Home.movies.Hero),5200)"/>
+						<param name="metadata" value="$INFO[Container(5200).ListItemSettled.Year]$INFO[Container(5200).ListItemSettled.Rating,  &#183;  ]$INFO[Container(5200).ListItemSettled.Duration,  &#183;  ]$INFO[Container(5200).ListItemSettled.Genre,  &#183;  ]"/>
+					</include>
+					<include content="HomeFocusedItemHero" condition="Library.HasContent(movies) + !Skin.HasSetting(home_no_movies_premieres_widget)">
+						<param name="id" value="5800001"/>
+						<param name="list_id" value="5800"/>
+						<param name="visible" value="String.IsEqual(Window(home).Property(Home.movies.Hero),5800)"/>
+						<param name="metadata" value="$INFO[Container(5800).ListItemSettled.Year]$INFO[Container(5800).ListItemSettled.Rating,  &#183;  ]$INFO[Container(5800).ListItemSettled.Duration,  &#183;  ]$INFO[Container(5800).ListItemSettled.Genre,  &#183;  ]"/>
+					</include>
+					<include content="HomeFocusedItemHero" condition="Library.HasContent(movies) + !Skin.HasSetting(home_no_movies_highrated_widget)">
+						<param name="id" value="5300001"/>
+						<param name="list_id" value="5300"/>
+						<param name="visible" value="String.IsEqual(Window(home).Property(Home.movies.Hero),5300)"/>
+						<param name="metadata" value="$INFO[Container(5300).ListItemSettled.Year]$INFO[Container(5300).ListItemSettled.Rating,  &#183;  ]$INFO[Container(5300).ListItemSettled.Duration,  &#183;  ]$INFO[Container(5300).ListItemSettled.Genre,  &#183;  ]"/>
+					</include>
+					<include content="HomeFocusedItemHero" condition="Library.HasContent(movies) + !Skin.HasSetting(home_no_movies_random_widget)">
+						<param name="id" value="5400001"/>
+						<param name="list_id" value="5400"/>
+						<param name="visible" value="String.IsEqual(Window(home).Property(Home.movies.Hero),5400)"/>
+						<param name="metadata" value="$INFO[Container(5400).ListItemSettled.Year]$INFO[Container(5400).ListItemSettled.Rating,  &#183;  ]$INFO[Container(5400).ListItemSettled.Duration,  &#183;  ]$INFO[Container(5400).ListItemSettled.Genre,  &#183;  ]"/>
+					</include>
+					<include content="HomeFocusedItemHero" condition="Library.HasContent(movies) + !Skin.HasSetting(home_no_movies_sets_widget)">
+						<param name="id" value="5600001"/>
+						<param name="list_id" value="5600"/>
+						<param name="collection" value="true"/>
+						<param name="visible" value="String.IsEqual(Window(home).Property(Home.movies.Hero),5600)"/>
+						<param name="metadata" value="$INFO[Container(5600).ListItemSettled.Year]$INFO[Container(5600).ListItemSettled.Rating,  &#183;  ]$INFO[Container(5600).ListItemSettled.Duration,  &#183;  ]$INFO[Container(5600).ListItemSettled.Genre,  &#183;  ]"/>
+					</include>
 					<control type="grouplist" id="5001">
 						<include>HomeVideoGroupListCommon</include>
-						<pagecontrol>5010</pagecontrol>
-						<include content="HomeFocusedItemHero" condition="Library.HasContent(movies) + !Skin.HasSetting(home_no_movies_inprogress_widget)">
-							<param name="id" value="5001001"/>
-							<param name="list_id" value="5100"/>
-							<param name="metadata" value="$INFO[Container(5100).ListItem.Year]$INFO[Container(5100).ListItem.Rating,  &#183;  ]$INFO[Container(5100).ListItem.Duration,  &#183;  ]$INFO[Container(5100).ListItem.Genre,  &#183;  ]"/>
+						<include content="HomeVideoPage">
+							<param name="id" value="5002"/>
+							<param name="visible" value="[Integer.IsGreater(Container(5100).NumItems,0) | Container(5100).IsUpdating] | $EXP[NaraHomeMovieLibrariesVisible]"/>
+							<include content="HomeVideoPageContent">
+								<param name="top" value="0"/>
+								<param name="active" value="String.IsEmpty(Window(home).Property(Home.movies.Page)) | String.IsEqual(Window(home).Property(Home.movies.Page),first)"/>
+								<control type="grouplist" id="5004">
+									<include>HomeVideoFirstPageListCommon</include>
+									<onup>9000</onup>
+									<ondown>5201</ondown>
+									<include content="HomeRailSpacer">
+										<param name="id" value="5002001"/>
+										<param name="height" value="528"/>
+										<param name="visible" value="Integer.IsGreater(Container(5100).NumItems,0)"/>
+									</include>
+									<include content="HomeContinueWatchingRail" condition="Library.HasContent(movies) + !Skin.HasSetting(home_no_movies_inprogress_widget)">
+										<param name="content_path" value="special://skin/playlists/home_inprogress_movies.xsp"/>
+										<param name="widget_limit" value="20"/>
+										<param name="widget_header" value="$LOCALIZE[31010]"/>
+										<param name="widget_target" value="videos"/>
+										<param name="list_id" value="5100"/>
+										<param name="media_row_visible" value="$EXP[NaraHomeMovieLibrariesVisible]"/>
+										<param name="onclick_condition" value="String.IsEqual(ListItem.Property(node.type),target_folder)"/>
+										<param name="onclick_action" value="ActivateWindow(videos,special://skin/playlists/all_inprogress_movies.xsp,return)"/>
+										<param name="navigation" value="HomeVideoRowNavigation"/>
+										<param name="section" value="movies"/>
+										<param name="pages_id" value="5001"/>
+										<param name="onup" value="0"/>
+										<param name="ondown" value="0"/>
+										<param name="page" value="first"/>
+										<param name="hero_id" value="5100"/>
+										<param name="update_hero" value="true"/>
+									</include>
+									<include content="HomeMediaLibraryRail" condition="Library.HasContent(movies) + System.AddonIsEnabled(plugin.service.emby-next-gen)">
+										<param name="content_path" value="videodb://movies/tags/?excludetags=Movies%20%28Favorites%29%7CTVShows%20%28Favorites%29&amp;SkinExtended=true"/>
+										<param name="widget_header" value="$LOCALIZE[31616]"/>
+										<param name="widget_target" value="videos"/>
+										<param name="list_id" value="5700"/>
+										<param name="item_limit" value="30"/>
+										<param name="background_art_condition" value="ListItem.Property(emby.library.art)"/>
+										<param name="navigation" value="HomeVideoRowNavigation"/>
+										<param name="section" value="movies"/>
+										<param name="pages_id" value="5001"/>
+										<param name="onup" value="0"/>
+										<param name="ondown" value="0"/>
+										<param name="page" value="first"/>
+										<param name="hero_id" value="5100"/>
+										<param name="update_hero" value="true"/>
+									</include>
+								</control>
+							</include>
 						</include>
-						<include content="HomeContinueWatchingRail" condition="Library.HasContent(movies) + !Skin.HasSetting(home_no_movies_inprogress_widget)">
-							<param name="content_path" value="special://skin/playlists/home_inprogress_movies.xsp"/>
-							<param name="widget_limit" value="20"/>
-							<param name="widget_header" value="$LOCALIZE[31010]"/>
-							<param name="widget_target" value="videos"/>
-							<param name="list_id" value="5100"/>
-							<param name="media_row_visible" value="[System.AddonIsEnabled(plugin.service.emby-next-gen) + [Integer.IsGreater(Container(5700).NumItems,0) | Container(5700).IsUpdating]] | [!System.AddonIsEnabled(plugin.service.emby-next-gen) + !Skin.HasSetting(home_no_movies_categories_widget) + [Integer.IsGreater(Container(5900).NumItems,0) | Container(5900).IsUpdating]]"/>
-							<param name="onclick_condition" value="String.IsEqual(ListItem.Property(node.type),target_folder)"/>
-							<param name="onclick_action" value="ActivateWindow(videos,special://skin/playlists/all_inprogress_movies.xsp,return)"/>
+						<include content="HomeVideoPage">
+							<param name="id" value="5201"/>
+							<param name="visible" value="[Integer.IsGreater(Container(5200).NumItems,0) | Container(5200).IsUpdating]"/>
+							<include content="HomeVideoPageContent">
+								<param name="top" value="500"/>
+								<param name="slide_distance" value="96"/>
+								<param name="slide_time" value="420"/>
+								<param name="fade_time" value="260"/>
+								<param name="active" value="String.IsEqual(Window(home).Property(Home.movies.Row),5200)"/>
+								<include content="WidgetListPoster" condition="Library.HasContent(movies) + !Skin.HasSetting(home_no_movies_recentlyadded_widget)">
+									<param name="content_path" value="special://skin/playlists/home_recent_unwatched_movies.xsp"/>
+									<param name="widget_limit" value="20"/>
+									<param name="widget_header" value="$LOCALIZE[20386]"/>
+									<param name="widget_target" value="videos"/>
+									<param name="list_id" value="5200"/>
+									<param name="onclick_condition" value="String.IsEqual(ListItem.Property(node.type),target_folder)"/>
+									<param name="onclick_action" value="ActivateWindow(videos,special://skin/playlists/all_recent_unwatched_movies.xsp,return)"/>
+									<param name="navigation" value="HomeVideoRowNavigation"/>
+									<param name="section" value="movies"/>
+									<param name="pages_id" value="5001"/>
+									<param name="onup" value="5002"/>
+									<param name="ondown" value="5801"/>
+									<param name="page" value="poster"/>
+									<param name="hero_id" value="5200"/>
+									<param name="update_hero" value="true"/>
+								</include>
+							</include>
 						</include>
-						<include content="HomeMediaLibraryRail" condition="Library.HasContent(movies) + System.AddonIsEnabled(plugin.service.emby-next-gen)">
-							<param name="content_path" value="videodb://movies/tags/?excludetags=Movies%20%28Favorites%29%7CTVShows%20%28Favorites%29&amp;SkinExtended=true"/>
-							<param name="widget_header" value="$LOCALIZE[31616]"/>
-							<param name="widget_target" value="videos"/>
-							<param name="list_id" value="5700"/>
-							<param name="item_limit" value="30"/>
-							<param name="background_art_condition" value="ListItem.Property(emby.library.art)"/>
+						<include content="HomeVideoPage">
+							<param name="id" value="5801"/>
+							<param name="visible" value="[Integer.IsGreater(Container(5800).NumItems,0) | Container(5800).IsUpdating]"/>
+							<include content="HomeVideoPageContent">
+								<param name="top" value="500"/>
+								<param name="slide_distance" value="96"/>
+								<param name="slide_time" value="420"/>
+								<param name="fade_time" value="260"/>
+								<param name="active" value="String.IsEqual(Window(home).Property(Home.movies.Row),5800)"/>
+								<include content="WidgetListPoster" condition="Library.HasContent(movies) + !Skin.HasSetting(home_no_movies_premieres_widget)">
+									<param name="content_path" value="special://skin/playlists/home_recent_releases_movies.xsp"/>
+									<param name="widget_header" value="$LOCALIZE[31711]"/>
+									<param name="widget_target" value="videos"/>
+									<param name="list_id" value="5800"/>
+									<param name="onclick_condition" value="String.IsEqual(ListItem.Property(node.type),target_folder)"/>
+									<param name="onclick_action" value="ActivateWindow(videos,special://skin/playlists/all_recent_releases_movies.xsp,return)"/>
+									<param name="navigation" value="HomeVideoRowNavigation"/>
+									<param name="section" value="movies"/>
+									<param name="pages_id" value="5001"/>
+									<param name="onup" value="5201"/>
+									<param name="ondown" value="5301"/>
+									<param name="page" value="poster"/>
+									<param name="hero_id" value="5800"/>
+									<param name="update_hero" value="true"/>
+								</include>
+							</include>
 						</include>
-						<include content="HomeMediaLibraryRail" condition="Library.HasContent(movies) + !Skin.HasSetting(home_no_movies_categories_widget) + !System.AddonIsEnabled(plugin.service.emby-next-gen)">
-							<param name="additional_movie_items" value="true"/>
-							<param name="dynamic_content" value="false"/>
-							<param name="widget_header" value="$LOCALIZE[31148]"/>
-							<param name="widget_target" value="videos"/>
-							<param name="list_id" value="5900"/>
+						<include content="HomeVideoPage">
+							<param name="id" value="5301"/>
+							<param name="visible" value="[Integer.IsGreater(Container(5300).NumItems,0) | Container(5300).IsUpdating]"/>
+							<include content="HomeVideoPageContent">
+								<param name="top" value="500"/>
+								<param name="slide_distance" value="96"/>
+								<param name="slide_time" value="420"/>
+								<param name="fade_time" value="260"/>
+								<param name="active" value="String.IsEqual(Window(home).Property(Home.movies.Row),5300)"/>
+								<include content="WidgetListPoster" condition="Library.HasContent(movies) + !Skin.HasSetting(home_no_movies_highrated_widget)">
+									<param name="content_path" value="special://skin/playlists/home_highrated_unwatched_movies.xsp"/>
+									<param name="widget_header" value="$LOCALIZE[31710]"/>
+									<param name="widget_target" value="videos"/>
+									<param name="list_id" value="5300"/>
+									<param name="onclick_condition" value="String.IsEqual(ListItem.Property(node.type),target_folder)"/>
+									<param name="onclick_action" value="ActivateWindow(videos,special://skin/playlists/all_highrated_unwatched_movies.xsp,return)"/>
+									<param name="navigation" value="HomeVideoRowNavigation"/>
+									<param name="section" value="movies"/>
+									<param name="pages_id" value="5001"/>
+									<param name="onup" value="5801"/>
+									<param name="ondown" value="5401"/>
+									<param name="page" value="poster"/>
+									<param name="hero_id" value="5300"/>
+									<param name="update_hero" value="true"/>
+								</include>
+							</include>
 						</include>
-						<include content="WidgetListPoster" condition="Library.HasContent(movies) + !Skin.HasSetting(home_no_movies_recentlyadded_widget)">
-							<param name="content_path" value="special://skin/playlists/home_recent_unwatched_movies.xsp"/>
-							<param name="widget_limit" value="20"/>
-							<param name="widget_header" value="$LOCALIZE[20386]"/>
-							<param name="widget_target" value="videos"/>
-							<param name="list_id" value="5200"/>
-							<param name="onclick_condition" value="String.IsEqual(ListItem.Property(node.type),target_folder)"/>
-							<param name="onclick_action" value="ActivateWindow(videos,special://skin/playlists/all_recent_unwatched_movies.xsp,return)"/>
+						<include content="HomeVideoPage">
+							<param name="id" value="5401"/>
+							<param name="visible" value="[Integer.IsGreater(Container(5400).NumItems,0) | Container(5400).IsUpdating]"/>
+							<include content="HomeVideoPageContent">
+								<param name="top" value="500"/>
+								<param name="slide_distance" value="96"/>
+								<param name="slide_time" value="420"/>
+								<param name="fade_time" value="260"/>
+								<param name="active" value="String.IsEqual(Window(home).Property(Home.movies.Row),5400)"/>
+								<include content="WidgetListPoster" condition="Library.HasContent(movies) + !Skin.HasSetting(home_no_movies_random_widget)">
+									<param name="content_path" value="special://skin/playlists/random_movies.xsp"/>
+									<param name="widget_header" value="$LOCALIZE[31006]"/>
+									<param name="widget_target" value="videos"/>
+									<param name="browse_mode" value="never"/>
+									<param name="list_id" value="5400"/>
+									<param name="navigation" value="HomeVideoRowNavigation"/>
+									<param name="section" value="movies"/>
+									<param name="pages_id" value="5001"/>
+									<param name="onup" value="5301"/>
+									<param name="ondown" value="5601"/>
+									<param name="page" value="poster"/>
+									<param name="hero_id" value="5400"/>
+									<param name="update_hero" value="true"/>
+								</include>
+							</include>
 						</include>
-						<include content="WidgetListPoster" condition="Library.HasContent(movies) + !Skin.HasSetting(home_no_movies_unwatched_widget)">
-							<param name="content_path" value="special://skin/playlists/home_unwatched_movies.xsp"/>
-							<param name="widget_header" value="$LOCALIZE[31007]"/>
-							<param name="widget_target" value="videos"/>
-							<param name="list_id" value="5300"/>
-							<param name="onclick_condition" value="String.IsEqual(ListItem.Property(node.type),target_folder)"/>
-							<param name="onclick_action" value="ActivateWindow(videos,special://skin/playlists/all_unwatched_movies.xsp,return)"/>
+						<include content="HomeVideoPage">
+							<param name="id" value="5601"/>
+							<param name="visible" value="[Integer.IsGreater(Container(5600).NumItems,0) | Container(5600).IsUpdating]"/>
+							<include content="HomeVideoPageContent">
+								<param name="top" value="500"/>
+								<param name="slide_distance" value="96"/>
+								<param name="slide_time" value="420"/>
+								<param name="fade_time" value="260"/>
+								<param name="active" value="String.IsEqual(Window(home).Property(Home.movies.Row),5600)"/>
+								<include content="WidgetListPoster" condition="Library.HasContent(movies) + !Skin.HasSetting(home_no_movies_sets_widget)">
+									<param name="content_path" value="videodb://movies/sets/"/>
+									<param name="widget_limit" value="20"/>
+									<param name="widget_header" value="$LOCALIZE[31075]"/>
+									<param name="widget_target" value="videos"/>
+									<param name="sortby" value="random"/>
+									<param name="list_id" value="5600"/>
+									<param name="onclick_condition" value="!String.IsEqual(ListItem.Property(node.type),target_folder)"/>
+									<param name="onclick_action" value="SetProperty(MovieSetDialog.SetId,$INFO[ListItem.DBID],home)"/>
+									<param name="onclick_condition_2" value="!String.IsEqual(ListItem.Property(node.type),target_folder)"/>
+									<param name="onclick_action_2" value="SetProperty(MovieSetDialog.SetName,$ESCINFO[ListItem.Label],home)"/>
+									<param name="onclick_condition_3" value="!String.IsEqual(ListItem.Property(node.type),target_folder)"/>
+									<param name="onclick_action_3" value="SetProperty(MovieSetDialog.SourceFanart,$ESCINFO[ListItem.Art(fanart)],home)"/>
+									<param name="onclick_condition_4" value="!String.IsEqual(ListItem.Property(node.type),target_folder)"/>
+									<param name="onclick_action_4" value="ActivateWindow(1111)"/>
+									<param name="navigation" value="HomeVideoRowNavigation"/>
+									<param name="section" value="movies"/>
+									<param name="pages_id" value="5001"/>
+									<param name="onup" value="5401"/>
+									<param name="ondown" value="5003"/>
+									<param name="page" value="poster"/>
+									<param name="hero_id" value="5600"/>
+									<param name="update_hero" value="true"/>
+								</include>
+							</include>
 						</include>
-						<include content="WidgetListPoster" condition="Library.HasContent(movies) + !Skin.HasSetting(home_no_movies_random_widget)">
-							<param name="content_path" value="special://skin/playlists/random_movies.xsp"/>
-							<param name="widget_header" value="$LOCALIZE[31006]"/>
-							<param name="widget_target" value="videos"/>
-							<param name="browse_mode" value="never"/>
-							<param name="list_id" value="5400"/>
-						</include>
-						<include content="WidgetListPoster" condition="Library.HasContent(movies) + !Skin.HasSetting(home_no_movies_sets_widget)">
-							<param name="content_path" value="videodb://movies/sets/"/>
-							<param name="widget_limit" value="20"/>
-							<param name="widget_header" value="$LOCALIZE[31075]"/>
-							<param name="widget_target" value="videos"/>
-							<param name="sortby" value="random"/>
-							<param name="list_id" value="5600"/>
-							<param name="onclick_condition" value="!String.IsEqual(ListItem.Property(node.type),target_folder)"/>
-							<param name="onclick_action" value="SetProperty(MovieSetDialog.SetId,$INFO[ListItem.DBID],home)"/>
-							<param name="onclick_condition_2" value="!String.IsEqual(ListItem.Property(node.type),target_folder)"/>
-							<param name="onclick_action_2" value="SetProperty(MovieSetDialog.SetName,$ESCINFO[ListItem.Label],home)"/>
-							<param name="onclick_condition_3" value="!String.IsEqual(ListItem.Property(node.type),target_folder)"/>
-							<param name="onclick_action_3" value="SetProperty(MovieSetDialog.SourceFanart,$ESCINFO[ListItem.Art(fanart)],home)"/>
-							<param name="onclick_condition_4" value="!String.IsEqual(ListItem.Property(node.type),target_folder)"/>
-							<param name="onclick_action_4" value="ActivateWindow(1111)"/>
-						</include>
-						<include content="WidgetListCategories" condition="Library.HasContent(movies) + !Skin.HasSetting(home_no_movies_genres_widget)">
-							<param name="content_path" value="videodb://movies/genres/"/>
-							<param name="widget_header" value="$LOCALIZE[135]"/>
-							<param name="widget_target" value="videos"/>
-							<param name="list_id" value="5500"/>
-							<param name="icon" value="$VAR[WidgetGenreIconVar]"/>
-							<param name="icon_height" value="70"/>
-						</include>
-						<include content="WidgetListCategories" condition="Library.HasContent(movies) + !Skin.HasSetting(home_no_movies_categories_widget) + System.AddonIsEnabled(plugin.service.emby-next-gen)">
-							<param name="additional_movie_items" value="true"/>
-							<param name="dynamic_content" value="false"/>
-							<param name="widget_header" value="$LOCALIZE[31148]"/>
-							<param name="widget_target" value="videos"/>
-							<param name="list_id" value="5900"/>
+						<include content="HomeVideoPage">
+							<param name="id" value="5003"/>
+							<param name="always_first_row" value="true"/>
+							<param name="visible" value="[Integer.IsGreater(Container(5500).NumItems,0) | Container(5500).IsUpdating] | [System.AddonIsEnabled(plugin.service.emby-next-gen) + [[Integer.IsGreater(Container(5900).NumItems,0) | Container(5900).IsUpdating]]]"/>
+							<include content="HomeVideoPageContent">
+								<param name="top" value="368"/>
+								<param name="active" value="String.IsEqual(Window(home).Property(Home.movies.Page),tail)"/>
+								<control type="grouplist" id="5005">
+									<include>HomeVideoTailListCommon</include>
+									<onup>5601</onup>
+									<ondown>noop</ondown>
+									<include content="HomeVideoTailRow">
+										<param name="id" value="5501"/>
+										<param name="list_id" value="5500"/>
+										<include content="WidgetListCategories" condition="Library.HasContent(movies) + !Skin.HasSetting(home_no_movies_genres_widget)">
+											<param name="content_path" value="videodb://movies/genres/"/>
+											<param name="widget_header" value="$LOCALIZE[135]"/>
+											<param name="widget_target" value="videos"/>
+											<param name="list_id" value="5500"/>
+											<param name="icon" value="$VAR[WidgetGenreIconVar]"/>
+											<param name="icon_height" value="50"/>
+											<param name="navigation" value="HomeVideoRowNavigation"/>
+											<param name="section" value="movies"/>
+											<param name="pages_id" value="5001"/>
+											<param name="onup" value="5601"/>
+											<param name="ondown" value="5901"/>
+											<param name="page" value="tail"/>
+											<param name="header_left" value="80"/>
+											<param name="header_top" value="0"/>
+											<param name="header_height" value="44"/>
+											<param name="panel_top" value="48"/>
+											<param name="panel_height" value="200"/>
+											<param name="item_height" value="200"/>
+										</include>
+									</include>
+									<include content="HomeVideoTailRow">
+										<param name="id" value="5901"/>
+										<param name="list_id" value="5900"/>
+										<param name="visible" value="System.AddonIsEnabled(plugin.service.emby-next-gen)"/>
+										<include content="WidgetListCategories" condition="Library.HasContent(movies) + !Skin.HasSetting(home_no_movies_categories_widget) + System.AddonIsEnabled(plugin.service.emby-next-gen)">
+											<param name="additional_movie_items" value="true"/>
+											<param name="dynamic_content" value="false"/>
+											<param name="widget_header" value="$LOCALIZE[31148]"/>
+											<param name="widget_target" value="videos"/>
+											<param name="list_id" value="5900"/>
+											<param name="navigation" value="HomeVideoRowNavigation"/>
+											<param name="section" value="movies"/>
+											<param name="pages_id" value="5001"/>
+											<param name="onup" value="5501"/>
+											<param name="ondown" value="noop"/>
+											<param name="page" value="tail"/>
+											<param name="header_left" value="80"/>
+											<param name="header_top" value="0"/>
+											<param name="header_height" value="44"/>
+											<param name="panel_top" value="48"/>
+											<param name="panel_height" value="200"/>
+											<param name="item_height" value="200"/>
+										</include>
+									</include>
+								</control>
+							</include>
 						</include>
 					</control>
 					<include content="ImageWidget" condition="!Library.HasContent(movies)">
@@ -241,87 +454,272 @@
 					<top>0</top>
 					<visible>String.IsEqual(Window(home).Property(Home.Section),tvshows)</visible>
 					<include>Visible_Fade</include>
+					<include content="HomeFocusedItemHero" condition="Library.HasContent(tvshows) + !Skin.HasSetting(home_no_tvshows_inprogress_widget)">
+						<param name="id" value="6001001"/>
+						<param name="list_id" value="6100"/>
+						<param name="metadata" value="$INFO[Container(6100).ListItemSettled.Year]$INFO[Container(6100).ListItemSettled.Rating,  &#183;  ]$INFO[Container(6100).ListItemSettled.Genre,  &#183;  ]"/>
+						<param name="visible" value="String.IsEmpty(Window(home).Property(Home.tvshows.Hero)) | String.IsEqual(Window(home).Property(Home.tvshows.Hero),6100)"/>
+					</include>
+					<include content="HomeFocusedItemHero" condition="Library.HasContent(tvshows) + !Skin.HasSetting(home_no_tvshows_recentlyaddedepisodes_widget)">
+						<param name="id" value="6200001"/>
+						<param name="list_id" value="6200"/>
+						<param name="visible" value="String.IsEqual(Window(home).Property(Home.tvshows.Hero),6200)"/>
+						<param name="metadata" value="$INFO[Container(6200).ListItemSettled.Year]$INFO[Container(6200).ListItemSettled.Rating,  &#183;  ]$INFO[Container(6200).ListItemSettled.Genre,  &#183;  ]"/>
+					</include>
+					<include content="HomeFocusedItemHero" condition="Library.HasContent(tvshows) + !Skin.HasSetting(home_no_tvshows_premieres_widget)">
+						<param name="id" value="6700001"/>
+						<param name="list_id" value="6700"/>
+						<param name="visible" value="String.IsEqual(Window(home).Property(Home.tvshows.Hero),6700)"/>
+						<param name="metadata" value="$INFO[Container(6700).ListItemSettled.Year]$INFO[Container(6700).ListItemSettled.Rating,  &#183;  ]$INFO[Container(6700).ListItemSettled.Genre,  &#183;  ]"/>
+					</include>
+					<include content="HomeFocusedItemHero" condition="Library.HasContent(tvshows) + !Skin.HasSetting(home_no_tvshows_highrated_widget)">
+						<param name="id" value="6300001"/>
+						<param name="list_id" value="6300"/>
+						<param name="visible" value="String.IsEqual(Window(home).Property(Home.tvshows.Hero),6300)"/>
+						<param name="metadata" value="$INFO[Container(6300).ListItemSettled.Year]$INFO[Container(6300).ListItemSettled.Rating,  &#183;  ]$INFO[Container(6300).ListItemSettled.Genre,  &#183;  ]"/>
+					</include>
+					<include content="HomeFocusedItemHero" condition="Library.HasContent(tvshows) + !Skin.HasSetting(home_no_tvshows_random_widget)">
+						<param name="id" value="6800001"/>
+						<param name="list_id" value="6800"/>
+						<param name="visible" value="String.IsEqual(Window(home).Property(Home.tvshows.Hero),6800)"/>
+						<param name="metadata" value="$INFO[Container(6800).ListItemSettled.Year]$INFO[Container(6800).ListItemSettled.Rating,  &#183;  ]$INFO[Container(6800).ListItemSettled.Genre,  &#183;  ]"/>
+					</include>
 					<control type="grouplist" id="6001">
 						<include>HomeVideoGroupListCommon</include>
-						<pagecontrol>6010</pagecontrol>
-						<include content="HomeFocusedItemHero" condition="Library.HasContent(tvshows) + !Skin.HasSetting(home_no_tvshows_inprogress_widget)">
-							<param name="id" value="6001001"/>
-							<param name="list_id" value="6100"/>
-							<param name="metadata" value="$INFO[Container(6100).ListItem.Year]$INFO[Container(6100).ListItem.Rating,  &#183;  ]$INFO[Container(6100).ListItem.Genre,  &#183;  ]"/>
+						<include content="HomeVideoPage">
+							<param name="id" value="6002"/>
+							<param name="visible" value="[Integer.IsGreater(Container(6100).NumItems,0) | Container(6100).IsUpdating] | $EXP[NaraHomeTVShowLibrariesVisible]"/>
+							<include content="HomeVideoPageContent">
+								<param name="top" value="0"/>
+								<param name="active" value="String.IsEmpty(Window(home).Property(Home.tvshows.Page)) | String.IsEqual(Window(home).Property(Home.tvshows.Page),first)"/>
+								<control type="grouplist" id="6004">
+									<include>HomeVideoFirstPageListCommon</include>
+									<onup>9000</onup>
+									<ondown>6201</ondown>
+									<include content="HomeRailSpacer">
+										<param name="id" value="6002001"/>
+										<param name="height" value="528"/>
+										<param name="visible" value="Integer.IsGreater(Container(6100).NumItems,0)"/>
+									</include>
+									<include content="HomeContinueWatchingRail" condition="Library.HasContent(tvshows) + !Skin.HasSetting(home_no_tvshows_inprogress_widget)">
+										<param name="content_path" value="videodb://inprogresstvshows"/>
+										<param name="widget_limit" value="20"/>
+										<param name="sortby" value="lastplayed"/>
+										<param name="sortorder" value="descending"/>
+										<param name="widget_header" value="$LOCALIZE[626]"/>
+										<param name="widget_target" value="videos"/>
+										<param name="list_id" value="6100"/>
+										<param name="media_row_visible" value="$EXP[NaraHomeTVShowLibrariesVisible]"/>
+										<param name="sub_label" value="$INFO[ListItem.Property(WatchedEpisodes)]$INFO[ListItem.Property(TotalEpisodes),/]"/>
+										<param name="sub_label_visible" value="!String.IsEmpty(ListItem.Property(TotalEpisodes))"/>
+										<param name="progress_info" value="ListItem.Property(WatchedEpisodePercent)"/>
+										<param name="onclick_condition" value="true"/>
+										<param name="onclick_action" value="$VAR[TVShowOnClickActionVar]"/>
+										<param name="navigation" value="HomeVideoRowNavigation"/>
+										<param name="section" value="tvshows"/>
+										<param name="pages_id" value="6001"/>
+										<param name="onup" value="0"/>
+										<param name="ondown" value="0"/>
+										<param name="page" value="first"/>
+										<param name="hero_id" value="6100"/>
+										<param name="update_hero" value="true"/>
+									</include>
+									<include content="HomeMediaLibraryRail" condition="Library.HasContent(tvshows) + System.AddonIsEnabled(plugin.service.emby-next-gen)">
+										<param name="content_path" value="videodb://tvshows/tags/?excludetags=Movies%20%28Favorites%29%7CTVShows%20%28Favorites%29&amp;SkinExtended=true"/>
+										<param name="widget_header" value="$LOCALIZE[31616]"/>
+										<param name="widget_target" value="videos"/>
+										<param name="list_id" value="6600"/>
+										<param name="item_limit" value="30"/>
+										<param name="background_art_condition" value="ListItem.Property(emby.library.art)"/>
+										<param name="navigation" value="HomeVideoRowNavigation"/>
+										<param name="section" value="tvshows"/>
+										<param name="pages_id" value="6001"/>
+										<param name="onup" value="0"/>
+										<param name="ondown" value="0"/>
+										<param name="page" value="first"/>
+										<param name="hero_id" value="6100"/>
+										<param name="update_hero" value="true"/>
+									</include>
+								</control>
+							</include>
 						</include>
-						<include content="HomeContinueWatchingRail" condition="Library.HasContent(tvshows) + !Skin.HasSetting(home_no_tvshows_inprogress_widget)">
-							<param name="content_path" value="videodb://inprogresstvshows"/>
-							<param name="widget_limit" value="20"/>
-							<param name="sortby" value="lastplayed"/>
-							<param name="sortorder" value="descending"/>
-							<param name="widget_header" value="$LOCALIZE[626]"/>
-							<param name="widget_target" value="videos"/>
-							<param name="list_id" value="6100"/>
-							<param name="media_row_visible" value="[System.AddonIsEnabled(plugin.service.emby-next-gen) + [Integer.IsGreater(Container(6600).NumItems,0) | Container(6600).IsUpdating]] | [!System.AddonIsEnabled(plugin.service.emby-next-gen) + !Skin.HasSetting(home_no_tvshows_categories_widget) + [Integer.IsGreater(Container(6900).NumItems,0) | Container(6900).IsUpdating]]"/>
-							<param name="sub_label" value="$INFO[ListItem.Property(WatchedEpisodes)]$INFO[ListItem.Property(TotalEpisodes),/]"/>
-							<param name="sub_label_visible" value="!String.IsEmpty(ListItem.Property(TotalEpisodes))"/>
-							<param name="progress_info" value="ListItem.Property(WatchedEpisodePercent)"/>
-							<param name="onclick_condition" value="true"/>
-							<param name="onclick_action" value="$VAR[TVShowOnClickActionVar]"/>
+						<include content="HomeVideoPage">
+							<param name="id" value="6201"/>
+							<param name="visible" value="[Integer.IsGreater(Container(6200).NumItems,0) | Container(6200).IsUpdating]"/>
+							<include content="HomeVideoPageContent">
+								<param name="top" value="500"/>
+								<param name="slide_distance" value="96"/>
+								<param name="slide_time" value="420"/>
+								<param name="fade_time" value="260"/>
+								<param name="active" value="String.IsEqual(Window(home).Property(Home.tvshows.Row),6200)"/>
+								<include content="WidgetListPoster" condition="Library.HasContent(tvshows) + !Skin.HasSetting(home_no_tvshows_recentlyaddedepisodes_widget)">
+									<param name="content_path" value="special://skin/playlists/home_recent_unwatched_tvshows.xsp"/>
+									<param name="widget_limit" value="20"/>
+									<param name="widget_header" value="$LOCALIZE[31618]"/>
+									<param name="widget_target" value="videos"/>
+									<param name="list_id" value="6200"/>
+									<param name="onclick_condition" value="!String.IsEqual(ListItem.Property(node.type),target_folder)"/>
+									<param name="onclick_action" value="$VAR[TVShowOnClickActionVar]"/>
+									<param name="onclick_condition_2" value="String.IsEqual(ListItem.Property(node.type),target_folder)"/>
+									<param name="onclick_action_2" value="ActivateWindow(videos,special://skin/playlists/all_recent_unwatched_tvshows.xsp,return)"/>
+									<param name="navigation" value="HomeVideoRowNavigation"/>
+									<param name="section" value="tvshows"/>
+									<param name="pages_id" value="6001"/>
+									<param name="onup" value="6002"/>
+									<param name="ondown" value="6701"/>
+									<param name="page" value="poster"/>
+									<param name="hero_id" value="6200"/>
+									<param name="update_hero" value="true"/>
+								</include>
+							</include>
 						</include>
-						<include content="HomeMediaLibraryRail" condition="Library.HasContent(tvshows) + System.AddonIsEnabled(plugin.service.emby-next-gen)">
-							<param name="content_path" value="videodb://tvshows/tags/?excludetags=Movies%20%28Favorites%29%7CTVShows%20%28Favorites%29&amp;SkinExtended=true"/>
-							<param name="widget_header" value="$LOCALIZE[31616]"/>
-							<param name="widget_target" value="videos"/>
-							<param name="list_id" value="6600"/>
-							<param name="item_limit" value="30"/>
-							<param name="background_art_condition" value="ListItem.Property(emby.library.art)"/>
+						<include content="HomeVideoPage">
+							<param name="id" value="6701"/>
+							<param name="visible" value="[Integer.IsGreater(Container(6700).NumItems,0) | Container(6700).IsUpdating]"/>
+							<include content="HomeVideoPageContent">
+								<param name="top" value="500"/>
+								<param name="slide_distance" value="96"/>
+								<param name="slide_time" value="420"/>
+								<param name="fade_time" value="260"/>
+								<param name="active" value="String.IsEqual(Window(home).Property(Home.tvshows.Row),6700)"/>
+								<include content="WidgetListPoster" condition="Library.HasContent(tvshows) + !Skin.HasSetting(home_no_tvshows_premieres_widget)">
+									<param name="content_path" value="special://skin/playlists/home_recent_premieres_tvshows.xsp"/>
+									<param name="widget_header" value="$LOCALIZE[31712]"/>
+									<param name="widget_target" value="videos"/>
+									<param name="list_id" value="6700"/>
+									<param name="onclick_condition" value="!String.IsEqual(ListItem.Property(node.type),target_folder)"/>
+									<param name="onclick_action" value="$VAR[TVShowOnClickActionVar]"/>
+									<param name="onclick_condition_2" value="String.IsEqual(ListItem.Property(node.type),target_folder)"/>
+									<param name="onclick_action_2" value="ActivateWindow(videos,special://skin/playlists/all_recent_premieres_tvshows.xsp,return)"/>
+									<param name="navigation" value="HomeVideoRowNavigation"/>
+									<param name="section" value="tvshows"/>
+									<param name="pages_id" value="6001"/>
+									<param name="onup" value="6201"/>
+									<param name="ondown" value="6301"/>
+									<param name="page" value="poster"/>
+									<param name="hero_id" value="6700"/>
+									<param name="update_hero" value="true"/>
+								</include>
+							</include>
 						</include>
-						<include content="HomeMediaLibraryRail" condition="Library.HasContent(tvshows) + !Skin.HasSetting(home_no_tvshows_categories_widget) + !System.AddonIsEnabled(plugin.service.emby-next-gen)">
-							<param name="additional_tvshow_items" value="true"/>
-							<param name="dynamic_content" value="false"/>
-							<param name="widget_header" value="$LOCALIZE[31148]"/>
-							<param name="widget_target" value="videos"/>
-							<param name="list_id" value="6900"/>
+						<include content="HomeVideoPage">
+							<param name="id" value="6301"/>
+							<param name="visible" value="[Integer.IsGreater(Container(6300).NumItems,0) | Container(6300).IsUpdating]"/>
+							<include content="HomeVideoPageContent">
+								<param name="top" value="500"/>
+								<param name="slide_distance" value="96"/>
+								<param name="slide_time" value="420"/>
+								<param name="fade_time" value="260"/>
+								<param name="active" value="String.IsEqual(Window(home).Property(Home.tvshows.Row),6300)"/>
+								<include content="WidgetListPoster" condition="Library.HasContent(tvshows) + !Skin.HasSetting(home_no_tvshows_highrated_widget)">
+									<param name="content_path" value="special://skin/playlists/home_highrated_unwatched_tvshows.xsp"/>
+									<param name="widget_header" value="$LOCALIZE[31710]"/>
+									<param name="widget_target" value="videos"/>
+									<param name="list_id" value="6300"/>
+									<param name="onclick_condition" value="!String.IsEqual(ListItem.Property(node.type),target_folder)"/>
+									<param name="onclick_action" value="$VAR[TVShowOnClickActionVar]"/>
+									<param name="onclick_condition_2" value="String.IsEqual(ListItem.Property(node.type),target_folder)"/>
+									<param name="onclick_action_2" value="ActivateWindow(videos,special://skin/playlists/all_highrated_unwatched_tvshows.xsp,return)"/>
+									<param name="navigation" value="HomeVideoRowNavigation"/>
+									<param name="section" value="tvshows"/>
+									<param name="pages_id" value="6001"/>
+									<param name="onup" value="6701"/>
+									<param name="ondown" value="6801"/>
+									<param name="page" value="poster"/>
+									<param name="hero_id" value="6300"/>
+									<param name="update_hero" value="true"/>
+								</include>
+							</include>
 						</include>
-						<include content="WidgetListPoster" condition="Library.HasContent(tvshows) + !Skin.HasSetting(home_no_tvshows_recentlyaddedepisodes_widget)">
-							<param name="content_path" value="special://skin/playlists/home_recent_unwatched_tvshows.xsp"/>
-							<param name="widget_limit" value="20"/>
-							<param name="widget_header" value="$LOCALIZE[31618]"/>
-							<param name="widget_target" value="videos"/>
-							<param name="list_id" value="6200"/>
-							<param name="onclick_condition" value="!String.IsEqual(ListItem.Property(node.type),target_folder)"/>
-							<param name="onclick_action" value="$VAR[TVShowOnClickActionVar]"/>
-							<param name="onclick_condition_2" value="String.IsEqual(ListItem.Property(node.type),target_folder)"/>
-							<param name="onclick_action_2" value="ActivateWindow(videos,special://skin/playlists/all_recent_unwatched_tvshows.xsp,return)"/>
+						<include content="HomeVideoPage">
+							<param name="id" value="6801"/>
+							<param name="visible" value="[Integer.IsGreater(Container(6800).NumItems,0) | Container(6800).IsUpdating]"/>
+							<include content="HomeVideoPageContent">
+								<param name="top" value="500"/>
+								<param name="slide_distance" value="96"/>
+								<param name="slide_time" value="420"/>
+								<param name="fade_time" value="260"/>
+								<param name="active" value="String.IsEqual(Window(home).Property(Home.tvshows.Row),6800)"/>
+								<include content="WidgetListPoster" condition="Library.HasContent(tvshows) + !Skin.HasSetting(home_no_tvshows_random_widget)">
+									<param name="content_path" value="special://skin/playlists/random_tvshows.xsp"/>
+									<param name="widget_header" value="$LOCALIZE[31713]"/>
+									<param name="widget_target" value="videos"/>
+									<param name="browse_mode" value="never"/>
+									<param name="list_id" value="6800"/>
+									<param name="onclick_condition" value="!String.IsEqual(ListItem.Property(node.type),target_folder)"/>
+									<param name="onclick_action" value="$VAR[TVShowOnClickActionVar]"/>
+									<param name="navigation" value="HomeVideoRowNavigation"/>
+									<param name="section" value="tvshows"/>
+									<param name="pages_id" value="6001"/>
+									<param name="onup" value="6301"/>
+									<param name="ondown" value="6003"/>
+									<param name="page" value="poster"/>
+									<param name="hero_id" value="6800"/>
+									<param name="update_hero" value="true"/>
+								</include>
+							</include>
 						</include>
-						<include content="WidgetListPoster" condition="Library.HasContent(tvshows) + !Skin.HasSetting(home_no_tvshows_unwatched_widget)">
-							<param name="content_path" value="special://skin/playlists/home_unwatched_tvshows.xsp"/>
-							<param name="widget_header" value="$LOCALIZE[31122]"/>
-							<param name="widget_target" value="videos"/>
-							<param name="list_id" value="6300"/>
-							<param name="onclick_condition" value="!String.IsEqual(ListItem.Property(node.type),target_folder)"/>
-							<param name="onclick_action" value="$VAR[TVShowOnClickActionVar]"/>
-							<param name="onclick_condition_2" value="String.IsEqual(ListItem.Property(node.type),target_folder)"/>
-							<param name="onclick_action_2" value="ActivateWindow(videos,special://skin/playlists/all_unwatched_tvshows.xsp,return)"/>
-						</include>
-						<include content="WidgetListCategories" condition="Library.HasContent(tvshows) + !Skin.HasSetting(home_no_tvshows_genres_widget)">
-							<param name="content_path" value="videodb://tvshows/genres/"/>
-							<param name="widget_header" value="$LOCALIZE[135]"/>
-							<param name="widget_target" value="videos"/>
-							<param name="list_id" value="6400"/>
-							<param name="icon" value="$VAR[WidgetGenreIconVar]"/>
-							<param name="icon_height" value="70"/>
-						</include>
-						<include content="WidgetListCategories" condition="Library.HasContent(tvshows) + Skin.HasSetting(home_tvshows_studios_widget)">
-							<param name="content_path" value="videodb://tvshows/studios/"/>
-							<param name="widget_header" value="$LOCALIZE[20388]"/>
-							<param name="widget_target" value="videos"/>
-							<param name="list_id" value="6500"/>
-							<param name="icon" value="$VAR[WidgetStudioIconVar]"/>
-							<param name="icon_height" value="70"/>
-						</include>
-						<include content="WidgetListCategories" condition="Library.HasContent(tvshows) + !Skin.HasSetting(home_no_tvshows_categories_widget) + System.AddonIsEnabled(plugin.service.emby-next-gen)">
-							<param name="additional_tvshow_items" value="true"/>
-							<param name="dynamic_content" value="false"/>
-							<param name="widget_header" value="$LOCALIZE[31148]"/>
-							<param name="widget_target" value="videos"/>
-							<param name="list_id" value="6900"/>
+						<include content="HomeVideoPage">
+							<param name="id" value="6003"/>
+							<param name="always_first_row" value="true"/>
+							<param name="visible" value="[Integer.IsGreater(Container(6400).NumItems,0) | Container(6400).IsUpdating] | [System.AddonIsEnabled(plugin.service.emby-next-gen) + [[Integer.IsGreater(Container(6900).NumItems,0) | Container(6900).IsUpdating]]]"/>
+							<include content="HomeVideoPageContent">
+								<param name="top" value="368"/>
+								<param name="active" value="String.IsEqual(Window(home).Property(Home.tvshows.Page),tail)"/>
+								<control type="grouplist" id="6005">
+									<include>HomeVideoTailListCommon</include>
+									<onup>6801</onup>
+									<ondown>noop</ondown>
+									<include content="HomeVideoTailRow">
+										<param name="id" value="6401"/>
+										<param name="list_id" value="6400"/>
+										<include content="WidgetListCategories" condition="Library.HasContent(tvshows) + !Skin.HasSetting(home_no_tvshows_genres_widget)">
+											<param name="content_path" value="videodb://tvshows/genres/"/>
+											<param name="widget_header" value="$LOCALIZE[135]"/>
+											<param name="widget_target" value="videos"/>
+											<param name="list_id" value="6400"/>
+											<param name="icon" value="$VAR[WidgetGenreIconVar]"/>
+											<param name="icon_height" value="50"/>
+											<param name="navigation" value="HomeVideoRowNavigation"/>
+											<param name="section" value="tvshows"/>
+											<param name="pages_id" value="6001"/>
+											<param name="onup" value="6801"/>
+											<param name="ondown" value="6901"/>
+											<param name="page" value="tail"/>
+											<param name="header_left" value="80"/>
+											<param name="header_top" value="0"/>
+											<param name="header_height" value="44"/>
+											<param name="panel_top" value="48"/>
+											<param name="panel_height" value="200"/>
+											<param name="item_height" value="200"/>
+										</include>
+									</include>
+									<include content="HomeVideoTailRow">
+										<param name="id" value="6901"/>
+										<param name="list_id" value="6900"/>
+										<param name="visible" value="System.AddonIsEnabled(plugin.service.emby-next-gen)"/>
+										<include content="WidgetListCategories" condition="Library.HasContent(tvshows) + !Skin.HasSetting(home_no_tvshows_categories_widget) + System.AddonIsEnabled(plugin.service.emby-next-gen)">
+											<param name="additional_tvshow_items" value="true"/>
+											<param name="dynamic_content" value="false"/>
+											<param name="widget_header" value="$LOCALIZE[31148]"/>
+											<param name="widget_target" value="videos"/>
+											<param name="list_id" value="6900"/>
+											<param name="navigation" value="HomeVideoRowNavigation"/>
+											<param name="section" value="tvshows"/>
+											<param name="pages_id" value="6001"/>
+											<param name="onup" value="6401"/>
+											<param name="ondown" value="noop"/>
+											<param name="page" value="tail"/>
+											<param name="header_left" value="80"/>
+											<param name="header_top" value="0"/>
+											<param name="header_height" value="44"/>
+											<param name="panel_top" value="48"/>
+											<param name="panel_height" value="200"/>
+											<param name="item_height" value="200"/>
+										</include>
+									</include>
+								</control>
+							</include>
 						</include>
 					</control>
 					<include content="ImageWidget" condition="!Library.HasContent(tvshows)">

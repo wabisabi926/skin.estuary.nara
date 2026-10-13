@@ -44,10 +44,6 @@ msgctxt "#31006"
 msgid "Random movies"
 msgstr "随机电影"
 
-msgctxt "#31007"
-msgid "Unwatched movies"
-msgstr "未观看的电影"
-
 msgctxt "#31008"
 msgid "Enable category widgets"
 msgstr "启用类别小组件"
@@ -431,10 +427,6 @@ msgstr "进入插件浏览器"
 msgctxt "#31119"
 msgid "You do not have any add-ons installed yet. Visit our add-on browser to browse through our collection and improve your Kodi experience."
 msgstr "尚未安排插件。请到插件浏览器使用我们的插件库来提升 Kodi 使用体验。"
-
-msgctxt "#31122"
-msgid "Unwatched TV Shows"
-msgstr "未观看电视剧"
 
 msgctxt "#31123"
 msgid "Same director"
@@ -875,15 +867,10 @@ msgctxt "#31643"
 msgid "Audio language"
 msgstr "音频语言"
 
-#: /xml/DialogPlayerProcessInfo.xml
-msgctxt "#31644"
-msgid "Subtitle language"
-msgstr "字幕语言"
-
-#: /xml/DialogPlayerProcessInfo.xml
+#: /xml/Variables.xml
 msgctxt "#31645"
-msgid "Disabled"
-msgstr "已禁用"
+msgid "Off"
+msgstr "已关闭"
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31647"
@@ -1149,6 +1136,75 @@ msgstr "静音"
 msgctxt "#31704"
 msgid "More"
 msgstr "更多"
+
+#: /xml/Includes_HomeVideo.xml
+msgctxt "#31705"
+msgid "Movies in library"
+msgstr "馆藏影片"
+
+#: /xml/Includes_HomeVideo.xml
+msgctxt "#31706"
+msgid "Average movie rating"
+msgstr "影片均分"
+
+#: /xml/Includes_HomeVideo.xml
+msgctxt "#31707"
+msgid "Latest movie year"
+msgstr "最新年份"
+
+#: /xml/Includes_HomeVideo.xml
+msgctxt "#31708"
+msgid "Included movies"
+msgstr "收录影片"
+
+#: /xml/Includes_HomeVideo.xml
+msgctxt "#31709"
+msgid "In progress"
+msgstr "观看中"
+
+#: /xml/Home.xml
+#: /xml/Includes_SettingsDialog.xml
+msgctxt "#31710"
+msgid "High-rated unwatched"
+msgstr "高分未看"
+
+#: /xml/Home.xml
+#: /xml/Includes_SettingsDialog.xml
+msgctxt "#31711"
+msgid "Recent releases"
+msgstr "近期上映"
+
+#: /xml/Home.xml
+#: /xml/Includes_SettingsDialog.xml
+msgctxt "#31712"
+msgid "Recent premieres"
+msgstr "近期首播"
+
+#: /xml/Home.xml
+#: /xml/Includes_SettingsDialog.xml
+msgctxt "#31713"
+msgid "Random TV shows"
+msgstr "随机电视剧"
+
+#: /xml/Custom_1113_MusicAudioDialog.xml
+msgctxt "#31714"
+msgid "Restore default background"
+msgstr "恢复默认背景"
+
+#: /xml/Variables.xml
+msgctxt "#31715"
+msgid "Unknown language"
+msgstr "未知语言"
+
+#: /xml/Variables.xml
+msgctxt "#31716"
+msgid "External"
+msgstr "外挂"
+
+#: /xml/Variables.xml
+msgctxt "#31717"
+msgid "No subtitles available"
+msgstr "无可用字幕"
 
 #~ msgctxt "#31025"
 #~ msgid "No favourites found. You can add any item from media views to this list by using the context menu."

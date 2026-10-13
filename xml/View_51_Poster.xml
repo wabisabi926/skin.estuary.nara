@@ -5,13 +5,20 @@
 	<include name="View_51_Poster_Background">
 		<control type="group">
 			<visible>Control.IsVisible(51) + [Container.Content(movies) | Container.Content(seasons) | Container.Content(sets) | Container.Content(tvshows) | $EXP[videoasset_true]]</visible>
-			<animation effect="fade" start="0" end="100" time="260">WindowOpen</animation>
-			<animation effect="fade" start="100" end="0" time="180">WindowClose</animation>
+			<animation effect="fade" start="0" end="100" time="260" reversible="false" condition="!Window.Previous(home)">WindowOpen</animation>
+			<animation effect="fade" start="100" end="0" time="180" condition="!Window.Next(home)">WindowClose</animation>
 			<animation effect="fade" time="220">VisibleChange</animation>
 			<control type="image">
 				<width>1920</width>
 				<height>1080</height>
 				<texture>colors/black.png</texture>
+			</control>
+			<control type="image">
+				<width>1920</width>
+				<height>1080</height>
+				<aspectratio>scale</aspectratio>
+				<texture colordiffuse="primary_background">special://skin/extras/backgrounds/primary.jpg</texture>
+				<visible>Skin.HasSetting(no_fanart) | String.IsEmpty(Container(51).ListItemSettled.Art(fanart))</visible>
 			</control>
 			<control type="image">
 				<width>1920</width>
@@ -55,13 +62,13 @@
 			<control type="image">
 				<width>420</width>
 				<height>630</height>
-				<texture>colors/black.png</texture>
+				<texture colordiffuse="selection_surface">colors/black.png</texture>
 			</control>
 			<control type="image">
 				<width>420</width>
 				<height>630</height>
 				<aspectratio>scale</aspectratio>
-				<texture background="true" fallback="DefaultVideo.png">$VAR[PosterVar]</texture>
+				<texture background="true">$VAR[PosterVar]</texture>
 			</control>
 			<control type="image">
 				<right>12</right>
@@ -97,6 +104,7 @@
 			     make room for S01E01 technical data with the movie row spacing intact. -->
 			<control type="group">
 				<animation effect="slide" start="0,-11" end="0,-11" condition="String.IsEqual(Container(51).ListItemSettled.DBType,tvshow)">Conditional</animation>
+				<animation effect="slide" start="0,38" end="0,38" condition="String.IsEqual(Container(51).ListItemSettled.DBType,movie) + String.IsEmpty(Container(51).ListItemSettled.Tagline)">Conditional</animation>
 				<control type="image">
 					<top>5</top>
 					<width>660</width>
@@ -177,18 +185,8 @@
 				<font>font13</font>
 				<textcolor>text_secondary</textcolor>
 				<label fallback="19055">$VAR[NaraPosterHeroSynopsisVar]</label>
-				<visible>!String.IsEqual(Container(51).ListItemSettled.DBType,tvshow)</visible>
+				<animation effect="slide" start="0,-57" end="0,-57" condition="String.IsEqual(Container(51).ListItemSettled.DBType,tvshow)">Conditional</animation>
 				<animation effect="slide" start="0,-64" end="0,-64" condition="String.IsEqual(Container(51).ListItemSettled.DBType,season)">Conditional</animation>
-			</control>
-			<control type="textbox">
-				<left>2</left>
-				<top>335</top>
-				<width>690</width>
-				<height>134</height>
-				<font>font13</font>
-				<textcolor>text_secondary</textcolor>
-				<label fallback="19055">$VAR[NaraPosterHeroSynopsisVar]</label>
-				<visible>String.IsEqual(Container(51).ListItemSettled.DBType,tvshow)</visible>
 			</control>
 		</control>
 	</include>

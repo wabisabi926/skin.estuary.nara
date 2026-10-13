@@ -4,33 +4,39 @@
 	<controls>
 		<!-- CU LRC needs its list for initialization; Nara renders the published lyrics. -->
 		<control type="list" id="110">
-			<left>1040</left>
-			<top>222</top>
-			<width>720</width>
-			<height>560</height>
+			<left>960</left>
+			<top>150</top>
+			<width>800</width>
+			<height>622</height>
 			<animation effect="slide" end="0,-10000" time="0" condition="String.IsEqual(Window.Property(NaraMusic.IntegratedLyrics),true)">Conditional</animation>
-			<scrolltime tween="sine">300</scrolltime>
+			<animation type="WindowOpen" reversible="false">
+				<effect type="slide" end="0" start="622" time="400" delay="400" tween="cubic" easing="out" />
+				<effect type="fade" start="0" end="100" time="300" delay="400" tween="sine" easing="out" />
+			</animation>
+			<scrolltime tween="sine">200</scrolltime>
 			<onup>110</onup>
 			<ondown>110</ondown>
-			<itemlayout width="720" height="80">
+			<itemlayout width="800" height="72">
 				<control type="label">
-					<width>710</width>
-					<height>80</height>
-					<font>font27</font>
+					<width>790</width>
+					<height>72</height>
+					<font>font_nara_music_lyric_context</font>
 					<aligny>center</aligny>
 					<label>$INFO[ListItem.Label]</label>
-					<textcolor>70FFFFFF</textcolor>
+					<textcolor>4DFFFFFF</textcolor>
 				</control>
 			</itemlayout>
-			<focusedlayout width="720" height="80">
-				<control type="label">
-					<width>710</width>
-					<height>80</height>
-					<font>font32_title</font>
+			<focusedlayout width="800" height="180">
+				<control type="textbox">
+					<top>12</top>
+					<width>790</width>
+					<height>156</height>
+					<font>font_nara_music_lyric</font>
 					<aligny>center</aligny>
 					<label>$INFO[ListItem.Label]</label>
 					<textcolor>FFFFFFFF</textcolor>
-					<scroll>true</scroll>
+					<autoscroll delay="1800" time="1400" repeat="5000">true</autoscroll>
+					<animation effect="fade" start="0" end="100" delay="0" time="1000" tween="sine" easing="out" reversible="false">Focus</animation>
 				</control>
 			</focusedlayout>
 		</control>

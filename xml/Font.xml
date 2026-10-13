@@ -162,9 +162,26 @@
 		</font>
 		<!-- Title Fonts -->
 		<font>
+			<name>font_nara_music_lyric</name>
+			<filename>inter.ttf</filename>
+			<size>46</size>
+			<style>bold</style>
+			<linespacing>1.08</linespacing>
+		</font>
+		<font>
+			<name>font_nara_music_lyric_context</name>
+			<filename>inter.ttf</filename>
+			<size>34</size>
+		</font>
+		<font>
 			<name>font_flag</name>
 			<filename>inter.ttf</filename>
 			<size>18</size>
+		</font>
+		<font>
+			<name>font19_title</name>
+			<filename>inter.ttf</filename>
+			<size>19</size>
 		</font>
 		<font>
 			<name>font20_title</name>

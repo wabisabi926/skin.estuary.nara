@@ -2,11 +2,13 @@
 <includes>
 	<include file="Defaults.xml" />
 	<include file="Includes_Home.xml" />
+	<include file="Includes_HomeVideo.xml" />
 	<include file="Includes_Animations.xml" />
 	<include file="Includes_MediaMenu.xml" />
 	<include file="Includes_Buttons.xml" />
 	<include file="Includes_Settings.xml" />
 	<include file="Includes_DialogGlass.xml" />
+	<include file="Includes_DialogAddonInfo.xml" />
 	<include file="Includes_SettingsOSD.xml" />
 	<include file="Includes_DialogSelect.xml" />
 	<include file="Includes_VideoTechnicalFlags.xml" />
@@ -18,6 +20,7 @@
 	<include file="Includes_MusicPlayer.xml" />
 	<include file="Includes_MusicBackground.xml" />
 	<include file="Includes_PlayerProcessInfo.xml" />
+	<include file="Includes_VideoOSD.xml" />
 	<include file="Includes_PVR.xml" />
 	<include file="Includes_SettingsDialog.xml" />
 	<include file="Includes_Search.xml" />
@@ -66,10 +69,10 @@
 						<top>0</top>
 						<bottom>0</bottom>
 						<width>13</width>
-						<onleft condition="![Window.IsVisible(musicplaylist) | Window.IsVisible(videoplaylist)]">50</onleft>
-						<onleft condition="Window.IsVisible(musicplaylist) | Window.IsVisible(videoplaylist)">55</onleft>
-						<onright condition="![Window.IsVisible(musicplaylist) | Window.IsVisible(videoplaylist)]">50</onright>
-						<onright condition="Window.IsVisible(musicplaylist) | Window.IsVisible(videoplaylist)">55</onright>
+						<onleft condition="!Control.IsVisible(55) + ![Window.IsVisible(musicplaylist) | Window.IsVisible(videoplaylist)]">50</onleft>
+						<onleft condition="Control.IsVisible(55) | Window.IsVisible(musicplaylist) | Window.IsVisible(videoplaylist)">55</onleft>
+						<onright condition="!Control.IsVisible(55) + ![Window.IsVisible(musicplaylist) | Window.IsVisible(videoplaylist)]">50</onright>
+						<onright condition="Control.IsVisible(55) | Window.IsVisible(musicplaylist) | Window.IsVisible(videoplaylist)">55</onright>
 						<orientation>vertical</orientation>
 						<texturesliderbackground />
 						<animation effect="fade" start="0" end="100" time="$PARAM[visible_time]" delay="$PARAM[visible_delay]">Visible</animation>
@@ -522,7 +525,7 @@
 				</include>
 			</control>
 			<control type="grouplist">
-				<visible>Player.ShowInfo + !Player.ChannelPreviewActive + Window.IsActive(visualisation)</visible>)
+				<visible>Player.ShowInfo + !Player.ChannelPreviewActive + Window.IsActive(visualisation)</visible>
 				<orientation>horizontal</orientation>
 				<right>20</right>
 				<bottom>9</bottom>
@@ -561,7 +564,7 @@
 	<include name="FileManagerPanel">
 		<param name="width"></param>
 		<param name="right"></param>
-		<param name="focus_color">focus_foreground</param>
+		<param name="focus_color">text_primary</param>
 		<definition>
 			<control type="fixedlist" id="$PARAM[list_id]">
 				<left>0</left>
@@ -583,7 +586,7 @@
 						<top>0</top>
 						<right>0</right>
 						<bottom>0</bottom>
-						<texture colordiffuse="focus_surface">lists/focus.png</texture>
+						<texture cornerradius="4" colordiffuse="glass_focus_medium">colors/white.png</texture>
 						<animation effect="fade" start="100" end="0" time="0" condition="!Control.HasFocus($PARAM[list_id])">Conditional</animation>
 					</control>
 					<control type="image">
@@ -711,36 +714,6 @@
 						<param name="button_id" value="$PARAM[group_id]333" />
 						<param name="visible" value="![Integer.IsGreater(Container($PARAM[group_id]50).NumItems,0) | Container($PARAM[group_id]50).IsUpdating]" />
 					</include>
-				</control>
-			</control>
-		</definition>
-	</include>
-	<include name="LeftAlignedInfo">
-		<param name="id">33333</param>
-		<definition>
-			<control type="grouplist">
-				<left>20</left>
-				<top>5</top>
-				<animation effect="fade" start="0" end="100" time="300">WindowOpen</animation>
-				<animation effect="fade" start="100" end="0" time="200">WindowClose</animation>
-				<width>1400</width>
-				<height>80</height>
-				<itemgap>0</itemgap>
-				<orientation>vertical</orientation>
-				<control type="label">
-					<width>1400</width>
-					<label>$PARAM[main_label]</label>
-					<font>font30_title</font>
-					<height>35</height>
-					<scroll>true</scroll>
-					<animation effect="slide" start="0,0" end="0,15" time="0" condition="String.IsEmpty(Control.GetLabel($PARAM[id]))">Conditional</animation>
-				</control>
-				<control type="label" id="$PARAM[id]">
-					<label>$PARAM[sub_label]</label>
-					<font>font12</font>
-					<left>85</left>
-					<height>100</height>
-					<width>1400</width>
 				</control>
 			</control>
 		</definition>
@@ -981,6 +954,7 @@
 					<width>300</width>
 					<align>right</align>
 					<aligny>center</aligny>
+					<visible>!Window.IsVisible(extendedprogressdialog)</visible>
 					<animation effect="fade" start="0" end="100" time="$PARAM[window_open_time]">WindowOpen</animation>
 					<animation effect="fade" start="100" end="0" time="200">WindowClose</animation>
 				</control>
@@ -1024,7 +998,7 @@
 			<depth>DepthBackground</depth>
 			<include>FullScreenDimensions</include>
 			<aspectratio>scale</aspectratio>
-			<texture colordiffuse="surface_main">special://skin/extras/backgrounds/primary.jpg</texture>
+			<texture colordiffuse="primary_background">special://skin/extras/backgrounds/primary.jpg</texture>
 		</control>
 	</include>
 	<include name="DefaultBackground">
@@ -1056,8 +1030,8 @@
 					<visible>!Window.IsActive(Home) + [![Player.HasVideo | [Player.HasAudio + Visualisation.Enabled + !String.IsEmpty(Visualisation.Name)]] | !String.IsEmpty(Window(Videos).Property(PlayingBackgroundMedia))]</visible>
 					<visible>$PARAM[media_background_visible]</visible>
 					<depth>DepthBackground</depth>
-					<animation effect="fade" start="0" end="100" time="$PARAM[transition_time]">WindowOpen</animation>
-					<animation effect="fade" start="100" end="0" time="$PARAM[window_close_time]">WindowClose</animation>
+					<animation effect="fade" start="0" end="100" time="$PARAM[transition_time]" reversible="false" condition="!Window.Previous(home)">WindowOpen</animation>
+					<animation effect="fade" start="100" end="0" time="$PARAM[window_close_time]" condition="!Window.Next(home)">WindowClose</animation>
 					<animation effect="fade" time="$PARAM[transition_time]">VisibleChange</animation>
 					<control type="image" id="32111">
 						<include>FullScreenDimensions</include>
@@ -1294,9 +1268,7 @@
 		<param name="flipx">false</param>
 		<definition>
 			<control type="image">
-				<texture flipx="$PARAM[flipx]" colordiffuse="opacity_strong">lists/panel.png</texture>
-				<bordertexture border="21" infill="false">overlays/shadow.png</bordertexture>
-				<bordersize>20</bordersize>
+				<texture flipx="$PARAM[flipx]" material="glass" glassstyle="frosted">colors/white.png</texture>
 				<width>$PARAM[width]</width>
 				<left>$PARAM[left]</left>
 				<right>$PARAM[right]</right>

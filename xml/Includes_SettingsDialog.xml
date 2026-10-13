@@ -256,11 +256,17 @@
 			<onclick>Skin.ToggleSetting(home_no_movies_recentlyadded_widget)</onclick>
 			<selected>!Skin.HasSetting(home_no_movies_recentlyadded_widget)</selected>
 		</control>
+		<control type="radiobutton" id="22109">
+			<include>NaraSkinSettingButton</include>
+			<label>$LOCALIZE[31711]</label>
+			<onclick>Skin.ToggleSetting(home_no_movies_premieres_widget)</onclick>
+			<selected>!Skin.HasSetting(home_no_movies_premieres_widget)</selected>
+		</control>
 		<control type="radiobutton" id="22104">
 			<include>NaraSkinSettingButton</include>
-			<label>$LOCALIZE[31007]</label>
-			<onclick>Skin.ToggleSetting(home_no_movies_unwatched_widget)</onclick>
-			<selected>!Skin.HasSetting(home_no_movies_unwatched_widget)</selected>
+			<label>$LOCALIZE[31710]</label>
+			<onclick>Skin.ToggleSetting(home_no_movies_highrated_widget)</onclick>
+			<selected>!Skin.HasSetting(home_no_movies_highrated_widget)</selected>
 		</control>
 		<control type="radiobutton" id="22105">
 			<include>NaraSkinSettingButton</include>
@@ -268,17 +274,17 @@
 			<onclick>Skin.ToggleSetting(home_no_movies_random_widget)</onclick>
 			<selected>!Skin.HasSetting(home_no_movies_random_widget)</selected>
 		</control>
-		<control type="radiobutton" id="22106">
-			<include>NaraSkinSettingButton</include>
-			<label>$LOCALIZE[135]</label>
-			<onclick>Skin.ToggleSetting(home_no_movies_genres_widget)</onclick>
-			<selected>!Skin.HasSetting(home_no_movies_genres_widget)</selected>
-		</control>
 		<control type="radiobutton" id="22107">
 			<include>NaraSkinSettingButton</include>
 			<label>$LOCALIZE[31075]</label>
 			<onclick>Skin.ToggleSetting(home_no_movies_sets_widget)</onclick>
 			<selected>!Skin.HasSetting(home_no_movies_sets_widget)</selected>
+		</control>
+		<control type="radiobutton" id="22106">
+			<include>NaraSkinSettingButton</include>
+			<label>$LOCALIZE[135]</label>
+			<onclick>Skin.ToggleSetting(home_no_movies_genres_widget)</onclick>
+			<selected>!Skin.HasSetting(home_no_movies_genres_widget)</selected>
 		</control>
 	</include>
 	<include name="SettingsDialogTVShowWidgetsContent">
@@ -305,27 +311,33 @@
 		</control>
 		<control type="radiobutton" id="22103">
 			<include>NaraSkinSettingButton</include>
-			<label>$LOCALIZE[20387]</label>
+			<label>$LOCALIZE[31618]</label>
 			<onclick>Skin.ToggleSetting(home_no_tvshows_recentlyaddedepisodes_widget)</onclick>
 			<selected>!Skin.HasSetting(home_no_tvshows_recentlyaddedepisodes_widget)</selected>
 		</control>
+		<control type="radiobutton" id="22109">
+			<include>NaraSkinSettingButton</include>
+			<label>$LOCALIZE[31712]</label>
+			<onclick>Skin.ToggleSetting(home_no_tvshows_premieres_widget)</onclick>
+			<selected>!Skin.HasSetting(home_no_tvshows_premieres_widget)</selected>
+		</control>
 		<control type="radiobutton" id="22104">
 			<include>NaraSkinSettingButton</include>
-			<label>$LOCALIZE[31122]</label>
-			<onclick>Skin.ToggleSetting(home_no_tvshows_unwatched_widget)</onclick>
-			<selected>!Skin.HasSetting(home_no_tvshows_unwatched_widget)</selected>
+			<label>$LOCALIZE[31710]</label>
+			<onclick>Skin.ToggleSetting(home_no_tvshows_highrated_widget)</onclick>
+			<selected>!Skin.HasSetting(home_no_tvshows_highrated_widget)</selected>
+		</control>
+		<control type="radiobutton" id="22107">
+			<include>NaraSkinSettingButton</include>
+			<label>$LOCALIZE[31713]</label>
+			<onclick>Skin.ToggleSetting(home_no_tvshows_random_widget)</onclick>
+			<selected>!Skin.HasSetting(home_no_tvshows_random_widget)</selected>
 		</control>
 		<control type="radiobutton" id="22105">
 			<include>NaraSkinSettingButton</include>
 			<label>$LOCALIZE[135]</label>
 			<onclick>Skin.ToggleSetting(home_no_tvshows_genres_widget)</onclick>
 			<selected>!Skin.HasSetting(home_no_tvshows_genres_widget)</selected>
-		</control>
-		<control type="radiobutton" id="22106">
-			<include>NaraSkinSettingButton</include>
-			<label>$LOCALIZE[20388]</label>
-			<onclick>Skin.ToggleSetting(home_tvshows_studios_widget)</onclick>
-			<selected>Skin.HasSetting(home_tvshows_studios_widget)</selected>
 		</control>
 	</include>
 	<include name="SettingsDialogMusicWidgetsContent">

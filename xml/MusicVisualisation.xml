@@ -40,57 +40,109 @@
 				<aligny>center</aligny>
 				<label>$INFO[System.Time]</label>
 			</control>
-			<control type="image">
-				<left>201</left>
-				<top>136</top>
-				<width>578</width>
-				<height>578</height>
-				<texture border="40" colordiffuse="60000000">overlays/shadow.png</texture>
-				<visible>!String.IsEmpty(MusicPlayer.Cover) + !String.IsEqual(MusicPlayer.Cover,DefaultAlbumCover.png)</visible>
+			<control type="image" id="434">
+				<left>196</left>
+				<top>166</top>
+				<width>498</width>
+				<height>498</height>
+				<texture border="40" colordiffuse="4D000000">overlays/shadow.png</texture>
+				<visible>[!String.IsEmpty(Window(visualisation).Property(NaraMusic.Cover)) + !String.IsEqual(Window(visualisation).Property(NaraMusic.Cover),DefaultAlbumCover.png)] | [PVR.IsPlayingRadio + !String.IsEmpty(MusicPlayer.Cover) + !String.IsEqual(MusicPlayer.Cover,DefaultAlbumCover.png)]</visible>
 			</control>
-			<control type="image">
-				<left>225</left>
-				<top>160</top>
-				<width>530</width>
-				<height>530</height>
+			<control type="image" id="431">
+				<left>136</left>
+				<top>106</top>
+				<width>618</width>
+				<height>618</height>
+				<colordiffuse>00FFFFFF</colordiffuse>
+				<texture>osd/nara/music-cover-glow.png</texture>
+			</control>
+			<control type="image" id="430">
+				<left>220</left>
+				<top>190</top>
+				<width>450</width>
+				<height>450</height>
 				<aspectratio>keep</aspectratio>
-				<fadetime>250</fadetime>
+				<fadetime>320</fadetime>
 				<texture background="true" fallback="osd/nara/music-cover.png">$VAR[NaraMusicCoverVar]</texture>
+				<visible>!String.IsEmpty(Window(visualisation).Property(NaraMusic.Cover)) | PVR.IsPlayingRadio</visible>
+			</control>
+			<control type="grouplist" id="432">
+				<left>220</left>
+				<top>190</top>
+				<width>450</width>
+				<height>450</height>
+				<orientation>vertical</orientation>
+				<usecontrolcoords>true</usecontrolcoords>
+				<control type="image" id="433">
+					<width>450</width>
+					<height>450</height>
+					<colordiffuse>00FFFFFF</colordiffuse>
+					<texture>osd/nara/music-cover-sheen.png</texture>
+				</control>
 			</control>
 			<control type="label">
-				<left>180</left>
-				<top>730</top>
-				<width>620</width>
-				<height>58</height>
-				<font>font45_title</font>
+				<left>220</left>
+				<top>674</top>
+				<width>640</width>
+				<height>56</height>
+				<font>font40_title</font>
 				<label>$INFO[Player.Title]</label>
 				<scroll>true</scroll>
 			</control>
 			<control type="label">
-				<left>180</left>
-				<top>794</top>
-				<width>620</width>
-				<height>40</height>
+				<left>220</left>
+				<top>738</top>
+				<width>640</width>
+				<height>36</height>
 				<font>font27</font>
 				<textcolor>BFFFFFFF</textcolor>
 				<label>$INFO[MusicPlayer.Artist]</label>
 				<scroll>true</scroll>
 			</control>
 			<control type="label">
-				<left>180</left>
-				<top>840</top>
-				<width>620</width>
+				<left>220</left>
+				<top>780</top>
+				<width>640</width>
 				<height>32</height>
 				<font>font12</font>
 				<textcolor>80FFFFFF</textcolor>
-				<label>$INFO[MusicPlayer.Album]$INFO[MusicPlayer.Year, · ]</label>
+				<label>$VAR[NaraMusicAlbumYearVar]</label>
 				<scroll>true</scroll>
 			</control>
+			<control type="grouplist">
+				<right>160</right>
+				<bottom>163</bottom>
+				<width>800</width>
+				<height>28</height>
+				<orientation>horizontal</orientation>
+				<align>right</align>
+				<itemgap>16</itemgap>
+				<include content="NaraMusicAudioDetail">
+					<param name="info" value="MusicPlayer.Codec" />
+					<param name="label" value="[UPPERCASE]$INFO[MusicPlayer.Codec][/UPPERCASE]" />
+				</include>
+				<include content="NaraMusicAudioDetail">
+					<param name="info" value="MusicPlayer.BitsPerSample" />
+					<param name="label" value="$INFO[MusicPlayer.BitsPerSample,, bit]" />
+				</include>
+				<include content="NaraMusicAudioDetail">
+					<param name="info" value="MusicPlayer.SampleRate" />
+					<param name="label" value="$INFO[MusicPlayer.SampleRate,, kHz]" />
+				</include>
+				<include content="NaraMusicAudioDetail">
+					<param name="info" value="MusicPlayer.BitRate" />
+					<param name="label" value="$INFO[MusicPlayer.BitRate,, kbps]" />
+				</include>
+				<include content="NaraMusicAudioDetail">
+					<param name="info" value="MusicPlayer.Channels" />
+					<param name="label" value="$INFO[MusicPlayer.Channels,, ch]" />
+				</include>
+			</control>
 			<control type="fixedlist" id="420">
-				<left>1040</left>
-				<top>222</top>
-				<width>720</width>
-				<height>560</height>
+				<left>960</left>
+				<top>150</top>
+				<width>800</width>
+				<height>622</height>
 				<focusposition>3</focusposition>
 				<movement>0</movement>
 				<scrolltime tween="sine">300</scrolltime>
@@ -99,75 +151,96 @@
 				<onup>420</onup>
 				<ondown>420</ondown>
 				<onclick>SetFocus(602)</onclick>
-				<visible>String.IsEqual(Window(visualisation).Property(NaraMusic.LyricsTimed),true)</visible>
-				<itemlayout width="720" height="80">
+				<visible>String.IsEqual(Window(visualisation).Property(NaraMusic.LyricsTimed),true) + !Window.IsVisible(script-cu-lrclyrics-main.xml)</visible>
+				<include>NaraMusicLyricsFade</include>
+				<itemlayout width="800" height="72">
 					<control type="label">
-						<width>710</width>
-						<height>80</height>
-						<font>font27</font>
+						<width>790</width>
+						<height>72</height>
+						<font>font_nara_music_lyric_context</font>
 						<aligny>center</aligny>
 						<label>$INFO[ListItem.Label]</label>
-						<textcolor>70FFFFFF</textcolor>
+						<textcolor>4DFFFFFF</textcolor>
 					</control>
 				</itemlayout>
-				<focusedlayout width="720" height="80">
-					<control type="label">
-						<width>710</width>
-						<height>80</height>
-						<font>font32_title</font>
+				<focusedlayout width="800" height="180">
+					<control type="textbox">
+						<top>12</top>
+						<width>790</width>
+						<height>156</height>
+						<font>font_nara_music_lyric</font>
 						<aligny>center</aligny>
 						<label>$INFO[ListItem.Label]</label>
 						<textcolor>$VAR[NaraMusicLyricColorVar]</textcolor>
-						<scroll>true</scroll>
+						<autoscroll delay="1800" time="1400" repeat="5000">true</autoscroll>
 					</control>
 				</focusedlayout>
 			</control>
 			<control type="textbox" id="421">
-				<left>1040</left>
-				<top>230</top>
-				<width>690</width>
-				<height>552</height>
+				<left>960</left>
+				<top>150</top>
+				<width>770</width>
+				<height>622</height>
 				<font>font27</font>
 				<textcolor>CFFFFFFF</textcolor>
 				<label>$INFO[Window(visualisation).Property(NaraMusic.LyricsText)]</label>
 				<pagecontrol>422</pagecontrol>
-				<visible>!String.IsEmpty(Window(visualisation).Property(NaraMusic.LyricsText))</visible>
+				<visible>!String.IsEmpty(Window(visualisation).Property(NaraMusic.LyricsText)) + !Window.IsVisible(script-cu-lrclyrics-main.xml)</visible>
+				<include>NaraMusicLyricsFade</include>
 			</control>
 			<control type="scrollbar" id="422">
 				<left>1760</left>
-				<top>230</top>
+				<top>150</top>
 				<width>6</width>
-				<height>552</height>
+				<height>622</height>
 				<orientation>vertical</orientation>
 				<onleft>602</onleft>
 				<onright>602</onright>
-				<visible>!String.IsEmpty(Window(visualisation).Property(NaraMusic.LyricsText))</visible>
+				<visible>!String.IsEmpty(Window(visualisation).Property(NaraMusic.LyricsText)) + !Window.IsVisible(script-cu-lrclyrics-main.xml)</visible>
+				<include>NaraMusicLyricsFade</include>
 			</control>
 			<control type="group">
-				<left>1040</left>
-				<top>360</top>
-				<visible>!String.IsEqual(Window(visualisation).Property(NaraMusic.LyricsTimed),true) + String.IsEmpty(Window(visualisation).Property(NaraMusic.LyricsText))</visible>
-				<control type="image">
-					<width>56</width>
-					<height>56</height>
-					<texture colordiffuse="60FFFFFF">osd/nara/lyrics.png</texture>
+				<left>960</left>
+				<top>350</top>
+				<width>800</width>
+				<height>300</height>
+				<visible>!String.IsEqual(Window(visualisation).Property(NaraMusic.LyricsTimed),true) + String.IsEmpty(Window(visualisation).Property(NaraMusic.LyricsText)) + !Window.IsVisible(script-cu-lrclyrics-main.xml)</visible>
+				<include>NaraMusicLyricsFade</include>
+				<control type="grouplist">
+					<width>800</width>
+					<height>260</height>
+					<orientation>vertical</orientation>
+					<itemgap>16</itemgap>
+					<visible>!String.IsEmpty(Window(visualisation).Property(NaraMusic.NextTitle))</visible>
+					<control type="label">
+						<height>32</height>
+						<font>font12</font>
+						<textcolor>80FFFFFF</textcolor>
+						<label>$VAR[NaraMusicNextHeadingVar]</label>
+					</control>
+					<control type="textbox">
+						<width>790</width>
+						<height min="48" max="112">auto</height>
+						<font>font36_title</font>
+						<textcolor>DFFFFFFF</textcolor>
+						<label>$INFO[Window(visualisation).Property(NaraMusic.NextTitle)]</label>
+					</control>
+					<control type="label">
+						<height>40</height>
+						<font>font27</font>
+						<textcolor>80FFFFFF</textcolor>
+						<label>$INFO[Window(visualisation).Property(NaraMusic.NextArtist)]</label>
+						<scroll>true</scroll>
+						<visible>!String.IsEmpty(Window(visualisation).Property(NaraMusic.NextArtist))</visible>
+					</control>
 				</control>
 				<control type="label">
-					<top>86</top>
-					<width>720</width>
+					<top>80</top>
 					<height>48</height>
-					<font>font32</font>
-					<textcolor>BFFFFFFF</textcolor>
+					<font>font27</font>
+					<textcolor>80FFFFFF</textcolor>
 					<label>$VAR[NaraMusicLyricsStatusVar]</label>
-				</control>
-				<control type="textbox">
-					<top>145</top>
-					<width>700</width>
-					<height>96</height>
-					<font>font12</font>
-					<textcolor>70FFFFFF</textcolor>
-					<label>$LOCALIZE[31702]</label>
-					<visible>!String.IsEqual(Window(visualisation).Property(NaraMusic.LyricsLoading),true)</visible>
+					<visible>String.IsEmpty(Window(visualisation).Property(NaraMusic.NextTitle))</visible>
 				</control>
 			</control>
 		</control>

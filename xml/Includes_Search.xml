@@ -31,7 +31,7 @@
 	<expression name="NaraSearchMoviesActive">Integer.IsGreater(Container(16101).NumItems,0) + [!String.IsEqual(Window(home).Property(Search.ActiveType),tvshows) | Integer.IsEqual(Container(16102).NumItems,0)]</expression>
 	<expression name="NaraSearchTVShowsActive">Integer.IsGreater(Container(16102).NumItems,0) + [String.IsEqual(Window(home).Property(Search.ActiveType),tvshows) | Integer.IsEqual(Container(16101).NumItems,0)]</expression>
 	<expression name="NaraSearchHasResults">!String.IsEmpty(Control.GetLabel(16999).index(1)) + [Integer.IsGreater(Container(16101).NumItems,0) | Integer.IsGreater(Container(16102).NumItems,0)]</expression>
-	<expression name="NaraSearchKeyboardHidden">!String.IsEqual(Window(home).Property(Home.Section),search) | System.HasActiveModalDialog | [!ControlGroup(16010).HasFocus() + !String.IsEmpty(Window(home).Property(Search.KeyboardHidden))]</expression>
+	<expression name="NaraSearchKeyboardHidden">!String.IsEqual(Window(home).Property(Home.Section),search) | System.HasActiveModalDialog | !String.IsEmpty(Window(home).Property(Search.SettingsTransition)) | [!ControlGroup(16010).HasFocus() + !String.IsEmpty(Window(home).Property(Search.KeyboardHidden))]</expression>
 	<variable name="NaraSearchFanartVar">
 		<value condition="$EXP[NaraSearchMoviesActive]">$INFO[Container(16101).ListItemSettled.Art(fanart)]</value>
 		<value condition="$EXP[NaraSearchTVShowsActive]">$INFO[Container(16102).ListItemSettled.Art(fanart)]</value>
@@ -254,14 +254,25 @@
 		<param name="focused">false</param>
 		<param name="titlecolor">text_primary</param>
 		<param name="show_year">false</param>
+		<param name="poster_texture">$VAR[PosterVar]</param>
+		<param name="poster_fallback">DefaultVideo.png</param>
+		<param name="poster_background"></param>
+		<param name="focus_color">focus_media</param>
 		<definition>
 			<control type="group">
+				<control type="image">
+					<left>10</left>
+					<top>11</top>
+					<width>214</width>
+					<height>321</height>
+					<texture cornerradius="12" colordiffuse="selection_surface">$PARAM[poster_background]</texture>
+				</control>
 				<control type="image">
 					<left>-4</left>
 					<top>-3</top>
 					<width>242</width>
 					<height>349</height>
-					<texture cornerradius="14" cornerborder="2" cornerglow="12" colordiffuse="focus_media">colors/white.png</texture>
+					<texture cornerradius="14" cornerborder="2" cornerglow="12" colordiffuse="$PARAM[focus_color]">colors/white.png</texture>
 					<visible>$PARAM[focused]</visible>
 				</control>
 				<control type="image">
@@ -270,7 +281,7 @@
 					<width>214</width>
 					<height>321</height>
 					<aspectratio>scale</aspectratio>
-					<texture background="true" fallback="DefaultVideo.png" cornerradius="12">$VAR[PosterVar]</texture>
+					<texture background="true" fallback="$PARAM[poster_fallback]" cornerradius="12">$PARAM[poster_texture]</texture>
 				</control>
 				<control type="image">
 					<right>17</right>
@@ -341,6 +352,7 @@
 				<animation effect="slide" start="-70,0" end="0,0" time="360" tween="cubic" easing="out">WindowOpen</animation>
 				<control type="group">
 					<animation effect="slide" start="0,-28" end="0,-28" condition="$PARAM[is_tv]">Conditional</animation>
+					<animation effect="slide" start="0,38" end="0,38" condition="String.IsEqual(Container($PARAM[container_id]).ListItemSettled.DBType,movie) + String.IsEmpty(Container($PARAM[container_id]).ListItemSettled.Tagline)">Conditional</animation>
 					<control type="image">
 						<top>25</top>
 						<width>624</width>
@@ -405,6 +417,7 @@
 						<font>font13</font>
 						<textcolor>text_secondary</textcolor>
 						<label fallback="19055">$INFO[Container($PARAM[container_id]).ListItemSettled.Plot]</label>
+						<animation effect="slide" start="0,-38" end="0,-38" condition="String.IsEqual(Container($PARAM[container_id]).ListItemSettled.DBType,movie) + String.IsEmpty(Container($PARAM[container_id]).ListItemSettled.Tagline)">Conditional</animation>
 						<animation effect="slide" start="0,-32" end="0,-32" condition="$PARAM[is_tv] + String.IsEmpty(Container($PARAM[container_id]).ListItemSettled.Tagline)">Conditional</animation>
 					</control>
 				</control>

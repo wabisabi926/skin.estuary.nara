@@ -17,7 +17,7 @@
 			<include>CommonScrollbars</include>
 			<control type="group">
 				<include>OpenClose_Left</include>
-				<visible>Control.Isvisible(54) | Control.IsVisible(55)</visible>
+				<visible>Control.IsVisible(54)</visible>
 				<include>Visible_Left</include>
 				<include>ListThumbInfoPanel</include>
 			</control>
@@ -31,7 +31,6 @@
 			<control type="group">
 				<include>MediaMenuCommon</include>
 				<control type="grouplist" id="9000">
-					<top>50</top>
 					<include>MediaMenuListCommon</include>
 					<control type="label" id="203">
 						<description>Actions</description>

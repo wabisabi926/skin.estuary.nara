@@ -2,6 +2,7 @@
 <colors>
 	<!-- Base surfaces -->
 	<color name="background_base">FF000000</color>
+	<color name="primary_background">FF404040</color>
 	<color name="surface_main">FF3A3542</color>
 	<color name="surface_panel">FF131218</color>
 	<color name="surface_dialog">FF18171E</color>
@@ -75,7 +76,6 @@
 	<color name="separator">AAFFFFFF</color>
 
 	<!-- Existing names retained as compatibility aliases -->
-	<color name="primary_background">FF3A3542</color>
 	<color name="secondary_background">1FFFFFFF</color>
 	<color name="dialog_tint">FF18171E</color>
 	<color name="dialog_header_tint">FF201E27</color>

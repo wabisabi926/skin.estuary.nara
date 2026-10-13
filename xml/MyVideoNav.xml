@@ -72,7 +72,6 @@
 					<visible>$EXP[nara_video_library_menu]</visible>
 				</control>
 				<control type="grouplist" id="9001">
-					<top>50</top>
 					<include>MediaMenuListCommon</include>
 					<visible>!$EXP[nara_video_library_menu] + !$EXP[nara_tv_hierarchy_sidebar_locked]</visible>
 					<control type="button" id="10">

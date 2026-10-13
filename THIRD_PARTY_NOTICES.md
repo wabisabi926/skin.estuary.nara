@@ -40,3 +40,16 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+## Arctic Fuse 2 genre icons
+
+The 27 PNG images in `media/genres/` are copied without modification from
+`genres/` in the supplied Arctic Fuse 2 asset checkout.
+The fallback icon `media/DefaultGenre.png` is copied without modification
+from `DefaultGenres.png` in the same checkout.
+
+Source: https://github.com/narapeka/skin.arctic.fuse.2
+
+Upstream: https://github.com/jurialmunkey/skin.arctic.fuse.2
+
+Source revision: `91c6fd8f932879dbe57e789d4651052ae25fb567`

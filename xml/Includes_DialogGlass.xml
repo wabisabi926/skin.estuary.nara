@@ -262,6 +262,14 @@
 		<value condition="$EXP[nara_dialog_glass]">text_primary</value>
 		<value>$VAR[FocusLayoutTextColor9010Var]</value>
 	</variable>
+	<variable name="NaraDialogFocusLayoutTextColor50Var">
+		<value condition="$EXP[nara_dialog_glass]">text_primary</value>
+		<value>$VAR[FocusLayoutTextColor451Var]</value>
+	</variable>
+	<variable name="NaraDialogFocusLayoutTextColor9000Var">
+		<value condition="$EXP[nara_dialog_glass]">text_primary</value>
+		<value>$VAR[FocusLayoutTextColor9000Var]</value>
+	</variable>
 	<include name="NaraDialogSettingsRowHeight">
 		<include condition="$EXP[nara_dialog_glass]">NaraDialogSettingsRowCompactHeight</include>
 		<include condition="!$EXP[nara_dialog_glass]">NaraDialogLegacyRowHeight</include>

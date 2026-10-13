@@ -12,12 +12,6 @@
 			<include>View_52_IconWall</include>
 			<include>View_55_WideList</include>
 			<include>View_500_Wall</include>
-			<control type="group">
-				<include>OpenClose_Left</include>
-				<include>Visible_Left</include>
-				<visible>Control.IsVisible(55)</visible>
-				<include>ListThumbInfoPanel</include>
-			</control>
 			<include content="TopBar">
 				<param name="breadcrumbs_label" value="$LOCALIZE[10001]" />
 			</include>
@@ -29,7 +23,6 @@
 			<control type="group">
 				<include>MediaMenuCommon</include>
 				<control type="grouplist" id="9000">
-					<top>50</top>
 					<include>MediaMenuListCommon</include>
 					<control type="label" id="203">
 						<description>Actions</description>
@@ -50,8 +43,8 @@
 						<onclick>ActivateWindow(addonbrowser,addons://more/executable/,return)</onclick>
 						<visible>Container.Content(addons)</visible>
 					</control>
+					<include>MediaMenuNowPlaying</include>
 				</control>
-				<include>MediaMenuNowPlaying</include>
 			</control>
 		</control>
 	</controls>

@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
+	<expression name="nara_list50_video_hero">Container.Content(movies) | Container.Content(tvshows) | Container.Content(episodes) | Container.Content(seasons) | Container.Content(sets) | Container.Content(musicvideos) | $EXP[videoasset_true] | [!$EXP[nara_list50_person] + !$EXP[nara_list50_addon] + !$EXP[nara_list50_category] + [String.IsEqual(Container(50).ListItemSettled.DBType,movie) | String.IsEqual(Container(50).ListItemSettled.DBType,tvshow) | String.IsEqual(Container(50).ListItemSettled.DBType,episode) | String.IsEqual(Container(50).ListItemSettled.DBType,season) | String.IsEqual(Container(50).ListItemSettled.DBType,set) | String.IsEqual(Container(50).ListItemSettled.DBType,musicvideo) | String.IsEqual(Container(50).ListItemSettled.DBType,video)]]</expression>
+	<expression name="nara_list50_person">!Container(50).ListItemSettled.IsParentFolder + [Container.Content(actors) | Container.Content(directors) | Container.Content(writers) | String.IsEqual(Container(50).ListItemSettled.DBType,actor) | String.IsEqual(Container(50).ListItemSettled.DBType,director) | String.IsEqual(Container(50).ListItemSettled.DBType,writer)]</expression>
+	<expression name="nara_list50_addon">!Container(50).ListItemSettled.IsParentFolder + !String.IsEmpty(Container(50).ListItemSettled.AddonName)</expression>
+	<expression name="nara_list50_category">Container.Content(years) | Container.Content(genres) | Container.Content(studios) | Container.Content(countries) | Container.Content(tags) | Container.Content(roles) | Container.Content(sources)</expression>
+	<expression name="nara_list50_has_art">!String.IsEmpty(Container(50).ListItemSettled.Art(thumb)) | !String.IsEmpty(Container(50).ListItemSettled.Art(poster)) | !String.IsEmpty(Container(50).ListItemSettled.Thumb)</expression>
+	<expression name="nara_list50_large_preview">!Container(50).ListItemSettled.IsParentFolder + !$EXP[nara_list50_category] + [$EXP[nara_list50_has_art] | String.IsEqual(Container(50).ListItemSettled.DBType,album) | String.IsEqual(Container(50).ListItemSettled.DBType,song) | String.IsEqual(Container(50).ListItemSettled.DBType,artist)]</expression>
 	<include name="View_50_List">
 		<control type="group">
 			<include>OpenClose_Right</include>
@@ -181,6 +187,7 @@
 
 			<!-- The right half is deliberately passive: fanart, copy and position only. -->
 			<control type="group">
+				<visible>$EXP[nara_list50_video_hero]</visible>
 				<left>1018</left>
 				<centertop>50%</centertop>
 				<width>802</width>
@@ -213,6 +220,298 @@
 					<width>780</width>
 					<height>34</height>
 					<font>font12</font>
+					<textcolor>text_muted</textcolor>
+					<label>$INFO[Container(50).CurrentItem]  /  $INFO[Container(50).NumItems]</label>
+				</control>
+			</control>
+			<include>NaraList50ContextPreview</include>
+		</control>
+	</include>
+	<include name="NaraList50PreviewSurface">
+		<definition>
+			<control type="image">
+				<width>802</width>
+				<height>$PARAM[height]</height>
+				<texture material="glass" glassstyle="regular" cornerradius="32">colors/white.png</texture>
+			</control>
+		</definition>
+	</include>
+	<include name="NaraList50ContextPreview">
+		<control type="group">
+			<visible>!$EXP[nara_list50_video_hero] + Integer.IsGreater(Container(50).NumItems,0) + !String.IsEmpty(Container(50).ListItemSettled.Label)</visible>
+			<left>1018</left>
+			<width>802</width>
+			<height>1080</height>
+			<control type="group">
+				<visible>$EXP[nara_list50_person]</visible>
+				<centertop>50%</centertop>
+				<width>802</width>
+				<height>404</height>
+				<include content="NaraList50PreviewSurface">
+					<param name="height" value="404" />
+				</include>
+				<control type="image">
+					<left>36</left>
+					<top>36</top>
+					<width>224</width>
+					<height>300</height>
+					<aspectratio>keep</aspectratio>
+					<fadetime>200</fadetime>
+					<visible>$EXP[nara_list50_has_art]</visible>
+					<texture background="true" cornerradius="16" fallback="DefaultActor.png">$VAR[NaraList50PreviewThumbVar]</texture>
+				</control>
+				<control type="image">
+					<left>84</left>
+					<top>122</top>
+					<width>128</width>
+					<height>128</height>
+					<aspectratio>keep</aspectratio>
+					<fadetime>200</fadetime>
+					<visible>!$EXP[nara_list50_has_art]</visible>
+					<texture background="true" cornerradius="16" fallback="DefaultActor.png">DefaultActor.png</texture>
+				</control>
+				<control type="textbox">
+					<left>292</left>
+					<top>62</top>
+					<width>474</width>
+					<height>28</height>
+					<font>font12</font>
+					<textcolor>text_secondary</textcolor>
+					<label>$VAR[NaraList50PreviewKindVar]</label>
+				</control>
+				<control type="textbox">
+					<left>292</left>
+					<top>108</top>
+					<width>474</width>
+					<height>126</height>
+					<font>font40_title</font>
+					<textcolor>text_primary</textcolor>
+					<label>$VAR[NaraList50PreviewTitleVar]</label>
+					<autoscroll time="3000" delay="7000" repeat="5000">!System.HasModalDialog + Skin.HasSetting(AutoScroll)</autoscroll>
+				</control>
+				<control type="textbox">
+					<left>292</left>
+					<top>258</top>
+					<width>474</width>
+					<height>58</height>
+					<font>font12</font>
+					<textcolor>text_secondary</textcolor>
+					<label>$VAR[NaraList50PreviewMetadataVar]</label>
+				</control>
+				<control type="label">
+					<left>36</left>
+					<top>356</top>
+					<width>730</width>
+					<height>24</height>
+					<font>font10</font>
+					<textcolor>text_muted</textcolor>
+					<label>$INFO[Container(50).CurrentItem]  /  $INFO[Container(50).NumItems]</label>
+				</control>
+			</control>
+			<control type="group">
+				<visible>!$EXP[nara_list50_person] + $EXP[nara_list50_addon]</visible>
+				<centertop>50%</centertop>
+				<width>802</width>
+				<height>740</height>
+				<include content="NaraList50PreviewSurface">
+					<param name="height" value="740" />
+				</include>
+				<control type="image">
+					<left>36</left>
+					<top>36</top>
+					<width>160</width>
+					<height>160</height>
+					<aspectratio>keep</aspectratio>
+					<fadetime>200</fadetime>
+					<texture background="true" cornerradius="16" fallback="DefaultAddon.png">$VAR[NaraList50PreviewThumbVar]</texture>
+				</control>
+				<control type="grouplist">
+					<left>232</left>
+					<top>36</top>
+					<width>534</width>
+					<height>168</height>
+					<orientation>vertical</orientation>
+					<itemgap>12</itemgap>
+					<control type="label">
+						<width>534</width>
+						<height>24</height>
+						<font>font10</font>
+						<textcolor>text_secondary</textcolor>
+						<label>$VAR[NaraList50PreviewKindVar]</label>
+					</control>
+					<control type="textbox">
+						<width>534</width>
+						<height min="44" max="88">auto</height>
+						<font>font32_title</font>
+						<textcolor>text_primary</textcolor>
+						<label>$VAR[NaraList50PreviewTitleVar]</label>
+						<autoscroll time="3000" delay="7000" repeat="5000">!System.HasModalDialog + Skin.HasSetting(AutoScroll)</autoscroll>
+					</control>
+					<control type="label">
+						<width>534</width>
+						<height>26</height>
+						<font>font10</font>
+						<textcolor>text_secondary</textcolor>
+						<label>$VAR[NaraList50PreviewMetadataVar]</label>
+						<scroll>true</scroll>
+					</control>
+				</control>
+				<control type="textbox">
+					<left>36</left>
+					<top>232</top>
+					<width>730</width>
+					<height>380</height>
+					<font>font12</font>
+					<textcolor>text_secondary</textcolor>
+					<label>$VAR[NaraList50PreviewDescriptionVar]</label>
+					<autoscroll time="3000" delay="7000" repeat="5000">!System.HasModalDialog + Skin.HasSetting(AutoScroll)</autoscroll>
+				</control>
+				<control type="textbox">
+					<left>36</left>
+					<top>624</top>
+					<width>730</width>
+					<height>60</height>
+					<font>font12</font>
+					<textcolor>status_warning</textcolor>
+					<label>$VAR[NaraList50AddonWarningVar]</label>
+					<autoscroll time="3000" delay="7000" repeat="5000">!System.HasModalDialog + Skin.HasSetting(AutoScroll)</autoscroll>
+				</control>
+				<control type="label">
+					<left>36</left>
+					<top>692</top>
+					<width>730</width>
+					<height>24</height>
+					<font>font10</font>
+					<textcolor>text_muted</textcolor>
+					<label>$INFO[Container(50).CurrentItem]  /  $INFO[Container(50).NumItems]</label>
+				</control>
+			</control>
+			<control type="group">
+				<visible>!$EXP[nara_list50_person] + !$EXP[nara_list50_addon] + $EXP[nara_list50_large_preview]</visible>
+				<centertop>50%</centertop>
+				<width>802</width>
+				<height>740</height>
+				<include content="NaraList50PreviewSurface">
+					<param name="height" value="740" />
+				</include>
+				<control type="image">
+					<left>36</left>
+					<top>36</top>
+					<width>730</width>
+					<height>318</height>
+					<aspectratio>keep</aspectratio>
+					<fadetime>200</fadetime>
+					<texture background="true" cornerradius="16" fallback="DefaultFolder.png">$VAR[NaraList50PreviewThumbVar]</texture>
+				</control>
+				<control type="textbox">
+					<left>36</left>
+					<top>374</top>
+					<width>730</width>
+					<height>26</height>
+					<font>font_nara_media_menu_section</font>
+					<textcolor>text_secondary</textcolor>
+					<label>$VAR[NaraList50PreviewKindVar]</label>
+				</control>
+				<control type="textbox">
+					<left>36</left>
+					<top>412</top>
+					<width>730</width>
+					<height>84</height>
+					<font>font32_title</font>
+					<textcolor>text_primary</textcolor>
+					<label>$VAR[NaraList50PreviewTitleVar]</label>
+					<autoscroll time="3000" delay="7000" repeat="5000">!System.HasModalDialog + Skin.HasSetting(AutoScroll)</autoscroll>
+				</control>
+				<control type="textbox">
+					<left>36</left>
+					<top>512</top>
+					<width>730</width>
+					<height>56</height>
+					<font>font12</font>
+					<textcolor>text_secondary</textcolor>
+					<label>$VAR[NaraList50PreviewMetadataVar]</label>
+				</control>
+				<control type="textbox">
+					<left>36</left>
+					<top>592</top>
+					<width>730</width>
+					<height>84</height>
+					<font>font12</font>
+					<textcolor>text_secondary</textcolor>
+					<label>$VAR[NaraList50PreviewDescriptionVar]</label>
+					<autoscroll time="3000" delay="7000" repeat="5000">!System.HasModalDialog + Skin.HasSetting(AutoScroll)</autoscroll>
+				</control>
+				<control type="label">
+					<left>36</left>
+					<top>692</top>
+					<width>730</width>
+					<height>24</height>
+					<font>font10</font>
+					<textcolor>text_muted</textcolor>
+					<label>$INFO[Container(50).CurrentItem]  /  $INFO[Container(50).NumItems]</label>
+				</control>
+			</control>
+			<control type="group">
+				<visible>!$EXP[nara_list50_person] + !$EXP[nara_list50_addon] + !$EXP[nara_list50_large_preview]</visible>
+				<centertop>50%</centertop>
+				<width>802</width>
+				<height>404</height>
+				<include content="NaraList50PreviewSurface">
+					<param name="height" value="404" />
+				</include>
+				<control type="image">
+					<left>36</left>
+					<top>70</top>
+					<width>184</width>
+					<height>184</height>
+					<aspectratio>keep</aspectratio>
+					<fadetime>200</fadetime>
+					<texture background="true" cornerradius="16" fallback="DefaultFolder.png">$VAR[NaraList50PreviewThumbVar]</texture>
+				</control>
+				<control type="textbox">
+					<left>256</left>
+					<top>64</top>
+					<width>510</width>
+					<height>28</height>
+					<font>font12</font>
+					<textcolor>text_secondary</textcolor>
+					<label>$VAR[NaraList50PreviewKindVar]</label>
+				</control>
+				<control type="textbox">
+					<left>256</left>
+					<top>112</top>
+					<width>510</width>
+					<height>100</height>
+					<font>font36_title</font>
+					<textcolor>text_primary</textcolor>
+					<label>$VAR[NaraList50PreviewTitleVar]</label>
+					<autoscroll time="3000" delay="7000" repeat="5000">!System.HasModalDialog + Skin.HasSetting(AutoScroll)</autoscroll>
+				</control>
+				<control type="textbox">
+					<left>256</left>
+					<top>230</top>
+					<width>510</width>
+					<height>56</height>
+					<font>font12</font>
+					<textcolor>text_secondary</textcolor>
+					<label>$VAR[NaraList50PreviewMetadataVar]</label>
+				</control>
+				<control type="textbox">
+					<left>36</left>
+					<top>296</top>
+					<width>730</width>
+					<height>48</height>
+					<font>font12</font>
+					<textcolor>text_secondary</textcolor>
+					<label>$VAR[NaraList50PreviewDescriptionVar]</label>
+					<autoscroll time="3000" delay="7000" repeat="5000">!System.HasModalDialog + Skin.HasSetting(AutoScroll)</autoscroll>
+				</control>
+				<control type="label">
+					<left>36</left>
+					<top>356</top>
+					<width>730</width>
+					<height>24</height>
+					<font>font10</font>
 					<textcolor>text_muted</textcolor>
 					<label>$INFO[Container(50).CurrentItem]  /  $INFO[Container(50).NumItems]</label>
 				</control>

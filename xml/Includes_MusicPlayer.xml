@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 	<variable name="NaraMusicCoverVar">
-		<value condition="String.IsEmpty(MusicPlayer.Cover) | String.IsEqual(MusicPlayer.Cover,DefaultAlbumCover.png)">osd/nara/music-cover.png</value>
-		<value>$INFO[MusicPlayer.Cover]</value>
+		<value condition="PVR.IsPlayingRadio + [String.IsEmpty(MusicPlayer.Cover) | String.IsEqual(MusicPlayer.Cover,DefaultAlbumCover.png)]">osd/nara/music-cover.png</value>
+		<value condition="PVR.IsPlayingRadio">$INFO[MusicPlayer.Cover]</value>
+		<value condition="String.IsEqual(Window(visualisation).Property(NaraMusic.Cover),DefaultAlbumCover.png)">osd/nara/music-cover.png</value>
+		<value>$INFO[Window(visualisation).Property(NaraMusic.Cover)]</value>
+	</variable>
+	<variable name="NaraMusicAlbumYearVar">
+		<value condition="String.IsEmpty(MusicPlayer.Album)">$INFO[MusicPlayer.Year]</value>
+		<value>$INFO[MusicPlayer.Album]$INFO[MusicPlayer.Year, · ]</value>
+	</variable>
+	<variable name="NaraMusicNextHeadingVar">
+		<value condition="Playlist.IsRepeatOne">$LOCALIZE[596]</value>
+		<value>$LOCALIZE[19031]</value>
 	</variable>
 	<variable name="NaraMusicMuteLabelVar">
 		<value condition="Player.Muted">$LOCALIZE[16041]</value>
@@ -25,7 +35,7 @@
 		<value>80FFFFFF</value>
 	</variable>
 	<variable name="NaraMusicLyricColorVar">
-		<value condition="String.IsEqual(Window(visualisation).Property(NaraMusic.LyricsStarted),true)">FFFFFFFF</value>
+		<value condition="String.IsEqual(Window(visualisation).Property(NaraMusic.LyricsStarted),true)">$INFO[Window(visualisation).Property(NaraMusic.LyricColor)]</value>
 		<value>70FFFFFF</value>
 	</variable>
 	<variable name="NaraMusicLyricsStatusVar">
@@ -40,6 +50,21 @@
 		<value condition="Control.HasFocus(70048)">$LOCALIZE[13396]</value>
 		<value>$VAR[OSDHelpTextVar]</value>
 	</variable>
+	<include name="NaraMusicAudioDetail">
+		<control type="label">
+			<width min="1" max="200">auto</width>
+			<height>28</height>
+			<font>font10</font>
+			<aligny>center</aligny>
+			<textcolor>80FFFFFF</textcolor>
+			<label>$PARAM[label]</label>
+			<visible>!String.IsEmpty($PARAM[info])</visible>
+		</control>
+	</include>
+	<include name="NaraMusicLyricsFade">
+		<animation effect="fade" start="0" end="100" time="260" delay="160" tween="sine" easing="out">Visible</animation>
+		<animation effect="fade" start="100" end="0" time="180" tween="sine" easing="out">Hidden</animation>
+	</include>
 	<include name="NaraMusicOSDButton">
 		<textureradioonfocus colordiffuse="text_primary">$PARAM[texture]</textureradioonfocus>
 		<textureradioonnofocus colordiffuse="text_primary">$PARAM[texture]</textureradioonnofocus>

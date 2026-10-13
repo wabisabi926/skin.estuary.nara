@@ -268,63 +268,8 @@
 				<top>180</top>
 				<right>20</right>
 				<height>25</height>
-				<label>$VAR[OSDNextLabelVar]</label>
+				<label>$INFO[VideoPlayer.NextStartTime,[COLOR text_secondary]$LOCALIZE[19031]: [/COLOR]]$INFO[VideoPlayer.NextEndTime, - ]$INFO[VideoPlayer.NextTitle,: ]</label>
 				<visible>VideoPlayer.HasEpg</visible>
-			</control>
-		</control>
-		<control type="group">
-			<visible>!Window.IsVisible(playerprocessinfo)</visible>
-			<visible>[Player.ShowInfo | Window.IsActive(fullscreeninfo)] + !VideoPlayer.Content(LiveTV) + Window.IsActive(fullscreenvideo)</visible>
-			<visible>Player.ShowInfo | Window.IsActive(fullscreeninfo) | !Player.Seeking | !Player.HasPerformedSeek(3) | !Player.Forwarding | !Player.Rewinding | !Player.Paused</visible>
-			<animation effect="fade" start="0" end="100" time="300" delay="250">Visible</animation>
-			<animation effect="fade" start="100" end="0" time="100">Hidden</animation>
-			<bottom>0</bottom>
-			<height>470</height>
-			<control type="image">
-				<left>0</left>
-				<width>100%</width>
-				<height>330</height>
-				<texture>dialogs/dialog-bg-nobo.png</texture>
-			</control>
-			<control type="image">
-				<depth>DepthOSD+</depth>
-				<left>10</left>
-				<bottom>145</bottom>
-				<width>400</width>
-				<height>600</height>
-				<aspectratio aligny="bottom">keep</aspectratio>
-				<texture fallback="DefaultVideo.png" background="true">$VAR[NowPlayingPosterVar]</texture>
-				<bordertexture border="21" infill="false">overlays/shadow.png</bordertexture>
-				<bordersize>20</bordersize>
-				<include>OpenClose_Left</include>
-			</control>
-			<control type="grouplist">
-				<left>420</left>
-				<top>10</top>
-				<right>20</right>
-				<height>300</height>
-				<align>left</align>
-				<orientation>vertical</orientation>
-				<itemgap>10</itemgap>
-				<control type="textbox">
-					<height>294</height>
-					<label fallback="10005">$INFO[VideoPlayer.Tagline,,[CR]]$INFO[VideoPlayer.Plot]</label>
-					<align>left</align>
-					<autoscroll delay="5000" repeat="7500" time="5000"></autoscroll>
-					<visible>Integer.IsGreaterOrEqual(Playlist.Position(video), Playlist.Length(video))</visible>
-				</control>
-				<control type="textbox">
-					<height>250</height>
-					<label fallback="10005">$INFO[VideoPlayer.Tagline,,[CR]]$INFO[VideoPlayer.Plot]</label>
-					<align>left</align>
-					<autoscroll delay="5000" repeat="7500" time="5000"></autoscroll>
-					<visible>Integer.IsLess(Playlist.Position(video), Playlist.Length(video))</visible>
-				</control>
-				<control type="label">
-					<height>50</height>
-					<label>$VAR[OSDNextLabelVar]</label>
-					<visible>Integer.IsLess(Playlist.Position(video), Playlist.Length(video))</visible>
-				</control>
 			</control>
 		</control>
 	</controls>

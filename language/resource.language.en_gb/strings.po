@@ -51,11 +51,6 @@ msgctxt "#31006"
 msgid "Random movies"
 msgstr ""
 
-#: /xml/Home.xml
-msgctxt "#31007"
-msgid "Unwatched movies"
-msgstr ""
-
 #: /xml/SkinSettings.xml
 msgctxt "#31008"
 msgid "Enable category widgets"
@@ -542,11 +537,6 @@ msgstr ""
 #: /xml/Home.xml
 msgctxt "#31119"
 msgid "You do not have any add-ons installed yet. Visit our add-on browser to browse through our collection and improve your Kodi experience."
-msgstr ""
-
-#: /xml/Home.xml
-msgctxt "#31122"
-msgid "Unwatched TV Shows"
 msgstr ""
 
 #: /xml/DialogVideoInfo.xml
@@ -1051,14 +1041,9 @@ msgctxt "#31643"
 msgid "Audio language"
 msgstr ""
 
-#: /xml/DialogPlayerProcessInfo.xml
-msgctxt "#31644"
-msgid "Subtitle language"
-msgstr ""
-
-#: /xml/DialogPlayerProcessInfo.xml
+#: /xml/Variables.xml
 msgctxt "#31645"
-msgid "Disabled"
+msgid "Off"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
@@ -1324,4 +1309,73 @@ msgstr ""
 #: /xml/Includes_Settings.xml
 msgctxt "#31704"
 msgid "More"
+msgstr ""
+
+#: /xml/Includes_HomeVideo.xml
+msgctxt "#31705"
+msgid "Movies in library"
+msgstr ""
+
+#: /xml/Includes_HomeVideo.xml
+msgctxt "#31706"
+msgid "Average movie rating"
+msgstr ""
+
+#: /xml/Includes_HomeVideo.xml
+msgctxt "#31707"
+msgid "Latest movie year"
+msgstr ""
+
+#: /xml/Includes_HomeVideo.xml
+msgctxt "#31708"
+msgid "Included movies"
+msgstr ""
+
+#: /xml/Includes_HomeVideo.xml
+msgctxt "#31709"
+msgid "In progress"
+msgstr ""
+
+#: /xml/Home.xml
+#: /xml/Includes_SettingsDialog.xml
+msgctxt "#31710"
+msgid "High-rated unwatched"
+msgstr ""
+
+#: /xml/Home.xml
+#: /xml/Includes_SettingsDialog.xml
+msgctxt "#31711"
+msgid "Recent releases"
+msgstr ""
+
+#: /xml/Home.xml
+#: /xml/Includes_SettingsDialog.xml
+msgctxt "#31712"
+msgid "Recent premieres"
+msgstr ""
+
+#: /xml/Home.xml
+#: /xml/Includes_SettingsDialog.xml
+msgctxt "#31713"
+msgid "Random TV shows"
+msgstr ""
+
+#: /xml/Custom_1113_MusicAudioDialog.xml
+msgctxt "#31714"
+msgid "Restore default background"
+msgstr ""
+
+#: /xml/Variables.xml
+msgctxt "#31715"
+msgid "Unknown language"
+msgstr ""
+
+#: /xml/Variables.xml
+msgctxt "#31716"
+msgid "External"
+msgstr ""
+
+#: /xml/Variables.xml
+msgctxt "#31717"
+msgid "No subtitles available"
 msgstr ""

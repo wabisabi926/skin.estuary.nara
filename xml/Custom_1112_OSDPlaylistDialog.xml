@@ -137,6 +137,7 @@
 				</focusedlayout>
 				<onclick condition="!ListItem.IsPlaying">Playlist.PlayPosition(video,$INFO[ListItem.Property(playlistposition)])</onclick>
 				<onclick>Dialog.Close(1112)</onclick>
+				<onclick>Dialog.Close(videoosd)</onclick>
 				<content browse="never" loaditemdetails="false" focusplaying="true">playlistvideo://?reload=$INFO[Playlist.Position(video)]</content>
 			</control>
 			<control type="scrollbar" id="61">

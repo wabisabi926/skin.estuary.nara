@@ -10,7 +10,7 @@
 			<left>302</left>
 			<include content="FileManagerPanel">
 				<param name="list_id" value="50" />
-				<param name="focus_color" value="$VAR[FocusLayoutTextColor50Var]" />
+				<param name="focus_color" value="text_primary" />
 				<param name="scrollbar_id" value="60" />
 				<param name="onleft_id" value="9000" />
 				<param name="onright_id" value="60" />
@@ -31,6 +31,7 @@
 				<itemgap>-20</itemgap>
 				<control type="button" id="6">
 					<description>Button Network</description>
+					<include>NaraGlassMediaMenuItemStyle</include>
 					<include content="DefaultSettingButton">
 						<param name="height" value="120" />
 					</include>
@@ -38,6 +39,7 @@
 					<label>$LOCALIZE[502]</label>
 				</control>
 				<control type="button" id="7">
+					<include>NaraGlassMediaMenuItemStyle</include>
 					<include content="DefaultSettingButton">
 						<param name="height" value="120" />
 					</include>
@@ -45,6 +47,7 @@
 					<label>$LOCALIZE[190]</label>
 				</control>
 				<control type="button" id="8">
+					<include>NaraGlassMediaMenuItemStyle</include>
 					<include content="DefaultSettingButton">
 						<param name="height" value="120" />
 					</include>
@@ -63,7 +66,7 @@
 			</include>
 			<include content="FileManagerPanel">
 				<param name="list_id" value="100" />
-				<param name="focus_color" value="$VAR[FocusLayoutTextColor100Var]" />
+				<param name="focus_color" value="text_primary" />
 				<param name="scrollbar_id" value="61" />
 				<param name="onleft_id" value="60" />
 				<param name="onright_id" value="61" />

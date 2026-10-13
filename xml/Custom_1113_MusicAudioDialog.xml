@@ -15,15 +15,15 @@
 			<centerleft>50%</centerleft>
 			<centertop>50%</centertop>
 			<width>760</width>
-			<height>290</height>
+			<height>402</height>
 			<control type="image">
 				<width>760</width>
-				<height>290</height>
+				<height>402</height>
 				<texture material="glass" glassstyle="regular" cornerradius="42">colors/white.png</texture>
 			</control>
 			<control type="button">
 				<width>760</width>
-				<height>290</height>
+				<height>402</height>
 				<texturefocus />
 				<texturenofocus />
 				<onclick>noop</onclick>
@@ -91,7 +91,7 @@
 				<textureslidernibdisabled colordiffuse="40FFFFFF">osd/nara/progress-nib.png</textureslidernibdisabled>
 				<action>volume</action>
 				<enable>!Player.Passthrough</enable>
-				<onup>11</onup>
+				<onup>13</onup>
 				<ondown>11</ondown>
 			</control>
 			<control type="image">
@@ -117,6 +117,58 @@
 				<label2>$VAR[NaraMusicMuteLabelVar]</label2>
 				<onclick>Mute</onclick>
 				<onup>10</onup>
+				<ondown>12</ondown>
+			</control>
+			<control type="image">
+				<left>20</left>
+				<top>274</top>
+				<width>720</width>
+				<height>50</height>
+				<texture colordiffuse="glass_focus_medium" cornerradius="4">colors/white.png</texture>
+				<visible>Control.HasFocus(12)</visible>
+			</control>
+			<control type="button" id="12">
+				<left>20</left>
+				<top>271</top>
+				<width>720</width>
+				<height>56</height>
+				<font>font12</font>
+				<textoffsetx>20</textoffsetx>
+				<textcolor>text_primary</textcolor>
+				<focusedcolor>text_primary</focusedcolor>
+				<texturefocus />
+				<texturenofocus />
+				<label>$LOCALIZE[33070]</label>
+				<label2>$INFO[Skin.String(Nara.MusicBackground)]</label2>
+				<onclick>Skin.SetImage(Nara.MusicBackground)</onclick>
+				<onup>11</onup>
+				<ondown>13</ondown>
+			</control>
+			<control type="image">
+				<left>20</left>
+				<top>330</top>
+				<width>720</width>
+				<height>50</height>
+				<texture colordiffuse="glass_focus_medium" cornerradius="4">colors/white.png</texture>
+				<visible>Control.HasFocus(13)</visible>
+			</control>
+			<control type="button" id="13">
+				<left>20</left>
+				<top>327</top>
+				<width>720</width>
+				<height>56</height>
+				<font>font12</font>
+				<textoffsetx>20</textoffsetx>
+				<textcolor>text_primary</textcolor>
+				<focusedcolor>text_primary</focusedcolor>
+				<disabledcolor>text_disabled</disabledcolor>
+				<texturefocus />
+				<texturenofocus />
+				<label>$LOCALIZE[31714]</label>
+				<enable>!String.IsEmpty(Skin.String(Nara.MusicBackground))</enable>
+				<onclick>Skin.Reset(Nara.MusicBackground)</onclick>
+				<onclick>SetFocus(12)</onclick>
+				<onup>12</onup>
 				<ondown>10</ondown>
 			</control>
 		</control>

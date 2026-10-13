@@ -1,17 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <includes>
+	<include name="NaraGlassMediaMenuItemStyle">
+		<textcolor>text_primary</textcolor>
+		<focusedcolor>text_primary</focusedcolor>
+		<selectedcolor>selection_foreground</selectedcolor>
+		<disabledcolor>text_disabled</disabledcolor>
+		<texturefocus cornerradius="4" colordiffuse="glass_focus_light">colors/white.png</texturefocus>
+		<texturenofocus />
+		<alttexturefocus cornerradius="4" colordiffuse="glass_focus_light">colors/white.png</alttexturefocus>
+		<alttexturenofocus />
+		<textureradioonfocus colordiffuse="text_primary">buttons/radio-button-on.png</textureradioonfocus>
+		<textureradioofffocus colordiffuse="text_secondary">buttons/radio-button-off.png</textureradioofffocus>
+	</include>
 	<include name="MediaMenuItemsCommon">
-		<width>470</width>
-		<textoffsetx>20</textoffsetx>
+		<width>384</width>
+		<textoffsetx>18</textoffsetx>
 		<top>0</top>
-		<height>80</height>
-		<radioposx>370</radioposx>
+		<height>52</height>
+		<font>font12</font>
+		<radioposx>304</radioposx>
+		<radioposy>1</radioposy>
+		<radiowidth>80</radiowidth>
+		<radioheight>50</radioheight>
 		<aligny>center</aligny>
 		<invalidcolor>invalid</invalidcolor>
-		<texturefocus colordiffuse="focus_surface">lists/focus.png</texturefocus>
-		<texturenofocus />
-		<alttexturefocus colordiffuse="focus_surface">lists/focus.png</alttexturefocus>
-		<alttexturenofocus></alttexturenofocus>
+		<include>NaraGlassMediaMenuItemStyle</include>
 	</include>
 	<include name="NaraMediaMenuViewPill">
 		<param name="width">81</param>
@@ -339,23 +352,22 @@
 		</definition>
 	</include>
 	<include name="PVRQuickNavItemsCommon">
-		<param name="height">110</param>
 		<definition>
 			<control type="radiobutton" id="$PARAM[control_id]">
-				<width>92</width>
-				<height>92</height>
+				<width>56</width>
+				<height>56</height>
 				<align>center</align>
 				<aligny>center</aligny>
 				<font></font>
-				<texturefocus colordiffuse="focus_surface">buttons/roundbutton-fo.png</texturefocus>
+				<texturefocus cornerradius="28" colordiffuse="glass_focus_light">colors/white.png</texturefocus>
 				<texturenofocus />
-				<radioposx>26</radioposx>
-				<radioposy>0</radioposy>
-				<radiowidth>40</radiowidth>
-				<radioheight>40</radioheight>
-				<textureradioonfocus colordiffuse="focus_foreground">$PARAM[icon]</textureradioonfocus>
+				<radioposx>16</radioposx>
+				<radioposy>16</radioposy>
+				<radiowidth>24</radiowidth>
+				<radioheight>24</radioheight>
+				<textureradioonfocus colordiffuse="text_primary">$PARAM[icon]</textureradioonfocus>
 				<textureradioonnofocus colordiffuse="text_secondary">$PARAM[icon]</textureradioonnofocus>
-				<textureradioofffocus colordiffuse="focus_foreground">$PARAM[icon]</textureradioofffocus>
+				<textureradioofffocus colordiffuse="text_primary">$PARAM[icon]</textureradioofffocus>
 				<textureradiooffnofocus colordiffuse="text_secondary">$PARAM[icon]</textureradiooffnofocus>
 				<textureradiooffdisabled colordiffuse="text_disabled">$PARAM[icon]</textureradiooffdisabled>
 				<onclick>ActivateWindow(TV$PARAM[area])</onclick>
@@ -371,45 +383,45 @@
 				<include>HiddenObject</include>
 			</control>
 			<control type="grouplist" id="9000">
-				<top>50</top>
-				<left>0</left>
-				<width>470</width>
-				<height>100%</height>
+				<top>20</top>
+				<left>24</left>
+				<width>384</width>
+				<bottom>20</bottom>
 				<onleft>9000</onleft>
 				<onup>9000</onup>
 				<onright>50</onright>
 				<ondown>14100</ondown>
 				<onback>50</onback>
 				<control type="group" id="60520">
-					<height>50</height>
+					<height>58</height>
 					<control type="label">
-						<include>MediaMenuLabelCommon</include>
+						<include>MediaMenuTitleCommon</include>
 						<label>$LOCALIZE[31148]</label>
 					</control>
 					<control type="label">
-						<width>470</width>
-						<textoffsetx>20</textoffsetx>
-						<textoffsety>15</textoffsety>
-						<height>50</height>
-						<font>font12</font>
+						<width>384</width>
+						<textoffsetx>18</textoffsetx>
+						<textoffsety>16</textoffsety>
+						<height>58</height>
+						<font>font_nara_media_menu_section</font>
 						<align>right</align>
 						<aligny>top</aligny>
-						<textcolor>grey</textcolor>
+						<textcolor>text_secondary</textcolor>
 						<label>$VAR[PVRAreaVar]</label>
 					</control>
 				</control>
 				<control type="group" id="60560">
-					<height>95</height>
+					<height>64</height>
 					<control type="grouplist" id="6056">
 						<orientation>horizontal</orientation>
-						<itemgap>-18</itemgap>
-						<left>0</left>
-						<height>120</height>
+						<itemgap>8</itemgap>
+						<left>4</left>
+						<height>56</height>
 						<onleft>6056</onleft>
 						<onright>50</onright>
 						<onup>14100</onup>
 						<ondown>6051</ondown>
-						<width>1000</width>
+						<width>376</width>
 						<include content="PVRQuickNavItemsCommon">
 							<param name="control_id" value="100" />
 							<param name="area" value="Channels" />
@@ -540,8 +552,11 @@
 						<animation effect="fade" start="100" end="0" time="300">WindowClose</animation>
 						<animation effect="fade" time="300">VisibleChange</animation>
 						<orientation>horizontal</orientation>
-						<itemgap>-17</itemgap>
-						<left>5</left>
+						<itemgap>12</itemgap>
+						<left>18</left>
+						<top>12</top>
+						<width>348</width>
+						<height>56</height>
 						<onleft>14100</onleft>
 						<onup>302</onup>
 						<ondown>6056</ondown>
@@ -584,38 +599,37 @@
 		</definition>
 	</include>
 	<include name="MediaMenuLabelCommon">
-		<width>470</width>
-		<textoffsetx>20</textoffsetx>
-		<textoffsety>15</textoffsety>
-		<height>50</height>
-		<radioposx>300</radioposx>
-		<font>font25_title</font>
+		<width>384</width>
+		<textoffsetx>18</textoffsetx>
+		<textoffsety>19</textoffsety>
+		<height>44</height>
+		<font>font_nara_media_menu_section</font>
+		<aligny>top</aligny>
+		<textcolor>text_secondary</textcolor>
+	</include>
+	<include name="MediaMenuTitleCommon">
+		<width>384</width>
+		<textoffsetx>18</textoffsetx>
+		<textoffsety>8</textoffsety>
+		<height>58</height>
+		<font>font_nara_media_menu_title</font>
 		<aligny>top</aligny>
 		<textcolor>text_primary</textcolor>
 	</include>
 	<include name="MediaMenuCommon">
 		<include>OpenClose_Left</include>
 		<depth>DepthSideBlade</depth>
-		<left>-520</left>
+		<left>-432</left>
 		<animation type="Conditional" condition="$EXP[sidebar_visible]" reversible="true">
-			<effect type="slide" start="0" end="520" time="400" tween="cubic" easing="out" />
+			<effect type="slide" start="0" end="432" time="400" tween="cubic" easing="out" />
 		</animation>
 		<control type="image">
-			<!-- Keep the Nara glass blade out of the dimmed backdrop. -->
 			<left>432</left>
 			<width>4000</width>
 			<height>100%</height>
 			<aspectratio>scale</aspectratio>
 			<texture colordiffuse="66000000">colors/black.png</texture>
-			<visible>$EXP[sidebar_visible] + !System.HasActiveModalDialog + $EXP[nara_video_library_menu]</visible>
-			<animation effect="fade" time="200">VisibleChange</animation>
-		</control>
-		<control type="image">
-			<width>4000</width>
-			<height>100%</height>
-			<aspectratio>scale</aspectratio>
-			<texture colordiffuse="overlay_soft">colors/black.png</texture>
-			<visible>$EXP[sidebar_visible] + !System.HasActiveModalDialog + !$EXP[nara_video_library_menu]</visible>
+			<visible>$EXP[sidebar_visible] + !System.HasActiveModalDialog</visible>
 			<animation effect="fade" time="200">VisibleChange</animation>
 		</control>
 		<control type="image">
@@ -624,20 +638,11 @@
 			<width>432</width>
 			<height>100%</height>
 			<texture material="glass" glassstyle="frosted">colors/white.png</texture>
-			<visible>$EXP[nara_video_library_menu]</visible>
-		</control>
-		<control type="image">
-			<left>0</left>
-			<top>0</top>
-			<width>520</width>
-			<height>100%</height>
-			<texture border="0,0,52,0">lists/panel-mediamenu.png</texture>
-			<visible>!$EXP[nara_video_library_menu]</visible>
 		</control>
 		<control type="button" id="6131">
 			<left>0</left>
 			<top>0</top>
-			<width>500</width>
+			<width>432</width>
 			<height>100%</height>
 			<label></label>
 			<texturefocus />
@@ -653,18 +658,19 @@
 		</control>
 	</include>
 	<include name="MediaMenuNowPlaying">
-        <param name="left">5</param>
+		<param name="left">18</param>
 		<definition>
 			<control type="grouplist" id="14100">
 				<animation effect="fade" start="0" end="100" time="400">WindowOpen</animation>
 				<animation effect="fade" start="100" end="0" time="300">WindowClose</animation>
 				<animation effect="fade" time="300">VisibleChange</animation>
-				<animation effect="slide" end="-10,0" time="0" condition ="Window.IsActive(MyPlaylist.xml)">Conditional</animation>
 				<orientation>horizontal</orientation>
-				<itemgap>-17</itemgap>
+				<itemgap>12</itemgap>
 				<left>$PARAM[left]</left>
+				<top>12</top>
 				<onleft>14100</onleft>
-				<width>450</width>
+				<width>348</width>
+				<height>56</height>
 				<visible>Player.HasMedia + [$EXP[sidebar_visible]]</visible>
 				<visible>!System.HasActiveModalDialog</visible>
 				<include content="BottomMainMenuToggleItem">
@@ -703,10 +709,10 @@
 	</include>
 	<include name="MediaMenuListCommon">
 		<definition>
-			<left>0</left>
-			<top>100</top>
-			<width>470</width>
-			<height>100%</height>
+			<left>24</left>
+			<top>20</top>
+			<width>384</width>
+			<bottom>20</bottom>
 			<onleft>9000</onleft>
 			<onup>9000</onup>
 			<onright condition="![Window.IsVisible(musicplaylist) | Window.IsVisible(videoplaylist)]">50</onright>
@@ -714,7 +720,7 @@
 			<ondown>9000</ondown>
 			<onback>50</onback>
 			<control type="label" id="200">
-				<include>MediaMenuLabelCommon</include>
+				<include>MediaMenuTitleCommon</include>
 				<label>$LOCALIZE[14018]</label>
 			</control>
 			<control type="button" id="6051">

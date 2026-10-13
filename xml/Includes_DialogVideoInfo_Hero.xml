@@ -82,6 +82,7 @@
 		<param name="synopsis_navigation">0</param>
 		<param name="synopsis_height">132</param>
 		<param name="tv_synopsis_height">132</param>
+		<param name="synopsis_focus_height">128</param>
 		<param name="tv_synopsis_tagline_offset">2</param>
 		<param name="tv_synopsis_no_tagline_offset">-38</param>
 		<param name="tv_content_tagline_offset">-30</param>
@@ -106,6 +107,7 @@
 		<param name="synopsis_label">$VAR[VideoInfoSynopsisVar]</param>
 		<definition>
 			<control type="group">
+				<animation effect="slide" start="0,38" end="0,38" condition="String.IsEqual($PARAM[item_dbtype],movie) + [$PARAM[tagline_missing]]">Conditional</animation>
 				<animation effect="slide" start="0,$PARAM[tv_content_tagline_offset]" end="0,$PARAM[tv_content_tagline_offset]" condition="String.IsEqual($PARAM[item_dbtype],tvshow) + [$PARAM[tagline_visible]]">Conditional</animation>
 				<animation effect="slide" start="0,$PARAM[tv_content_no_tagline_offset]" end="0,$PARAM[tv_content_no_tagline_offset]" condition="String.IsEqual($PARAM[item_dbtype],tvshow) + [$PARAM[tagline_missing]]">Conditional</animation>
 				<control type="image">
@@ -168,13 +170,15 @@
 				</control>
 				<control type="group">
 					<top>369</top>
+					<!-- Keep the synopsis anchored when the movie header fills the missing tagline row. -->
+					<animation effect="slide" start="0,-38" end="0,-38" condition="String.IsEqual($PARAM[item_dbtype],movie) + [$PARAM[tagline_missing]]">Conditional</animation>
 					<!-- Keep caller-supplied boolean expressions grouped when composing them
 					     with the TV-only condition; callers may pass their own OR branches. -->
 					<animation effect="slide" start="0,$PARAM[tv_synopsis_tagline_offset]" end="0,$PARAM[tv_synopsis_tagline_offset]" condition="String.IsEqual($PARAM[item_dbtype],tvshow) + [$PARAM[tagline_visible]]">Conditional</animation>
 					<animation effect="slide" start="0,$PARAM[tv_synopsis_no_tagline_offset]" end="0,$PARAM[tv_synopsis_no_tagline_offset]" condition="String.IsEqual($PARAM[item_dbtype],tvshow) + [$PARAM[tagline_missing]]">Conditional</animation>
 					<control type="button" id="138">
 						<width>804</width>
-						<height>128</height>
+						<height>$PARAM[synopsis_focus_height]</height>
 						<label></label>
 						<texturefocus colordiffuse="border_subtle">colors/white.png</texturefocus>
 						<texturenofocus />

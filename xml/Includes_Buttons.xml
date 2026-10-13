@@ -23,13 +23,14 @@
 		</definition>
 	</include>
 	<include name="NaraVideoOSDButton">
-		<textureradioonfocus colordiffuse="focus_foreground">$PARAM[texture]</textureradioonfocus>
+		<oninfo condition="!VideoPlayer.Content(LiveTV)">ActivateWindow(playerprocessinfo)</oninfo>
+		<textureradioonfocus colordiffuse="$VAR[VideoOSDButtonFocusForegroundVar]">$PARAM[texture]</textureradioonfocus>
 		<textureradioonnofocus colordiffuse="text_primary">$PARAM[texture]</textureradioonnofocus>
-		<textureradioofffocus colordiffuse="focus_foreground">$PARAM[texture]</textureradioofffocus>
+		<textureradioofffocus colordiffuse="$VAR[VideoOSDButtonFocusForegroundVar]">$PARAM[texture]</textureradioofffocus>
 		<textureradiooffnofocus colordiffuse="text_primary">$PARAM[texture]</textureradiooffnofocus>
 		<textureradioondisabled colordiffuse="text_disabled">$PARAM[texture]</textureradioondisabled>
 		<textureradiooffdisabled colordiffuse="text_disabled">$PARAM[texture]</textureradiooffdisabled>
-		<texturefocus colordiffuse="focus_surface">osd/fullscreen/buttons/button-fo.png</texturefocus>
+		<texturefocus colordiffuse="$VAR[VideoOSDButtonFocusSurfaceVar]">osd/fullscreen/buttons/button-fo.png</texturefocus>
 		<texturenofocus />
 		<width>52</width>
 		<height>52</height>
@@ -41,13 +42,14 @@
 		<animation center="26,26" effect="zoom" end="100" reversible="false" start="94" time="360" tween="back">Focus</animation>
 	</include>
 	<include name="NaraVideoOSDPlayButton">
-		<textureradioonfocus colordiffuse="focus_foreground">osd/nara/play.png</textureradioonfocus>
+		<oninfo condition="!VideoPlayer.Content(LiveTV)">ActivateWindow(playerprocessinfo)</oninfo>
+		<textureradioonfocus colordiffuse="$VAR[VideoOSDButtonFocusForegroundVar]">osd/nara/play.png</textureradioonfocus>
 		<textureradioonnofocus colordiffuse="text_primary">osd/nara/play.png</textureradioonnofocus>
-		<textureradioofffocus colordiffuse="focus_foreground">osd/nara/pause.png</textureradioofffocus>
+		<textureradioofffocus colordiffuse="$VAR[VideoOSDButtonFocusForegroundVar]">osd/nara/pause.png</textureradioofffocus>
 		<textureradiooffnofocus colordiffuse="text_primary">osd/nara/pause.png</textureradiooffnofocus>
 		<textureradioondisabled colordiffuse="text_disabled">osd/nara/play.png</textureradioondisabled>
 		<textureradiooffdisabled colordiffuse="text_disabled">osd/nara/pause.png</textureradiooffdisabled>
-		<texturefocus colordiffuse="focus_surface">osd/fullscreen/buttons/button-fo.png</texturefocus>
+		<texturefocus colordiffuse="$VAR[VideoOSDButtonFocusSurfaceVar]">osd/fullscreen/buttons/button-fo.png</texturefocus>
 		<texturenofocus />
 		<width>52</width>
 		<height>52</height>
@@ -213,12 +215,12 @@
 		</definition>
 	</include>
 	<include name="IconButton">
-		<param name="width">120</param>
-		<param name="height">120</param>
-		<param name="radio_pos_x">40</param>
-		<param name="radio_pos_y">0</param>
-		<param name="radio_width">40</param>
-		<param name="radio_height">40</param>
+		<param name="width">56</param>
+		<param name="height">56</param>
+		<param name="radio_pos_x">16</param>
+		<param name="radio_pos_y">16</param>
+		<param name="radio_width">24</param>
+		<param name="radio_height">24</param>
 		<param name="visible">true</param>
 		<param name="onclick_condition">true</param>
 		<param name="onclick_2_condition">true</param>
@@ -234,40 +236,40 @@
 				<onclick condition="$PARAM[onclick_3_condition]">$PARAM[onclick_3]</onclick>
 				<font></font>
 				<label>$PARAM[label]</label>
-				<texturefocus colordiffuse="focus_surface">buttons/roundbutton-fo.png</texturefocus>
+				<texturefocus cornerradius="28" colordiffuse="glass_focus_light">colors/white.png</texturefocus>
 				<texturenofocus />
 				<radioposx>$PARAM[radio_pos_x]</radioposx>
 				<radioposy>$PARAM[radio_pos_y]</radioposy>
 				<radiowidth>$PARAM[radio_width]</radiowidth>
 				<radioheight>$PARAM[radio_height]</radioheight>
-				<textureradioonfocus colordiffuse="focus_foreground">$PARAM[icon]</textureradioonfocus>
+				<textureradioonfocus colordiffuse="text_primary">$PARAM[icon]</textureradioonfocus>
 				<textureradioonnofocus colordiffuse="text_secondary">$PARAM[icon]</textureradioonnofocus>
-				<textureradioofffocus colordiffuse="focus_foreground">$PARAM[icon]</textureradioofffocus>
+				<textureradioofffocus colordiffuse="text_primary">$PARAM[icon]</textureradioofffocus>
 				<textureradiooffnofocus colordiffuse="text_secondary">$PARAM[icon]</textureradiooffnofocus>
 				<visible>$PARAM[visible]</visible>
 			</control>
 		</definition>
 	</include>
 	<include name="BottomMainMenuToggleItem">
-		<param name="height">120</param>
+		<param name="height">56</param>
 		<definition>
 			<control type="radiobutton" id="$PARAM[control_id]">
-				<width>120</width>
+				<width>56</width>
 				<height>$PARAM[height]</height>
 				<align>center</align>
 				<aligny>center</aligny>
 				<onclick>$PARAM[onclick]</onclick>
 				<font></font>
 				<label>$PARAM[label]</label>
-				<texturefocus colordiffuse="focus_surface">buttons/roundbutton-fo.png</texturefocus>
+				<texturefocus cornerradius="28" colordiffuse="glass_focus_light">colors/white.png</texturefocus>
 				<texturenofocus />
-				<radioposx>40</radioposx>
-				<radioposy>0</radioposy>
-				<radiowidth>40</radiowidth>
-				<radioheight>40</radioheight>
-				<textureradioonfocus colordiffuse="focus_foreground">$PARAM[icon_on]</textureradioonfocus>
+				<radioposx>16</radioposx>
+				<radioposy>16</radioposy>
+				<radiowidth>24</radiowidth>
+				<radioheight>24</radioheight>
+				<textureradioonfocus colordiffuse="text_primary">$PARAM[icon_on]</textureradioonfocus>
 				<textureradioonnofocus colordiffuse="text_secondary">$PARAM[icon_on]</textureradioonnofocus>
-				<textureradioofffocus colordiffuse="focus_foreground">$PARAM[icon_off]</textureradioofffocus>
+				<textureradioofffocus colordiffuse="text_primary">$PARAM[icon_off]</textureradioofffocus>
 				<textureradiooffnofocus colordiffuse="text_secondary">$PARAM[icon_off]</textureradiooffnofocus>
 				<selected>$PARAM[selected]</selected>
 			</control>
@@ -330,38 +332,6 @@
 				<onclick condition="$PARAM[onclick_3_condition]">$PARAM[onclick_3]</onclick>
 				<visible>$PARAM[visible]</visible>
 				<animation effect="fade" start="100" end="0" time="300" delay="300">Hidden</animation>
-				<focusedcolor>$VAR[NaraDialogFocusForegroundVar]</focusedcolor>
-			</control>
-		</definition>
-	</include>
-	<include name="InfoDialogToggleButton">
-		<param name="width">264</param>
-		<definition>
-			<control type="radiobutton" id="$PARAM[id]">
-				<width>$PARAM[width]</width>
-				<height>142</height>
-				<align>center</align>
-				<aligny>top</aligny>
-				<texturefocus border="21" colordiffuse="$VAR[NaraDialogFocusSurfaceVar]">buttons/button-fo.png</texturefocus>
-				<texturenofocus border="21">buttons/button-nofo.png</texturenofocus>
-				<textoffsetx>35</textoffsetx>
-				<textoffsety>78</textoffsety>
-				<radioposx>108</radioposx>
-				<radioposy>16</radioposy>
-				<radiowidth>48</radiowidth>
-				<font>font12</font>
-				<hitrect x="21" y="21" w="245" h="100" />
-				<textureradioonfocus colordiffuse="$VAR[NaraDialogFocusForegroundVar]">$PARAM[icon_on]</textureradioonfocus>
-				<textureradioonnofocus colordiffuse="text_secondary">$PARAM[icon_on]</textureradioonnofocus>
-				<textureradioofffocus colordiffuse="$VAR[NaraDialogFocusForegroundVar]">$PARAM[icon_off]</textureradioofffocus>
-				<textureradiooffnofocus colordiffuse="text_secondary">$PARAM[icon_off]</textureradiooffnofocus>
-				<textureradiooffdisabled colordiffuse="text_disabled">$PARAM[icon_off]</textureradiooffdisabled>
-				<textureradioondisabled colordiffuse="text_disabled">$PARAM[icon_on]</textureradioondisabled>
-				<selected>$PARAM[selected]</selected>
-				<label>$PARAM[label]</label>
-				<onclick>$PARAM[onclick_1]</onclick>
-				<onclick>$PARAM[onclick_2]</onclick>
-				<visible>$PARAM[visible]</visible>
 				<focusedcolor>$VAR[NaraDialogFocusForegroundVar]</focusedcolor>
 			</control>
 		</definition>

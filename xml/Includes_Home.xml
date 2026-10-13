@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 	<expression name="NaraHomeFanartFocused">!Skin.HasSetting(no_fanart) + [[String.IsEqual(Window(home).Property(Home.Section),movies) + ControlGroup(5001).HasFocus()] | [String.IsEqual(Window(home).Property(Home.Section),tvshows) + ControlGroup(6001).HasFocus()]]</expression>
-	<expression name="NaraHomeFanartSettledRow">$EXP[NaraHomeFanartFocused] + [Control.HasFocus(5100) | Control.HasFocus(5200) | Control.HasFocus(5300) | Control.HasFocus(5400) | Control.HasFocus(5600) | Control.HasFocus(6100) | Control.HasFocus(6200) | Control.HasFocus(6300)]</expression>
+	<expression name="NaraHomeFanartSettledRow">$EXP[NaraHomeFanartFocused] + [Control.HasFocus(5100) | Control.HasFocus(5200) | Control.HasFocus(5300) | Control.HasFocus(5800) | Control.HasFocus(5400) | Control.HasFocus(5600) | Control.HasFocus(6100) | Control.HasFocus(6200) | Control.HasFocus(6300) | Control.HasFocus(6700) | Control.HasFocus(6800)]</expression>
 	<expression name="NaraVideoInfoFromHome">Window.IsVisible(Home) + !Skin.HasSetting(no_fanart) + [String.IsEqual(Window(home).Property(Home.Section),movies) | String.IsEqual(Window(home).Property(Home.Section),tvshows) | String.IsEqual(Window(home).Property(Home.Section),search)]</expression>
-	<expression name="home_widget_group_scrolled">[String.IsEqual(Window(home).Property(Home.Section),movies) + Container(5001).HasPrevious] | [String.IsEqual(Window(home).Property(Home.Section),tvshows) + Container(6001).HasPrevious] | [String.IsEqual(Window(home).Property(Home.Section),music) + Container(7001).HasPrevious] | [String.IsEqual(Window(home).Property(Home.Section),livetv) + Container(12001).HasPrevious]</expression>
+	<expression name="home_widget_group_scrolled">[String.IsEqual(Window(home).Property(Home.Section),music) + Container(7001).HasPrevious] | [String.IsEqual(Window(home).Property(Home.Section),livetv) + Container(12001).HasPrevious]</expression>
 	<variable name="HomeFocusedFilePathVar">
 		<value condition="Control.HasFocus(15010) + !String.IsEmpty(Container(15010).ListItem.Property(displaypath))">$INFO[Container(15010).ListItem.Property(displaypath)]</value>
 		<value condition="Control.HasFocus(15010)">$INFO[Container(15010).ListItem.Property(path)]</value>
@@ -201,17 +201,23 @@
 		<ondown>20001</ondown>
 		<usecontrolcoords>true</usecontrolcoords>
 	</include>
-	<!-- Movie and TV use the same continuous grouplist behaviour, but stop at
-	     the final row instead of invoking Estuary's legacy 20 px edge bounce. -->
 	<include name="HomeVideoGroupListCommon">
 		<orientation>vertical</orientation>
-		<height>100%</height>
-		<scrolltime tween="cubic" easing="out">500</scrolltime>
-		<itemgap>-160</itemgap>
+		<!-- Resolve page heights before the list's content has loaded. -->
+		<height min="100%" max="100%">auto</height>
+		<scrolltime>0</scrolltime>
+		<itemgap>0</itemgap>
 		<defaultcontrol always="true">0</defaultcontrol>
 		<onup>9000</onup>
 		<ondown>noop</ondown>
+	</include>
+	<include name="HomeVideoFirstPageListCommon">
+		<orientation>vertical</orientation>
+		<height>100%</height>
+		<scrolltime tween="cubic" easing="out">300</scrolltime>
+		<itemgap>-160</itemgap>
 		<usecontrolcoords>true</usecontrolcoords>
+		<animation effect="slide" start="0,0" end="0,274" time="320" tween="cubic" easing="out" condition="$EXP[NaraHomeVideoSingleRow]">Conditional</animation>
 	</include>
 	<!-- Persist the fanart that was actually selected when leaving an artwork
 	     rail. No-art rails can then keep that exact backdrop, regardless of
@@ -223,22 +229,23 @@
 		<onunfocus condition="String.IsEqual(Window(home).Property(Home.Section),tvshows) + String.IsEqual(Container($PARAM[list_id]).ListItemSettled.Property(node.type),target_folder) + !String.IsEmpty(Container($PARAM[list_id]).ListItemSettled(-1).Art(fanart))">SetProperty(Home.LastTVShowFanart,$ESCINFO[Container($PARAM[list_id]).ListItemSettled(-1).Art(fanart)],home)</onunfocus>
 	</include>
 	<include name="CategoryLabel">
+		<param name="left">55</param>
+		<param name="top">80</param>
+		<param name="height">90</param>
 		<param name="visible">true</param>
 		<param name="item_treshold">0</param>
 		<definition>
 			<control type="label" id="$PARAM[list_id]666">
-				<left>55</left>
-				<top>80</top>
+				<left>$PARAM[left]</left>
+				<top>$PARAM[top]</top>
 				<width>900</width>
-				<height>90</height>
+				<height>$PARAM[height]</height>
 				<label>$PARAM[label]</label>
 				<visible>$PARAM[visible]</visible>
 				<visible>Integer.IsGreater(Container($PARAM[list_id]).NumItems,$PARAM[item_treshold]) | [Container($PARAM[list_id]).IsUpdating + Integer.IsEqual(Container($PARAM[list_id]).NumItems,0)]</visible>
 			</control>
 		</definition>
 	</include>
-	<!-- The complete hero is the first item in the single vertical home list, so
-	     it keeps one layout and scrolls away naturally with the widget rows. -->
 	<include name="HomeRailSpacer">
 		<param name="visible">true</param>
 		<definition>
@@ -250,22 +257,28 @@
 	</include>
 	<include name="HomeFocusedItemHero">
 		<param name="visible">true</param>
+		<param name="collection">false</param>
 		<definition>
 			<control type="group" id="$PARAM[id]">
 				<height>528</height>
+				<enable>false</enable>
 				<visible>$PARAM[visible]</visible>
+				<animation effect="fade" start="0" end="100" time="180">Visible</animation>
 				<visible>Integer.IsGreater(Container($PARAM[list_id]).NumItems,0)</visible>
 				<control type="group">
-					<visible>!String.IsEqual(Container($PARAM[list_id]).ListItem.Property(node.type),target_folder)</visible>
+					<visible>!String.IsEqual(Container($PARAM[list_id]).ListItemSettled.Property(node.type),target_folder)</visible>
 					<animation effect="fade" time="140">VisibleChange</animation>
+					<animation effect="slide" start="0,0" end="0,38" time="320" tween="cubic" easing="out" condition="$EXP[NaraHomeVideoExpanded]">Conditional</animation>
+					<animation effect="slide" start="0,0" end="0,112" time="320" tween="cubic" easing="out" condition="$EXP[NaraHomeVideoSingleRow]">Conditional</animation>
 					<control type="image">
 						<left>80</left>
 						<top>40</top>
 						<width>720</width>
 						<height>145</height>
 						<aspectratio align="left" aligny="center">keep</aspectratio>
-						<texture background="true">$INFO[Container($PARAM[list_id]).ListItem.Art(tvshow.clearlogo)]</texture>
-						<visible>!String.IsEmpty(Container($PARAM[list_id]).ListItem.Art(tvshow.clearlogo))</visible>
+						<texture background="true">$INFO[Container($PARAM[list_id]).ListItemSettled.Art(tvshow.clearlogo)]</texture>
+						<visible>!String.IsEmpty(Container($PARAM[list_id]).ListItemSettled.Art(tvshow.clearlogo))</visible>
+						<animation effect="zoom" start="100" end="112" center="80,40" time="320" tween="cubic" easing="out" condition="$EXP[NaraHomeVideoSingleRow]">Conditional</animation>
 					</control>
 					<control type="image">
 						<left>80</left>
@@ -273,8 +286,9 @@
 						<width>720</width>
 						<height>145</height>
 						<aspectratio align="left" aligny="center">keep</aspectratio>
-						<texture background="true">$INFO[Container($PARAM[list_id]).ListItem.Art(clearlogo)]</texture>
-						<visible>String.IsEmpty(Container($PARAM[list_id]).ListItem.Art(tvshow.clearlogo)) + !String.IsEmpty(Container($PARAM[list_id]).ListItem.Art(clearlogo))</visible>
+						<texture background="true">$INFO[Container($PARAM[list_id]).ListItemSettled.Art(clearlogo)]</texture>
+						<visible>String.IsEmpty(Container($PARAM[list_id]).ListItemSettled.Art(tvshow.clearlogo)) + !String.IsEmpty(Container($PARAM[list_id]).ListItemSettled.Art(clearlogo))</visible>
+						<animation effect="zoom" start="100" end="112" center="80,40" time="320" tween="cubic" easing="out" condition="$EXP[NaraHomeVideoSingleRow]">Conditional</animation>
 					</control>
 					<control type="label">
 						<left>80</left>
@@ -284,8 +298,8 @@
 						<font>font68_home_hero</font>
 						<aligny>center</aligny>
 						<scroll>true</scroll>
-						<label>$INFO[Container($PARAM[list_id]).ListItem.Title]</label>
-						<visible>!String.IsEmpty(Container($PARAM[list_id]).ListItem.Title) + String.IsEmpty(Container($PARAM[list_id]).ListItem.Art(clearlogo)) + String.IsEmpty(Container($PARAM[list_id]).ListItem.Art(tvshow.clearlogo))</visible>
+						<label>$INFO[Container($PARAM[list_id]).ListItemSettled.Title]</label>
+						<visible>!String.IsEmpty(Container($PARAM[list_id]).ListItemSettled.Title) + String.IsEmpty(Container($PARAM[list_id]).ListItemSettled.Art(clearlogo)) + String.IsEmpty(Container($PARAM[list_id]).ListItemSettled.Art(tvshow.clearlogo))</visible>
 					</control>
 					<control type="label">
 						<left>80</left>
@@ -295,8 +309,8 @@
 						<font>font68_home_hero</font>
 						<aligny>center</aligny>
 						<scroll>true</scroll>
-						<label>$INFO[Container($PARAM[list_id]).ListItem.Label]</label>
-						<visible>String.IsEmpty(Container($PARAM[list_id]).ListItem.Title) + String.IsEmpty(Container($PARAM[list_id]).ListItem.Art(clearlogo)) + String.IsEmpty(Container($PARAM[list_id]).ListItem.Art(tvshow.clearlogo))</visible>
+						<label>$INFO[Container($PARAM[list_id]).ListItemSettled.Label]</label>
+						<visible>String.IsEmpty(Container($PARAM[list_id]).ListItemSettled.Title) + String.IsEmpty(Container($PARAM[list_id]).ListItemSettled.Art(clearlogo)) + String.IsEmpty(Container($PARAM[list_id]).ListItemSettled.Art(tvshow.clearlogo))</visible>
 					</control>
 					<control type="label">
 						<left>80</left>
@@ -307,24 +321,36 @@
 						<textcolor>text_secondary</textcolor>
 						<scroll>true</scroll>
 						<label>$PARAM[metadata]</label>
+						<visible>!$EXP[NaraHomeVideoExpanded]</visible>
 					</control>
 					<control type="textbox">
+						<visible>!$EXP[NaraHomeVideoExpanded]</visible>
+						<animation effect="fade" time="180">VisibleChange</animation>
 						<left>80</left>
 						<top>245</top>
 						<width>820</width>
 						<height>91</height>
 						<font>font12_large</font>
 						<textcolor>text_secondary</textcolor>
-						<label>$INFO[Container($PARAM[list_id]).ListItem.Plot]</label>
+						<label>$INFO[Container($PARAM[list_id]).ListItemSettled.Plot]</label>
 					</control>
+					<include content="HomeVideoHeroDetails" condition="!$PARAM[collection]">
+						<param name="list_id" value="$PARAM[list_id]" />
+					</include>
+					<include condition="$PARAM[collection]">HomeMovieSetHeroDetails</include>
 				</control>
 			</control>
 		</definition>
 	</include>
-	<!-- A compact 16:9 first shelf. It keeps Kodi's existing content providers
-	     and click actions, but gives the selected item a restrained 4% TV-focus
-	     lift. Moving left/right is the only event that changes the Hero above. -->
 	<include name="HomeContinueWatchingRail">
+		<param name="navigation">WidgetListCommon</param>
+		<param name="section"></param>
+		<param name="page"></param>
+		<param name="pages_id">0</param>
+		<param name="onup">0</param>
+		<param name="ondown">0</param>
+		<param name="update_hero">false</param>
+		<param name="hero_id"></param>
 		<param name="onclick_condition">false</param>
 		<param name="onclick_action">noop</param>
 		<param name="sortby"></param>
@@ -352,8 +378,15 @@
 					<height>250</height>
 					<visible>Integer.IsGreater(Container($PARAM[list_id]).NumItems,0) | Container($PARAM[list_id]).IsUpdating</visible>
 					<onclick condition="$PARAM[onclick_condition]">$PARAM[onclick_action]</onclick>
-					<include content="WidgetListCommon">
+					<include content="$PARAM[navigation]">
 						<param name="list_id" value="$PARAM[list_id]"/>
+						<param name="section" value="$PARAM[section]"/>
+						<param name="page" value="$PARAM[page]"/>
+						<param name="pages_id" value="$PARAM[pages_id]"/>
+						<param name="hero_id" value="$PARAM[hero_id]"/>
+						<param name="update_hero" value="$PARAM[update_hero]"/>
+						<param name="onup" value="$PARAM[onup]"/>
+						<param name="ondown" value="$PARAM[ondown]"/>
 					</include>
 					<include content="HomeRememberFanartOnUnfocus">
 						<param name="list_id" value="$PARAM[list_id]"/>
@@ -604,16 +637,19 @@
 			</control>
 		</definition>
 	</include>
-	<!-- The second shelf is a fully visible, low-profile media-library rail.
-	     Emby libraries use their artwork; Kodi's static category fallback keeps
-	     the existing icons and actions for non-Emby installations. -->
+	<!-- The second shelf is a fully visible, low-profile media-library rail. -->
 	<include name="HomeMediaLibraryRail">
+		<param name="navigation">WidgetListCommon</param>
+		<param name="section"></param>
+		<param name="page"></param>
+		<param name="pages_id">0</param>
+		<param name="onup">0</param>
+		<param name="ondown">0</param>
+		<param name="update_hero">false</param>
+		<param name="hero_id"></param>
 		<param name="item_limit">20</param>
 		<param name="icon">$INFO[ListItem.Icon]</param>
 		<param name="background_art_condition">false</param>
-		<param name="additional_movie_items">false</param>
-		<param name="additional_tvshow_items">false</param>
-		<param name="dynamic_content">true</param>
 		<param name="browse_mode">auto</param>
 		<definition>
 			<control type="label" id="$PARAM[list_id]667">
@@ -631,8 +667,15 @@
 					<right>0</right>
 					<height>250</height>
 					<visible>Integer.IsGreater(Container($PARAM[list_id]).NumItems,0) | Container($PARAM[list_id]).IsUpdating</visible>
-					<include content="WidgetListCommon">
+					<include content="$PARAM[navigation]">
 						<param name="list_id" value="$PARAM[list_id]"/>
+						<param name="section" value="$PARAM[section]"/>
+						<param name="page" value="$PARAM[page]"/>
+						<param name="pages_id" value="$PARAM[pages_id]"/>
+						<param name="hero_id" value="$PARAM[hero_id]"/>
+						<param name="update_hero" value="$PARAM[update_hero]"/>
+						<param name="onup" value="$PARAM[onup]"/>
+						<param name="ondown" value="$PARAM[ondown]"/>
 					</include>
 					<itemlayout width="347" height="250">
 						<control type="group">
@@ -737,23 +780,24 @@
 							</control>
 						</control>
 					</focusedlayout>
-					<include condition="$PARAM[additional_movie_items]" content="MovieSubmenuItems" />
-					<include condition="$PARAM[additional_tvshow_items]" content="TVShowSubmenuItems" />
-					<include condition="$PARAM[dynamic_content]" content="WidgetListCategoriesContent">
+					<include content="WidgetListCategoriesContent">
 						<param name="widget_target" value="$PARAM[widget_target]"/>
 						<param name="item_limit" value="$PARAM[item_limit]"/>
 						<param name="browse_mode" value="$PARAM[browse_mode]"/>
 						<param name="content_path" value="$PARAM[content_path]"/>
 					</include>
 					</control>
-				<include content="HomeRailSpacer">
-					<param name="id" value="$PARAM[list_id]668"/>
-					<param name="height" value="256"/>
-					<param name="visible" value="Integer.IsGreater(Container($PARAM[list_id]).NumItems,0) | Container($PARAM[list_id]).IsUpdating"/>
-				</include>
 		</definition>
 	</include>
 	<include name="WidgetListPoster">
+		<param name="navigation">WidgetListCommon</param>
+		<param name="section"></param>
+		<param name="page"></param>
+		<param name="pages_id">0</param>
+		<param name="onup">0</param>
+		<param name="ondown">0</param>
+		<param name="update_hero">false</param>
+		<param name="hero_id"></param>
 		<param name="onclick_condition">false</param>
 		<param name="onclick_action">noop</param>
 		<param name="onclick_condition_2">false</param>
@@ -764,60 +808,61 @@
 		<param name="onclick_action_4">noop</param>
 		<param name="browse_mode">auto</param>
 		<param name="widget_limit">20</param>
-		<param name="progress_height">3</param>
 		<definition>
-			<include content="CategoryLabel">
-				<param name="label">$PARAM[widget_header]</param>
-				<param name="list_id" value="$PARAM[list_id]"/>
-			</include>
+			<control type="label" id="$PARAM[list_id]666">
+				<left>80</left>
+				<top>0</top>
+				<width>1400</width>
+				<height>40</height>
+				<font>font27</font>
+				<label>$PARAM[widget_header]</label>
+			</control>
 			<include content="BusyListSpinner">
 				<param name="list_id" value="$PARAM[list_id]"/>
-				<param name="posy" value="250"/>
+				<param name="posy" value="180"/>
 			</include>
 			<control type="panel" id="$PARAM[list_id]">
-				<left>0</left>
-				<top>115</top>
+				<left>70</left>
+				<top>50</top>
 				<visible>Integer.IsGreater(Container($PARAM[list_id]).NumItems,0) | Container($PARAM[list_id]).IsUpdating</visible>
-				<right>0</right>
-				<height>518</height>
+				<right>70</right>
+				<height>415</height>
 				<onclick condition="$PARAM[onclick_condition]">$PARAM[onclick_action]</onclick>
 				<onclick condition="$PARAM[onclick_condition_2]">$PARAM[onclick_action_2]</onclick>
 				<onclick condition="$PARAM[onclick_condition_3]">$PARAM[onclick_action_3]</onclick>
 				<onclick condition="$PARAM[onclick_condition_4]">$PARAM[onclick_action_4]</onclick>
-				<include content="WidgetListCommon">
+				<include content="$PARAM[navigation]">
+					<param name="reset_on_row_change" value="true"/>
 					<param name="list_id" value="$PARAM[list_id]"/>
+					<param name="section" value="$PARAM[section]"/>
+					<param name="page" value="$PARAM[page]"/>
+					<param name="pages_id" value="$PARAM[pages_id]"/>
+					<param name="hero_id" value="$PARAM[hero_id]"/>
+					<param name="update_hero" value="$PARAM[update_hero]"/>
+					<param name="onup" value="$PARAM[onup]"/>
+					<param name="ondown" value="$PARAM[ondown]"/>
 				</include>
 				<include content="HomeRememberFanartOnUnfocus">
 					<param name="list_id" value="$PARAM[list_id]"/>
 				</include>
 				<selectionsettledelay mode="adaptive">150</selectionsettledelay>
-				<itemlayout width="260" height="486">
-					<control type="group">
-						<left>58</left>
-						<top>10</top>
-						<include content="InfoWallMovieLayout">
-							<param name="focused" value="false" />
-							<param name="progress_height" value="$PARAM[progress_height]" />
-						</include>
-					</control>
+				<itemlayout width="240" height="410">
+					<include content="NaraSearchPosterLayout">
+						<param name="show_year" value="true" />
+						<param name="poster_texture" value="$INFO[ListItem.Art(poster)]" />
+						<param name="poster_fallback" value="" />
+						<param name="poster_background" value="colors/black.png" />
+					</include>
 				</itemlayout>
-				<focusedlayout width="260" height="486">
-					<control type="group">
-						<depth>DepthContentPopout</depth>
-						<left>58</left>
-						<top>10</top>
-						<animation type="Focus">
-							<effect type="zoom" start="100" end="106" time="200" tween="sine" easing="inout" center="198,216" />
-						</animation>
-						<animation type="Unfocus">
-							<effect type="zoom" start="106" end="100" time="200" tween="sine" easing="inout" center="198,216" />
-						</animation>
-						<include content="InfoWallMovieLayout">
-							<param name="focused" value="true" />
-							<param name="progress_height" value="$PARAM[progress_height]" />
-							<param name="progress_visible_condition" value="[!Control.HasFocus($PARAM[list_id]) | !Integer.IsEqual(ListItem.CurrentItem,Container($PARAM[list_id]).CurrentItem)]" />
-						</include>
-					</control>
+				<focusedlayout width="240" height="410">
+					<include content="NaraSearchPosterLayout">
+						<param name="focused" value="Control.HasFocus($PARAM[list_id])" />
+						<param name="show_year" value="true" />
+						<param name="poster_texture" value="$INFO[ListItem.Art(poster)]" />
+						<param name="poster_fallback" value="" />
+						<param name="poster_background" value="colors/black.png" />
+						<param name="focus_color" value="$VAR[HomeVideoPosterFocusColorVar]" />
+					</include>
 				</focusedlayout>
 				<content sortby="$PARAM[sortby]" sortorder="$PARAM[sortorder]" target="$PARAM[widget_target]" limit="$PARAM[widget_limit]" browse="$PARAM[browse_mode]">$PARAM[content_path]</content>
 			</control>
@@ -864,77 +909,6 @@
 						</control>
 					</control>
 				</control>
-			</control>
-		</definition>
-	</include>
-	<include name="WidgetListEpisodes">
-		<param name="main_label">$INFO[ListItem.Title]</param>
-		<param name="sub_label">$INFO[ListItem.TVShowTitle]</param>
-		<param name="thumb_label">$INFO[ListItem.Season,,x]$INFO[ListItem.Episode]</param>
-		<param name="sortby"></param>
-		<param name="visible">True</param>
-		<param name="sortorder">ascending</param>
-		<param name="widget_limit">20</param>
-		<param name="browse_mode">auto</param>
-		<param name="progress_height">3</param>
-		<definition>
-			<include content="CategoryLabel">
-				<param name="label">$PARAM[widget_header]</param>
-				<param name="list_id" value="$PARAM[list_id]"/>
-			</include>
-			<include content="BusyListSpinner">
-				<param name="list_id" value="$PARAM[list_id]"/>
-				<param name="posy" value="200"/>
-			</include>
-			<control type="panel" id="$PARAM[list_id]">
-				<left>0</left>
-				<top>105</top>
-				<right>0</right>
-				<height>410</height>
-				<include content="WidgetListCommon">
-					<param name="list_id" value="$PARAM[list_id]"/>
-				</include>
-				<visible>$PARAM[visible]</visible>
-				<visible>Integer.IsGreater(Container($PARAM[list_id]).NumItems,0) | Container($PARAM[list_id]).IsUpdating</visible>
-				<itemlayout width="310" height="500">
-					<control type="group">
-						<left>60</left>
-						<top>5</top>
-						<include content="InfoWallEpisodeLayout">
-							<param name="main_label" value="$PARAM[main_label]" />
-							<param name="sub_label" value="$PARAM[sub_label]" />
-							<param name="thumb_label" value="$PARAM[thumb_label]" />
-							<param name="focused" value="false" />
-							<param name="progress_height" value="$PARAM[progress_height]" />
-						</include>
-					</control>
-				</itemlayout>
-				<focusedlayout width="310" height="500">
-					<control type="group">
-						<depth>DepthContentPopout</depth>
-						<left>60</left>
-						<top>5</top>
-						<animation type="Focus">
-							<effect type="zoom" start="100" end="112" time="200" tween="sine" easing="inout" center="230,120" />
-						</animation>
-						<animation type="Unfocus">
-							<effect type="zoom" start="112" end="100" time="200" tween="sine" easing="inout" center="230,120" />
-						</animation>
-						<include content="InfoWallEpisodeLayout">
-							<param name="main_label" value="$PARAM[main_label]" />
-							<param name="sub_label" value="$PARAM[sub_label]" />
-							<param name="thumb_label" value="$PARAM[thumb_label]" />
-							<param name="focused" value="true" />
-							<param name="progress_height" value="$PARAM[progress_height]" />
-							<param name="focus_border" value="3" />
-							<param name="focus_left" value="-2.678571" />
-							<param name="focus_top" value="7.321429" />
-							<param name="focus_width" value="321.357142" />
-							<param name="focus_height" value="293.357142" />
-						</include>
-					</control>
-				</focusedlayout>
-				<content sortby="$PARAM[sortby]" sortorder="$PARAM[sortorder]" target="$PARAM[widget_target]" limit="$PARAM[widget_limit]" browse="$PARAM[browse_mode]">$PARAM[content_path]</content>
 			</control>
 		</definition>
 	</include>
@@ -1012,9 +986,23 @@
 		</definition>
 	</include>
 	<include name="WidgetListCategories">
+		<param name="header_left">55</param>
+		<param name="header_top">80</param>
+		<param name="header_height">90</param>
+		<param name="panel_top">110</param>
+		<param name="panel_height">290</param>
+		<param name="item_height">340</param>
+		<param name="navigation">WidgetListCommon</param>
+		<param name="section"></param>
+		<param name="page"></param>
+		<param name="pages_id">0</param>
+		<param name="onup">0</param>
+		<param name="ondown">0</param>
+		<param name="update_hero">false</param>
+		<param name="hero_id"></param>
 		<param name="item_limit">20</param>
 		<param name="icon">$INFO[ListItem.Icon]</param>
-		<param name="icon_height">120</param>
+		<param name="icon_height">84</param>
 		<param name="background_art_condition">false</param>
 		<param name="additional_movie_items">false</param>
 		<param name="additional_tvshow_items">false</param>
@@ -1029,6 +1017,9 @@
 				<param name="label">$PARAM[widget_header]</param>
 				<param name="list_id" value="$PARAM[list_id]"/>
 				<param name="visible" value="$PARAM[visible]"/>
+				<param name="left" value="$PARAM[header_left]"/>
+				<param name="top" value="$PARAM[header_top]"/>
+				<param name="height" value="$PARAM[header_height]"/>
 			</include>
 			<include content="BusyListSpinner">
 				<param name="list_id" value="$PARAM[list_id]"/>
@@ -1036,15 +1027,23 @@
 			</include>
 			<control type="panel" id="$PARAM[list_id]">
 				<left>0</left>
-				<top>110</top>
+				<top>$PARAM[panel_top]</top>
 				<right>0</right>
-				<height>290</height>
-				<include content="WidgetListCommon">
+				<height>$PARAM[panel_height]</height>
+				<include content="$PARAM[navigation]">
+					<param name="reset_on_row_change" value="true"/>
 					<param name="list_id" value="$PARAM[list_id]"/>
+					<param name="section" value="$PARAM[section]"/>
+					<param name="page" value="$PARAM[page]"/>
+					<param name="pages_id" value="$PARAM[pages_id]"/>
+					<param name="hero_id" value="$PARAM[hero_id]"/>
+					<param name="update_hero" value="$PARAM[update_hero]"/>
+					<param name="onup" value="$PARAM[onup]"/>
+					<param name="ondown" value="$PARAM[ondown]"/>
 				</include>
 				<visible>$PARAM[visible]</visible>
 				<visible>Integer.IsGreater(Container($PARAM[list_id]).NumItems,0) | Container($PARAM[list_id]).IsUpdating</visible>
-				<itemlayout width="310" height="340">
+				<itemlayout width="310" height="$PARAM[item_height]">
 					<control type="group">
 						<left>60</left>
 						<control type="image">
@@ -1097,7 +1096,7 @@
 						</control>
 					</control>
 				</itemlayout>
-				<focusedlayout width="310" height="340">
+				<focusedlayout width="310" height="$PARAM[item_height]">
 					<control type="group">
 						<depth>DepthContentPopout</depth>
 						<left>60</left>
@@ -1483,8 +1482,6 @@
 		<onleft>noop</onleft>
 		<onright>noop</onright>
 		<onback condition="$EXP[home_widget_group_scrolled]">SetFocus($PARAM[list_id],0,absolute)</onback>
-		<onback condition="$EXP[home_widget_group_scrolled] + String.IsEqual(Window(home).Property(Home.Section),movies)">SetFocus(5001)</onback>
-		<onback condition="$EXP[home_widget_group_scrolled] + String.IsEqual(Window(home).Property(Home.Section),tvshows)">SetFocus(6001)</onback>
 		<onback condition="$EXP[home_widget_group_scrolled] + String.IsEqual(Window(home).Property(Home.Section),music)">SetFocus(7001)</onback>
 		<onback condition="$EXP[home_widget_group_scrolled] + String.IsEqual(Window(home).Property(Home.Section),livetv)">SetFocus(12001)</onback>
 		<onback condition="!$EXP[home_widget_group_scrolled] + !Container($PARAM[list_id]).Position(0)">SetFocus($PARAM[list_id],0,absolute)</onback>

@@ -8,6 +8,8 @@ XML = Path(__file__).resolve().parents[1] / 'xml'
 ANIMATIONS = ET.parse(XML / 'Includes_Animations.xml').getroot()
 HOME = ET.parse(XML / 'Includes_Home.xml').getroot()
 INFO = ET.parse(XML / 'DialogVideoInfo.xml').getroot()
+BACKDROP = next(node for node in ET.parse(XML / 'Home.xml').findall('controls/control')
+                if node.findtext('texture') == '$VAR[NaraSharedRandomFanartVar]')
 EXPRESSIONS = {node.get('name'): node.text for node in HOME.findall('expression')}
 SOURCE = ANIMATIONS.find('variable[@name="NaraVideoInfoFanartSourceVar"]')
 CAMERA = ANIMATIONS.find('include[@name="Animation_NaraFanartDetail"]/definition/animation')
@@ -22,7 +24,13 @@ def window_id(value):
 class DialogStack:
     def __init__(self, page='home', section='search'):
         self.visible = {window_id(page)}
+        self.closing = set()
         self.properties = {('10000', 'Home.Section'): section}
+        self.labels = {
+            'Skin.String(Nara.SharedRandomFanart.LockedPath)': '',
+            'Window(home).Property(Home.SharedRandomFanart.SessionPath)': '',
+            'Container(16090).ListItem.Art(fanart)': 'random.jpg',
+        }
         self.no_fanart = False
         self.video = False
 
@@ -35,8 +43,13 @@ class DialogStack:
             condition)
         condition = re.sub(r'Window.IsVisible\(([^)]+)\)',
                            lambda m: str(window_id(m[1]) in self.visible), condition)
+        condition = re.sub(r'Window.IsActive\(([^)]+)\)',
+                           lambda m: str(window_id(m[1]) in self.visible - self.closing), condition)
+        for label, value in self.labels.items():
+            condition = condition.replace('String.IsEmpty(' + label + ')', str(not value))
         condition = condition.replace('Skin.HasSetting(no_fanart)', str(self.no_fanart))
         condition = condition.replace('Player.HasVideo', str(self.video))
+        condition = condition.replace('Player.HasAudio', 'False').replace('Player.HasGame', 'False')
         condition = re.sub(r'\btrue\b', 'True', condition)
         condition = condition.replace('!', ' not ').replace('+', ' and ').replace('|', ' or ')
         condition = condition.replace('[', '(').replace(']', ')')
@@ -62,6 +75,42 @@ class DialogStack:
 
 
 class FanartTransitionsTest(unittest.TestCase):
+    def test_favorites_backdrop_is_retained_and_revealed_when_closing_starts(self):
+        animation = BACKDROP.find('animation[.="Conditional"]')
+        self.assertIsNotNone(animation)
+        self.assertEqual((animation.get('effect'), animation.get('start'),
+                          animation.get('end'), animation.get('time')), ('fade', '100', '0', '0'))
+        for source in DialogStack().labels:
+            with self.subTest(source=source):
+                stack = DialogStack(section='favorites')
+                stack.labels = {label: 'random.jpg' if label == source else ''
+                                for label in stack.labels}
+                for state, transparent in [('closed', False), ('open', True),
+                                           ('closing', False), ('closed', False)]:
+                    if state == 'closed':
+                        stack.visible.discard('12003')
+                        stack.closing.clear()
+                    elif state == 'open':
+                        stack.open_info()
+                    else:
+                        stack.closing.add('12003')
+                    self.assertTrue(stack.evaluate(BACKDROP.findtext('visible')))
+                    self.assertEqual(stack.evaluate(animation.get('condition')), transparent)
+
+    def test_backdrop_handoff_does_not_change_other_home_sections(self):
+        animation = BACKDROP.find('animation[.="Conditional"]')
+        for section in ('movies', 'tvshows', 'search', 'files'):
+            for state in ('closed', 'open', 'closing'):
+                with self.subTest(section=section, state=state):
+                    stack = DialogStack(section=section)
+                    if state != 'closed':
+                        stack.open_info()
+                    if state == 'closing':
+                        stack.closing.add('12003')
+                    self.assertFalse(stack.evaluate(animation.get('condition')))
+                    self.assertEqual(stack.evaluate(BACKDROP.findtext('visible')),
+                                     section == 'files' and state == 'closed')
+
     def test_search_only_zooms_for_detail_and_holds_through_closing_fade(self):
         stack = DialogStack()
         self.assertFalse(stack.camera_active('search'))

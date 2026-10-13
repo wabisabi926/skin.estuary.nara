@@ -167,7 +167,33 @@
 	</variable>
 	<variable name="WidgetGenreIconVar">
 		<value condition="String.IsEqual(ListItem.Property(node.type),target_folder)">$INFO[ListItem.Icon]</value>
-		<value condition="System.AddonIsEnabled(resource.images.moviegenreicons.transparent)">$INFO[ListItem.Label,resource://resource.images.moviegenreicons.transparent/,.png]</value>
+		<value condition="String.IsEqual(ListItem.Label,Action &amp; Adventure) | String.IsEqual(ListItem.Label,动作冒险) | String.IsEqual(ListItem.Label,动作与冒险)">genres/Action &amp; Adventure.png</value>
+		<value condition="String.IsEqual(ListItem.Label,Action) | String.IsEqual(ListItem.Label,动作)">genres/Action.png</value>
+		<value condition="String.IsEqual(ListItem.Label,Adventure) | String.IsEqual(ListItem.Label,冒险)">genres/Adventure.png</value>
+		<value condition="String.IsEqual(ListItem.Label,Animation) | String.IsEqual(ListItem.Label,动画)">genres/Animation.png</value>
+		<value condition="String.IsEqual(ListItem.Label,Comedy) | String.IsEqual(ListItem.Label,喜剧)">genres/Comedy.png</value>
+		<value condition="String.IsEqual(ListItem.Label,Crime) | String.IsEqual(ListItem.Label,犯罪)">genres/Crime.png</value>
+		<value condition="String.IsEqual(ListItem.Label,Documentary) | String.IsEqual(ListItem.Label,纪录) | String.IsEqual(ListItem.Label,纪录片)">genres/Documentary.png</value>
+		<value condition="String.IsEqual(ListItem.Label,Drama) | String.IsEqual(ListItem.Label,剧情)">genres/Drama.png</value>
+		<value condition="String.IsEqual(ListItem.Label,Family) | String.IsEqual(ListItem.Label,家庭)">genres/Family.png</value>
+		<value condition="String.IsEqual(ListItem.Label,Fantasy) | String.IsEqual(ListItem.Label,奇幻)">genres/Fantasy.png</value>
+		<value condition="String.IsEqual(ListItem.Label,History) | String.IsEqual(ListItem.Label,历史)">genres/History.png</value>
+		<value condition="String.IsEqual(ListItem.Label,Horror) | String.IsEqual(ListItem.Label,恐怖)">genres/Horror.png</value>
+		<value condition="String.IsEqual(ListItem.Label,Kids) | String.IsEqual(ListItem.Label,儿童)">genres/Kids.png</value>
+		<value condition="String.IsEqual(ListItem.Label,Music) | String.IsEqual(ListItem.Label,音乐)">genres/Music.png</value>
+		<value condition="String.IsEqual(ListItem.Label,Mystery) | String.IsEqual(ListItem.Label,悬疑)">genres/Mystery.png</value>
+		<value condition="String.IsEqual(ListItem.Label,News) | String.IsEqual(ListItem.Label,新闻)">genres/News.png</value>
+		<value condition="String.IsEqual(ListItem.Label,Reality) | String.IsEqual(ListItem.Label,真人秀)">genres/Reality.png</value>
+		<value condition="String.IsEqual(ListItem.Label,Romance) | String.IsEqual(ListItem.Label,爱情)">genres/Romance.png</value>
+		<value condition="String.IsEqual(ListItem.Label,Sci-Fi &amp; Fantasy) | String.IsEqual(ListItem.Label,科幻奇幻) | String.IsEqual(ListItem.Label,科幻与奇幻)">genres/Sci-Fi &amp; Fantasy.png</value>
+		<value condition="String.IsEqual(ListItem.Label,Science Fiction) | String.IsEqual(ListItem.Label,科幻)">genres/Science Fiction.png</value>
+		<value condition="String.IsEqual(ListItem.Label,Soap) | String.IsEqual(ListItem.Label,肥皂剧)">genres/Soap.png</value>
+		<value condition="String.IsEqual(ListItem.Label,Talk) | String.IsEqual(ListItem.Label,脱口秀)">genres/Talk.png</value>
+		<value condition="String.IsEqual(ListItem.Label,Thriller) | String.IsEqual(ListItem.Label,惊悚)">genres/Thriller.png</value>
+		<value condition="String.IsEqual(ListItem.Label,TV Movie) | String.IsEqual(ListItem.Label,电视电影)">genres/TV Movie.png</value>
+		<value condition="String.IsEqual(ListItem.Label,War &amp; Politics) | String.IsEqual(ListItem.Label,战争政治) | String.IsEqual(ListItem.Label,战争与政治)">genres/War &amp; Politics.png</value>
+		<value condition="String.IsEqual(ListItem.Label,War) | String.IsEqual(ListItem.Label,战争)">genres/War.png</value>
+		<value condition="String.IsEqual(ListItem.Label,Western) | String.IsEqual(ListItem.Label,西部)">genres/Western.png</value>
 		<value>DefaultGenre.png</value>
 	</variable>
 	<variable name="WidgetStudioIconVar">
@@ -273,6 +299,10 @@
 	<variable name="BannerVar">
 		<value condition="!String.IsEmpty(ListItem.Art(banner))">$INFO[ListItem.Art(banner)]</value>
 		<value>$INFO[ListItem.Art(tvshow.banner)]</value>
+	</variable>
+	<variable name="PosterCardFocusColorVar">
+		<value condition="!ListItem.IsParentFolder + String.IsEmpty(ListItem.Art(poster)) + String.IsEmpty(ListItem.Art(tvshow.poster))">focus_card_surface</value>
+		<value>focus_media</value>
 	</variable>
 	<variable name="PosterVar">
 		<value condition="ListItem.IsParentFolder">DefaultFolderBackPoster.png</value>
@@ -446,6 +476,67 @@
 		<value condition="!String.IsEmpty(Container(50).ListItemSettled.PlotOutline)">$INFO[Container(50).ListItemSettled.PlotOutline]</value>
 		<value>$INFO[Container(50).ListItemSettled.Label2]</value>
 	</variable>
+	<variable name="NaraList50PreviewTitleVar">
+		<value condition="$EXP[nara_list50_addon]">$INFO[Container(50).ListItemSettled.AddonName]</value>
+		<value>$VAR[NaraList50TitleVar]</value>
+	</variable>
+	<variable name="NaraList50PreviewKindVar">
+		<value condition="Container(50).ListItemSettled.IsParentFolder">$LOCALIZE[19076]</value>
+		<value condition="Container.Content(directors) | String.IsEqual(Container(50).ListItemSettled.DBType,director)">$LOCALIZE[20339]</value>
+		<value condition="Container.Content(writers) | String.IsEqual(Container(50).ListItemSettled.DBType,writer)">$LOCALIZE[20417]</value>
+		<value condition="$EXP[nara_list50_person]">$LOCALIZE[20337]</value>
+		<value condition="$EXP[nara_list50_addon]">$INFO[Container(50).ListItemSettled.AddonType]</value>
+		<value condition="Container.Content(years)">$LOCALIZE[345]</value>
+		<value condition="Container.Content(genres)">$LOCALIZE[515]</value>
+		<value condition="Container.Content(studios)">$LOCALIZE[20388]</value>
+		<value condition="Container.Content(countries)">$LOCALIZE[574]</value>
+		<value condition="String.IsEqual(Container(50).ListItemSettled.DBType,album)">$LOCALIZE[558]</value>
+		<value condition="String.IsEqual(Container(50).ListItemSettled.DBType,song)">$LOCALIZE[179]</value>
+		<value condition="String.IsEqual(Container(50).ListItemSettled.DBType,artist)">$LOCALIZE[557]</value>
+		<value condition="Container.Content(favourites)">$LOCALIZE[1036]</value>
+		<value condition="Container(50).ListItemSettled.IsFolder">$LOCALIZE[19076]</value>
+		<value condition="Window.IsActive(pictures)">$LOCALIZE[1]</value>
+	</variable>
+	<variable name="NaraList50PreviewMetadataVar">
+		<value condition="Container(50).ListItemSettled.IsParentFolder" />
+		<value condition="$EXP[nara_list50_person]">$INFO[Container(50).ListItemSettled.Appearances,$LOCALIZE[38026]: ]</value>
+		<value condition="$EXP[nara_list50_addon] + !String.IsEmpty(Container(50).ListItemSettled.AddonVersion) + !String.IsEmpty(Container(50).ListItemSettled.AddonCreator)">$INFO[Container(50).ListItemSettled.AddonVersion,v]$INFO[Container(50).ListItemSettled.AddonCreator,  ·  ]</value>
+		<value condition="$EXP[nara_list50_addon] + !String.IsEmpty(Container(50).ListItemSettled.AddonVersion)">$INFO[Container(50).ListItemSettled.AddonVersion,v]</value>
+		<value condition="$EXP[nara_list50_addon]">$INFO[Container(50).ListItemSettled.AddonCreator]</value>
+		<value>$VAR[NaraList50MetadataVar]</value>
+	</variable>
+	<variable name="NaraList50PreviewThumbVar">
+		<value condition="Container(50).ListItemSettled.IsParentFolder">DefaultFolderBackSquare.png</value>
+		<value condition="Container.Content(studios) + System.AddonIsEnabled(resource.images.studios.white)">$INFO[Container(50).ListItemSettled.Label,resource://resource.images.studios.white/,.png]</value>
+		<value condition="Container.Content(genres) + System.AddonIsEnabled(resource.images.moviegenreicons.transparent)">$INFO[Container(50).ListItemSettled.Label,resource://resource.images.moviegenreicons.transparent/,.png]</value>
+		<value condition="!String.IsEmpty(Container(50).ListItemSettled.Art(thumb))">$INFO[Container(50).ListItemSettled.Art(thumb)]</value>
+		<value condition="!String.IsEmpty(Container(50).ListItemSettled.Thumb)">$INFO[Container(50).ListItemSettled.Thumb]</value>
+		<value condition="!String.IsEmpty(Container(50).ListItemSettled.Art(poster))">$INFO[Container(50).ListItemSettled.Art(poster)]</value>
+		<value condition="$EXP[nara_list50_person]">DefaultActor.png</value>
+		<value condition="$EXP[nara_list50_addon] + !String.IsEmpty(Container(50).ListItemSettled.Icon)">$INFO[Container(50).ListItemSettled.Icon]</value>
+		<value condition="$EXP[nara_list50_addon]">DefaultAddon.png</value>
+		<value condition="String.IsEqual(Container(50).ListItemSettled.DBType,artist)">DefaultArtist.png</value>
+		<value condition="String.IsEqual(Container(50).ListItemSettled.DBType,album) | String.IsEqual(Container(50).ListItemSettled.DBType,song)">DefaultAudio.png</value>
+		<value condition="!String.IsEmpty(Container(50).ListItemSettled.Icon)">$INFO[Container(50).ListItemSettled.Icon]</value>
+		<value>DefaultFolder.png</value>
+	</variable>
+	<variable name="NaraList50PreviewDescriptionVar">
+		<value condition="Container(50).ListItemSettled.IsParentFolder" />
+		<value condition="$EXP[nara_list50_addon] + String.IsEqual(Container.FolderPath,addons://outdated/) + !String.IsEmpty(Container(50).ListItemSettled.AddonNews)">$INFO[Container(50).ListItemSettled.AddonNews]</value>
+		<value condition="$EXP[nara_list50_addon] + !String.IsEmpty(Container(50).ListItemSettled.AddonDescription)">$INFO[Container(50).ListItemSettled.AddonDescription]</value>
+		<value condition="$EXP[nara_list50_addon]">$INFO[Container(50).ListItemSettled.AddonSummary]</value>
+		<value condition="String.IsEqual(Container(50).ListItemSettled.DBType,album)">$INFO[Container(50).ListItemSettled.Property(album_description)]</value>
+		<value condition="String.IsEqual(Container(50).ListItemSettled.DBType,artist)">$INFO[Container(50).ListItemSettled.Property(artist_description)]</value>
+		<value condition="String.IsEqual(Container(50).ListItemSettled.DBType,song)">$INFO[Container(50).ListItemSettled.Comment]</value>
+		<value condition="!String.IsEmpty(Container(50).ListItemSettled.Property(description))">$INFO[Container(50).ListItemSettled.Property(description)]</value>
+		<value condition="Window.IsActive(pictures)">$INFO[Container(50).ListItemSettled.PictureCamMake,, ]$INFO[Container(50).ListItemSettled.PictureCamModel]</value>
+		<value condition="Container.Content(favourites)">$INFO[Container(50).ListItemSettled.Property(favourite.action),$LOCALIZE[15217]: ]</value>
+		<value condition="!String.IsEmpty(Container(50).ListItemSettled.Plot)">$INFO[Container(50).ListItemSettled.Plot]</value>
+		<value condition="!String.IsEmpty(Container(50).ListItemSettled.PlotOutline)">$INFO[Container(50).ListItemSettled.PlotOutline]</value>
+	</variable>
+	<variable name="NaraList50AddonWarningVar">
+		<value condition="String.IsEqual(Container(50).ListItemSettled.AddonLifecycleType,$LOCALIZE[24170]) | String.IsEqual(Container(50).ListItemSettled.AddonLifecycleType,$LOCALIZE[24171])">$INFO[Container(50).ListItemSettled.AddonLifecycleType]$INFO[Container(50).ListItemSettled.AddonLifecycleDesc,[CR]]</value>
+	</variable>
 	<!-- These two values form the aligned data columns in each compact row. -->
 	<variable name="NaraList50PrimaryMetaVar">
 		<value condition="Container.Content(addons)">$INFO[ListItem.AddonVersion]</value>
@@ -557,13 +648,6 @@
 		<value condition="player.chaptercount + [!VideoPlayer.Content(episodes) + !VideoPlayer.Content(LiveTV)]">$INFO[player.chapter,[COLOR text_secondary]$LOCALIZE[21396]:[/COLOR] ]$INFO[Player.ChapterCount,/]$INFO[Player.ChapterName, - ]</value>
 		<value>$INFO[VideoPlayer.Genre]</value>
 	</variable>
-	<variable name="OSDNextLabelVar">
-		<value condition="VideoPlayer.Content(musicvideos)">$INFO[VideoPlayer.offset(1).Title,[COLOR text_secondary]$LOCALIZE[19031]: [/COLOR]]$INFO[VideoPlayer.offset(1).Artist, - ]$INFO[VideoPlayer.offset(1).Album, - ]$INFO[VideoPlayer.offset(1).Year, (,)]</value>
-		<value condition="VideoPlayer.Content(livetv)">$INFO[VideoPlayer.NextStartTime,[COLOR text_secondary]$LOCALIZE[19031]: [/COLOR]]$INFO[VideoPlayer.NextEndTime, - ]$INFO[VideoPlayer.NextTitle,: ]</value>
-		<value condition="VideoPlayer.Content(episodes) + Window.IsActive(fullscreenvideo)">$INFO[VideoPlayer.offset(1).TVShowtitle,[COLOR text_secondary]$LOCALIZE[19031]: [/COLOR]]$INFO[VideoPlayer.offset(1).Season, - S,]$INFO[VideoPlayer.offset(1).Episode,E]$INFO[VideoPlayer.offset(1).Title,  - ]</value>
-		<value condition="Window.IsActive(visualisation)">$INFO[MusicPlayer.offset(1).Title,[COLOR text_secondary]$LOCALIZE[19031]: [/COLOR]]$INFO[MusicPlayer.offset(1).Artist, - ]$INFO[MusicPlayer.offset(1).Album, - ]$INFO[MusicPlayer.offset(1).Year, (,)]</value>
-		<value>$INFO[VideoPlayer.offset(1).Title,[COLOR text_secondary]$LOCALIZE[19031]: [/COLOR]]$INFO[VideoPlayer.offset(1).Year, (,)]</value>
-	</variable>
 	<variable name="PlayerClearLogoVar">
 		<value condition="!String.IsEmpty(Player.Art(tvshow.clearlogo))">$INFO[Player.Art(tvshow.clearlogo)]</value>
 		<value condition="!String.IsEmpty(Player.Art(clearlogo))">$INFO[Player.Art(clearlogo)]</value>
@@ -623,17 +707,25 @@
 		<value condition="$EXP[NaraHomeFanartSettledRow]">$INFO[Container.ListItemSettled.Art(fanart)]</value>
 		<value condition="String.IsEqual(Window(home).Property(Home.Section),movies) + ControlGroup(5001).HasFocus() + String.IsEqual(Container.ListItem.Property(node.type),target_folder) + !String.IsEmpty(Container.ListItemNoWrap(-1).Art(fanart))">$INFO[Container.ListItemNoWrap(-1).Art(fanart)]</value>
 		<value condition="String.IsEqual(Window(home).Property(Home.Section),tvshows) + ControlGroup(6001).HasFocus() + String.IsEqual(Container.ListItem.Property(node.type),target_folder) + !String.IsEmpty(Container.ListItemNoWrap(-1).Art(fanart))">$INFO[Container.ListItemNoWrap(-1).Art(fanart)]</value>
+		<value condition="[Control.HasFocus(9012) + !String.IsEmpty(Window(home).Property(Home.movies.Hero))] | [Control.HasFocus(9013) + !String.IsEmpty(Window(home).Property(Home.tvshows.Hero))]">$VAR[HomeVideoHeroFanartVar]</value>
 		<value condition="String.IsEqual(Window(home).Property(Home.Section),movies) + Control.HasFocus(9012) + !String.IsEmpty(Container(5100).ListItemSettled.Art(fanart))">$INFO[Container(5100).ListItemSettled.Art(fanart)]</value>
 		<value condition="String.IsEqual(Window(home).Property(Home.Section),tvshows) + Control.HasFocus(9013) + !String.IsEmpty(Container(6100).ListItemSettled.Art(fanart))">$INFO[Container(6100).ListItemSettled.Art(fanart)]</value>
 		<value condition="String.IsEqual(Window(home).Property(Home.Section),movies) + [Control.HasFocus(5500) | Control.HasFocus(5700) | Control.HasFocus(5900)] + !String.IsEmpty(Window(home).Property(Home.LastMovieFanart))">$INFO[Window(home).Property(Home.LastMovieFanart)]</value>
-		<value condition="String.IsEqual(Window(home).Property(Home.Section),tvshows) + [Control.HasFocus(6400) | Control.HasFocus(6500) | Control.HasFocus(6600) | Control.HasFocus(6900)] + !String.IsEmpty(Window(home).Property(Home.LastTVShowFanart))">$INFO[Window(home).Property(Home.LastTVShowFanart)]</value>
+		<value condition="String.IsEqual(Window(home).Property(Home.Section),tvshows) + [Control.HasFocus(6400) | Control.HasFocus(6600) | Control.HasFocus(6900)] + !String.IsEmpty(Window(home).Property(Home.LastTVShowFanart))">$INFO[Window(home).Property(Home.LastTVShowFanart)]</value>
 		<value condition="Container.ListItem.Property(emby.library.art) + !String.IsEmpty(Container.ListItem.Art(fanart))">$INFO[Container.ListItem.Art(fanart)]</value>
 		<value condition="Container.ListItem.Property(emby.library.art) + !String.IsEmpty(Container.ListItem.Art(thumb))">$INFO[Container.ListItem.Art(thumb)]</value>
 		<value condition="!String.IsEmpty(Container.ListItem.Art(fanart))">$INFO[Container.ListItem.Art(fanart)]</value>
 	</variable>
+	<variable name="NaraWallFanartVar">
+		<value condition="!String.IsEmpty(Container(500).ListItemSettled.Art(fanart))">$INFO[Container(500).ListItemSettled.Art(fanart)]</value>
+		<value condition="!String.IsEmpty(Container.Art(tvshow.fanart))">$INFO[Container.Art(tvshow.fanart)]</value>
+		<value condition="!String.IsEmpty(Container.Art(artist.fanart))">$INFO[Container.Art(artist.fanart)]</value>
+		<value>$INFO[Container.Art(fanart)]</value>
+	</variable>
 	<variable name="MediaFanartVar">
 		<value condition="Skin.HasSetting(no_fanart)"></value>
 		<value condition="Window.IsActive(musicinformation) | Window.IsActive(movieinformation) | Window.IsActive(addoninformation) | Window.IsActive(pvrguideinfo) | Window.IsActive(pvrrecordinginfo) | Window.IsActive(pictureinfo)">$INFO[Window(home).Property(infobackground)]</value>
+		<value condition="Window.IsActive(videos) + Control.IsVisible(500)">$VAR[NaraWallFanartVar]</value>
 		<value condition="Window.IsActive(pictures) + String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.FolderPath]</value>
 		<value condition="!String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
 		<value condition="!String.IsEmpty(Container.Art(tvshow.fanart))">$INFO[Container.Art(tvshow.fanart)]</value>
@@ -700,9 +792,11 @@
 	<variable name="TopBarFolderBreadcrumbVar">
 		<value condition="String.Contains(Container.FolderPath,all_inprogress_movies.xsp)"> / $LOCALIZE[31010]</value>
 		<value condition="String.Contains(Container.FolderPath,all_recent_unwatched_movies.xsp)"> / $LOCALIZE[20386]</value>
-		<value condition="String.Contains(Container.FolderPath,all_unwatched_movies.xsp)"> / $LOCALIZE[31007]</value>
+		<value condition="String.Contains(Container.FolderPath,all_highrated_unwatched_movies.xsp)"> / $LOCALIZE[31710]</value>
+		<value condition="String.Contains(Container.FolderPath,all_highrated_unwatched_tvshows.xsp)"> / $LOCALIZE[31710]</value>
+		<value condition="String.Contains(Container.FolderPath,all_recent_releases_movies.xsp)"> / $LOCALIZE[31711]</value>
+		<value condition="String.Contains(Container.FolderPath,all_recent_premieres_tvshows.xsp)"> / $LOCALIZE[31712]</value>
 		<value condition="String.Contains(Container.FolderPath,all_recent_unwatched_tvshows.xsp)"> / $LOCALIZE[31618]</value>
-		<value condition="String.Contains(Container.FolderPath,all_unwatched_tvshows.xsp)"> / $LOCALIZE[31122]</value>
 		<value condition="String.Contains(Container.FolderPath,all_unplayed_albums.xsp)"> / $LOCALIZE[31014]</value>
 		<value condition="String.Contains(Container.FolderPath,all_mostplayed_albums.xsp)"> / $LOCALIZE[31011]</value>
 		<value condition="![Container.Content() + Window.IsActive(videos)] + ![Window.IsActive(MyPVRChannels.xml) | Window.IsActive(MyPVRTimers.xml) | Window.IsActive(MyPVRRecordings.xml) | Window.IsActive(MyPVRSearch.xml) | Window.IsActive(MyPVRProviders.xml)]">$INFO[Container.FolderName, / ]</value>
@@ -797,9 +891,19 @@
 		<value condition="String.IsEqual(VideoPlayer.AudioChannels,10)">FL, FR, FC, LFE, BL, BR, SL, SR, FWL, FWR</value>
 		<value>$INFO[VideoPlayer.AudioChannels]</value>
 	</variable>
-	<variable name="NaraProcessSubtitleLanguageVar">
-		<value condition="VideoPlayer.SubtitlesEnabled + !String.IsEmpty(VideoPlayer.SubtitlesLanguage)">$INFO[VideoPlayer.SubtitlesLanguage]</value>
-		<value>$LOCALIZE[31645]</value>
+	<variable name="NaraSubtitleTrackNameVar">
+		<value condition="!String.IsEmpty(VideoPlayer.SubtitleName)">$INFO[VideoPlayer.SubtitleName]</value>
+		<value condition="String.IsEmpty(VideoPlayer.SubtitlesLanguage) | String.IsEqual(VideoPlayer.SubtitlesLanguage,und)">$LOCALIZE[31715]</value>
+		<value>$INFO[VideoPlayer.SubtitleLanguageEx]</value>
+	</variable>
+	<variable name="NaraSubtitleFormatVar">
+		<value condition="VideoPlayer.SubtitleIsExternal">$LOCALIZE[31716]$VAR[SubtitleCodecVar, ]</value>
+		<value>$VAR[SubtitleCodecVar]</value>
+	</variable>
+	<variable name="NaraSubtitleDescriptionVar">
+		<value condition="!VideoPlayer.HasSubtitles">$LOCALIZE[31717]</value>
+		<value condition="!VideoPlayer.SubtitlesEnabled">$LOCALIZE[31645]</value>
+		<value>$VAR[NaraSubtitleTrackNameVar]$VAR[NaraSubtitleFormatVar, · ]</value>
 	</variable>
 	<variable name="NaraProcessHDRTypeVar">
 		<value condition="String.IsEqual(VideoPlayer.HdrType,dolbyvision)">Dolby Vision</value>
@@ -808,6 +912,19 @@
 		<value condition="String.IsEqual(VideoPlayer.HdrType,hlg)">HLG</value>
 		<value condition="!String.IsEmpty(VideoPlayer.HdrType)">$INFO[VideoPlayer.HdrType]</value>
 		<value>SDR</value>
+	</variable>
+	<variable name="NaraChannelLayoutVar">
+		<value condition="[String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos) | String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x_imax)] + String.IsEqual(VideoPlayer.AudioChannels,6)">osd/nara/process-info/channels/5.1.2.png</value>
+		<value condition="[String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos) | String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x_imax)] + String.IsEqual(VideoPlayer.AudioChannels,8)">osd/nara/process-info/channels/7.1.2.png</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioChannels,1)">osd/nara/process-info/channels/1.0.png</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioChannels,2)">osd/nara/process-info/channels/2.0.png</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioChannels,3)">osd/nara/process-info/channels/2.1.png</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioChannels,4)">osd/nara/process-info/channels/3.1.png</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioChannels,5)">osd/nara/process-info/channels/4.1.png</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioChannels,6)">osd/nara/process-info/channels/5.1.png</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioChannels,7)">osd/nara/process-info/channels/6.1.png</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioChannels,8)">osd/nara/process-info/channels/7.1.png</value>
+		<value></value>
 	</variable>
 	<variable name="PlayerControlsRepeatImageVar">
 		<value condition="Playlist.IsRepeatOne">osd/fullscreen/buttons/repeat-one.png</value>
@@ -899,9 +1016,6 @@
 	<variable name="VideoHWDecoder">
 		<value condition="Player.Process(videohwdecoder)">HW</value>
 		<value>SW</value>
-	</variable>
-	<variable name="AddonNewsVar">
-		<value condition="!String.IsEmpty(ListItem.AddonNews)">$LOCALIZE[31136]</value>
 	</variable>
 	<variable name="PVRNextProgrammeLabel">
 		<value condition="!String.IsEmpty(ListItem.NextStartTime) + !String.IsEmpty(ListItem.NextTitle)">[COLOR grey]$LOCALIZE[19031]:[/COLOR] $INFO[ListItem.NextStartTime]: $INFO[ListItem.NextTitle]</value>
@@ -1135,25 +1249,25 @@
 		<value>$INFO[ListItem.AudioChannels(DefaultLayout)]</value>
 	</variable>
 	<variable name="SubtitleCodecVar">
-		<value condition="Window.IsActive(fullscreenvideo) + String.IsEqual(VideoPlayer.SubtitleCodec, ass)">ASS</value>
-		<value condition="Window.IsActive(fullscreenvideo) + String.IsEqual(VideoPlayer.SubtitleCodec, dvb_subtitle)">DVB-SUB</value>
-		<value condition="Window.IsActive(fullscreenvideo) + String.IsEqual(VideoPlayer.SubtitleCodec, dvb_teletext)">DVB-Text</value>
-		<value condition="Window.IsActive(fullscreenvideo) + String.IsEqual(VideoPlayer.SubtitleCodec, dvd_subtitle)">VobSub</value>
-		<value condition="Window.IsActive(fullscreenvideo) + String.IsEqual(VideoPlayer.SubtitleCodec, hdmv_pgs_subtitle)">PGS</value>
-		<value condition="Window.IsActive(fullscreenvideo) + String.IsEqual(VideoPlayer.SubtitleCodec, microdvd)">MicroDVD</value>
-		<value condition="Window.IsActive(fullscreenvideo) + String.IsEqual(VideoPlayer.SubtitleCodec, mov_text)">Timed Text</value>
-		<value condition="Window.IsActive(fullscreenvideo) + String.IsEqual(VideoPlayer.SubtitleCodec, mpl2)">MPL2</value>
-		<value condition="Window.IsActive(fullscreenvideo) + String.IsEqual(VideoPlayer.SubtitleCodec, realtext)">RealText</value>
-		<value condition="Window.IsActive(fullscreenvideo) + String.IsEqual(VideoPlayer.SubtitleCodec, sami)">SAMI</value>
-		<value condition="Window.IsActive(fullscreenvideo) + String.IsEqual(VideoPlayer.SubtitleCodec, srt)">SubRip</value>
-		<value condition="Window.IsActive(fullscreenvideo) + String.IsEqual(VideoPlayer.SubtitleCodec, ssa)">SSA</value>
-		<value condition="Window.IsActive(fullscreenvideo) + String.IsEqual(VideoPlayer.SubtitleCodec, subrip)">Subrip</value>
-		<value condition="Window.IsActive(fullscreenvideo) + String.IsEqual(VideoPlayer.SubtitleCodec, text)">Text</value>
-		<value condition="Window.IsActive(fullscreenvideo) + String.IsEqual(VideoPlayer.SubtitleCodec, ttml)">TTML</value>
-		<value condition="Window.IsActive(fullscreenvideo) + String.IsEqual(VideoPlayer.SubtitleCodec, vplayer)">VPlayer</value>
-		<value condition="Window.IsActive(fullscreenvideo) + String.IsEqual(VideoPlayer.SubtitleCodec, webvtt)">WebVTT</value>
-		<value condition="Window.IsActive(fullscreenvideo) + String.IsEqual(VideoPlayer.SubtitleCodec, xsub)">XSUB</value>
-		<value condition="Window.IsActive(fullscreenvideo)">$INFO[VideoPlayer.SubtitleCodec]</value>
+		<value condition="String.IsEqual(VideoPlayer.SubtitleCodec, ass)">ASS</value>
+		<value condition="String.IsEqual(VideoPlayer.SubtitleCodec, dvb_subtitle)">DVB-SUB</value>
+		<value condition="String.IsEqual(VideoPlayer.SubtitleCodec, dvb_teletext)">DVB-Text</value>
+		<value condition="String.IsEqual(VideoPlayer.SubtitleCodec, dvd_subtitle)">VobSub</value>
+		<value condition="String.IsEqual(VideoPlayer.SubtitleCodec, hdmv_pgs_subtitle)">PGS</value>
+		<value condition="String.IsEqual(VideoPlayer.SubtitleCodec, microdvd)">MicroDVD</value>
+		<value condition="String.IsEqual(VideoPlayer.SubtitleCodec, mov_text)">Timed Text</value>
+		<value condition="String.IsEqual(VideoPlayer.SubtitleCodec, mpl2)">MPL2</value>
+		<value condition="String.IsEqual(VideoPlayer.SubtitleCodec, realtext)">RealText</value>
+		<value condition="String.IsEqual(VideoPlayer.SubtitleCodec, sami)">SAMI</value>
+		<value condition="String.IsEqual(VideoPlayer.SubtitleCodec, srt)">SubRip</value>
+		<value condition="String.IsEqual(VideoPlayer.SubtitleCodec, ssa)">SSA</value>
+		<value condition="String.IsEqual(VideoPlayer.SubtitleCodec, subrip)">Subrip</value>
+		<value condition="String.IsEqual(VideoPlayer.SubtitleCodec, text)">Text</value>
+		<value condition="String.IsEqual(VideoPlayer.SubtitleCodec, ttml)">TTML</value>
+		<value condition="String.IsEqual(VideoPlayer.SubtitleCodec, vplayer)">VPlayer</value>
+		<value condition="String.IsEqual(VideoPlayer.SubtitleCodec, webvtt)">WebVTT</value>
+		<value condition="String.IsEqual(VideoPlayer.SubtitleCodec, xsub)">XSUB</value>
+		<value>$INFO[VideoPlayer.SubtitleCodec]</value>
 	</variable>
 	<variable name="StreamCodecVar">
 		<value condition="Window.IsVisible(dialogselectvideo) + String.IsEqual(ListItem.Property(stream.codec),av1)">AV1</value>
@@ -1329,10 +1443,6 @@
 		<value condition="Control.HasFocus(50)">focus_foreground</value>
 		<value>text_primary</value>
 	</variable>
-	<variable name="FocusLayoutTextColor100Var">
-		<value condition="Control.HasFocus(100)">focus_foreground</value>
-		<value>text_primary</value>
-	</variable>
 	<variable name="FocusLayoutTextColor51Var">
 		<value condition="Control.HasFocus(51)">focus_foreground</value>
 		<value>text_primary</value>
@@ -1347,7 +1457,44 @@
 	</variable>
 	<variable name="FocusLayoutTextColor55Var">
 		<value condition="Control.HasFocus(55)">focus_foreground</value>
-		<value>text_primary</value>
+		<value>selection_foreground</value>
+	</variable>
+	<variable name="FocusLayoutMetaColor55Var">
+		<value condition="Control.HasFocus(55)">focus_foreground_muted</value>
+		<value>text_secondary</value>
+	</variable>
+	<variable name="WideListIconSurfaceVar">
+		<value condition="Control.HasFocus(55)">focus_foreground_muted</value>
+		<value>selection_surface</value>
+	</variable>
+	<variable name="WideListPreviewTitleVar">
+		<value condition="!String.IsEmpty(ListItem.Title)">$INFO[ListItem.Title]</value>
+		<value>$INFO[ListItem.Label]</value>
+	</variable>
+	<variable name="WideListPreviewMetadataVar">
+		<value condition="ListItem.IsParentFolder"></value>
+		<value condition="Container.Content(addons)">$INFO[ListItem.AddonCreator]$INFO[ListItem.AddonVersion,[CR]]</value>
+		<value condition="String.IsEqual(ListItem.DBType,song)">$INFO[ListItem.Artist]$INFO[ListItem.Album,[CR]]</value>
+		<value condition="String.IsEqual(ListItem.DBType,album)">$INFO[ListItem.Artist]$INFO[ListItem.Year,[CR]]</value>
+		<value condition="String.IsEqual(ListItem.DBType,artist)">$INFO[ListItem.Genre]</value>
+		<value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.TVShowTitle][CR]$VAR[SeasonEpisodeLabel]</value>
+		<value condition="Window.IsActive(pictures)">$INFO[ListItem.PictureDateTime]$INFO[ListItem.PictureResolution,[CR]]</value>
+		<value condition="Container.Content(favourites)">$INFO[ListItem.Property(favourite.provider)]</value>
+		<value condition="!String.IsEmpty(ListItem.Year)">$INFO[ListItem.Year]$INFO[ListItem.Duration,[CR]]</value>
+		<value>$VAR[ListLabel2Var]</value>
+	</variable>
+	<variable name="WideListPreviewRatingVar">
+		<value condition="Skin.HasSetting(circle_userrating) + Integer.IsGreater(ListItem.UserRating,0) + Skin.HasSetting(circle_rating) + !String.IsEmpty(ListItem.Rating)">$INFO[ListItem.Rating,$LOCALIZE[563]: ]$INFO[ListItem.UserRating,  ·  $LOCALIZE[38018]: ]</value>
+		<value condition="Skin.HasSetting(circle_userrating) + Integer.IsGreater(ListItem.UserRating,0)">$INFO[ListItem.UserRating,$LOCALIZE[38018]: ]</value>
+		<value condition="Skin.HasSetting(circle_rating) + !String.IsEmpty(ListItem.Rating)">$INFO[ListItem.Rating,$LOCALIZE[563]: ]</value>
+	</variable>
+	<variable name="WideListPreviewDescriptionVar">
+		<value condition="ListItem.IsParentFolder"></value>
+		<value condition="Container.Content(addons) + [String.IsEqual(ListItem.AddonLifecycleType,$LOCALIZE[24170]) | String.IsEqual(ListItem.AddonLifecycleType,$LOCALIZE[24171])]">[COLOR status_warning]$INFO[ListItem.AddonLifecycleType][/COLOR][CR]$INFO[ListItem.AddonLifecycleDesc][CR][CR]$VAR[ListBoxInfoVar]</value>
+		<value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.Plot]</value>
+		<value condition="String.IsEqual(ListItem.DBType,song)">$VAR[InfoDiscVar,$LOCALIZE[427]: ,[CR]]$INFO[ListItem.TrackNumber,$LOCALIZE[554]: ,[CR]]$INFO[ListItem.Year,$LOCALIZE[345]: ,[CR]]$INFO[ListItem.Genre,,[CR]]$INFO[ListItem.Duration,$LOCALIZE[180]: ,[CR]]$INFO[ListItem.Playcount,$LOCALIZE[567]: ,[CR]]$INFO[ListItem.LastPlayed,$LOCALIZE[568]: ]</value>
+		<value condition="Window.IsActive(pictures)">$INFO[ListItem.Property(description),,[CR]]$INFO[ListItem.PictureCamMake,, ]$INFO[ListItem.PictureCamModel]</value>
+		<value>$VAR[ListBoxInfoVar]</value>
 	</variable>
 	<variable name="FocusLayoutTextColor120Var">
 		<value condition="Control.HasFocus(120)">focus_foreground</value>
@@ -1365,12 +1512,12 @@
 		<value condition="Control.HasFocus(5000)">focus_foreground</value>
 		<value>text_primary</value>
 	</variable>
-	<variable name="FocusLayoutTextColor9000Var">
-		<value condition="Control.HasFocus(9000)">focus_foreground</value>
-		<value>text_primary</value>
-	</variable>
 	<variable name="FocusLayoutTextColor9010Var">
 		<value condition="Control.HasFocus(9010)">focus_foreground</value>
+		<value>text_primary</value>
+	</variable>
+	<variable name="FocusLayoutTextColor9000Var">
+		<value condition="Control.HasFocus(9000)">focus_foreground</value>
 		<value>text_primary</value>
 	</variable>
 	<variable name="FileManagerTypeVar">

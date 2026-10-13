@@ -172,6 +172,13 @@ Save-Icon 'play' {
   Draw-Polyline $g $p ([float[]]@(23, 15, 47, 32, 23, 49, 23, 15))
 }
 
+Save-Icon 'play-circle' {
+  param($g, $p)
+  $p.Width = 2.0
+  $g.DrawEllipse($p, 8, 8, 48, 48)
+  Draw-Polyline $g $p ([float[]]@(26, 20, 43, 32, 26, 44, 26, 20))
+}
+
 Save-Icon 'pause' {
   param($g, $p)
   Draw-RoundedRectangle $g $p 19 15 8 34 2

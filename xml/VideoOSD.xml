@@ -6,6 +6,7 @@
 	<controls>
 		<control type="button">
 			<description>background close area</description>
+			<oninfo condition="!VideoPlayer.Content(LiveTV)">ActivateWindow(playerprocessinfo)</oninfo>
 			<left>0</left>
 			<top>0</top>
 			<width>100%</width>
@@ -14,6 +15,7 @@
 			<texturenofocus />
 			<onclick>Action(close)</onclick>
 		</control>
+		<include>VideoOSDHeader</include>
 		<control type="group">
 			<include>Animation_BottomSlide</include>
 			<bottom>0</bottom>
@@ -48,6 +50,18 @@
 				<label>$INFO[Player.Duration]</label>
 				<visible>!VideoPlayer.Content(LiveTV)</visible>
 			</control>
+			<control type="label">
+				<right>30</right>
+				<top>68</top>
+				<width>300</width>
+				<height>56</height>
+				<font>font12</font>
+				<align>right</align>
+				<aligny>center</aligny>
+				<label>$LOCALIZE[31080] $INFO[Player.FinishTime]</label>
+				<textcolor>text_secondary</textcolor>
+				<visible>!Player.Paused + !VideoPlayer.Content(livetv) + Integer.IsGreater(Player.Duration(secs),0)</visible>
+			</control>
 			<control type="group" id="200">
 				<include>Animation_BottomSlide</include>
 				<control type="grouplist" id="201">
@@ -60,7 +74,8 @@
 					<scrolltime tween="sine">200</scrolltime>
 					<orientation>horizontal</orientation>
 					<onup>87</onup>
-					<ondown>noop</ondown>
+					<ondown condition="Integer.IsGreater(Playlist.Length(video),1) + !VideoPlayer.Content(livetv)">Nara.OSDPlaylistShelf</ondown>
+					<ondown condition="!Integer.IsGreater(Playlist.Length(video),1) | VideoPlayer.Content(livetv)">noop</ondown>
 					<onleft>70048</onleft>
 					<onright>70046</onright>
 					<control type="radiobutton" id="70046">
@@ -331,6 +346,7 @@
 				</control>
 				<control type="button" id="87">
 					<include>HiddenObject</include>
+					<oninfo condition="!VideoPlayer.Content(LiveTV)">ActivateWindow(playerprocessinfo)</oninfo>
 					<onup>200</onup>
 					<ondown>200</ondown>
 					<onleft>StepBack</onleft>
@@ -348,6 +364,7 @@
 					<info>Player.Progress</info>
 					<onup>200</onup>
 					<ondown>200</ondown>
+					<oninfo>ActivateWindow(playerprocessinfo)</oninfo>
 					<action>seek</action>
 					<visible>!VideoPlayer.Content(LiveTV)</visible>
 				</control>
